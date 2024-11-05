@@ -10,8 +10,8 @@ import (
 	"slices"
 )
 
-func NewService(repository Repository) (Service, error) {
-	return &service{repository}, nil
+func NewService(repository Repository) Service {
+	return &service{repository}
 }
 
 type service struct {
@@ -66,11 +66,12 @@ func (s *service) SaveRecipeTypes(inputRecipeTypes []model.InputRecipeType) erro
 			return err
 		}
 		if /* recipeType already exists */ _, exists := rts[inputRecipeType.Name]; exists {
-			if inputRecipeType.Description != nil {
+			if /* has updates */ inputRecipeType.Description != nil {
 				if /* save is not true */ !(inputRecipeType.Save != nil && *inputRecipeType.Save) {
 					return errors.New("save does not true")
-					// TODO: return error ?
 				}
+			} else {
+				continue
 			}
 		}
 		err = s.repository.SaveRecipeType(model.RecipeType{
@@ -91,11 +92,12 @@ func (s *service) SaveGlassTypes(inputGlassTypes []model.InputGlassType) error {
 			return err
 		}
 		if /* glassType already exists */ _, exists := gts[inputGlassType.Name]; exists {
-			if inputGlassType.ImageURL != nil || inputGlassType.Description != nil {
+			if /* has update */ inputGlassType.ImageURL != nil || inputGlassType.Description != nil {
 				if /* save is not true */ !(inputGlassType.Save != nil && *inputGlassType.Save) {
 					return errors.New("save does not true")
-					// TODO: return error ?
 				}
+			} else {
+				continue
 			}
 		}
 		err = s.repository.SaveGlassType(model.GlassType{

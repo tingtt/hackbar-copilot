@@ -2,15 +2,19 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hackbar-copilot/internal/infrastructure/api/http"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph"
 	"hackbar-copilot/internal/usecase/recipes"
 	"log/slog"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
+
+	httpgo "net/http"
 
 	"github.com/spf13/pflag"
 )
@@ -26,28 +30,41 @@ func main() {
 func run() error {
 	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, os.Kill)
 
-	option := getCLIOption()
+	option := getCLIOption(os.Args)
 	deps, err := loadDependencies(option.DataDirPath)
 	if err != nil {
 		return err
 	}
 
-	s := http.NewServer(
+	server := http.NewServer(
 		fmt.Sprintf("%s:%s", option.Host, option.Port),
 		deps.Usecase.GraphQL,
 	)
-	go s.ListenAndServe()
+	return serveGraceful(ctx, server, deps.Datasources)
+}
+
+type server interface {
+	ListenAndServe() error
+	Shutdown(ctx context.Context) error
+}
+
+func serveGraceful(ctx context.Context, server server, datasources depsDatasources) (err error) {
+	errServeChan := make(chan error, 1)
+
+	go func() {
+		err := server.ListenAndServe()
+		if !errors.Is(err, httpgo.ErrServerClosed) {
+			errServeChan <- err
+		} else {
+			close(errServeChan)
+		}
+	}()
 
 	<-ctx.Done()
-	err = s.Shutdown(ctx)
-	if err != nil {
-		return err
-	}
-	err = deps.Datasources.Recipes.SavePersistently()
-	if err != nil {
-		return err
-	}
-	return nil
+	errShutdown := server.Shutdown(ctx)
+	errServe := <-errServeChan
+	errSave := datasources.Recipes.SavePersistently()
+	return errors.Join(errServe, errShutdown, errSave)
 }
 
 type option struct {
@@ -56,14 +73,16 @@ type option struct {
 	DataDirPath string
 }
 
-func getCLIOption() option {
-	host := pflag.String("host", "127.0.0.1", "")
-	port := pflag.StringP("port", "p", "8080", "")
-	dataDirPath := pflag.StringP("data", "d", "/var/lib/hackbar-copilot", "")
-	pflag.Parse()
+func getCLIOption(osArgs []string) option {
+	flag := pflag.NewFlagSet(osArgs[0], pflag.ExitOnError)
+	host := flag.IP("host", net.IPv4(127, 0, 0, 1), "")
+	port := flag.StringP("port", "p", "8080", "")
+	dataDirPath := flag.StringP("data", "d", "/var/lib/hackbar-copilot", "")
+	// *dataDirPath = "/Users/taku_ting/workspaces/hackbar/hackbar-copilot/data"
+	flag.Parse(osArgs[1:])
 
 	return option{
-		*host,
+		host.String(),
 		*port,
 		*dataDirPath,
 	}
@@ -74,7 +93,7 @@ type dependencies struct {
 	Usecase     depsUsecase
 }
 type depsDatasources struct {
-	Recipes *filesystem.Filesystem
+	Recipes filesystem.Filesystem
 }
 type depsUsecase struct {
 	GraphQL graph.Dependencies
@@ -85,10 +104,7 @@ func loadDependencies(dataDirPath string) (dependencies, error) {
 	if err != nil {
 		return dependencies{}, err
 	}
-	recipes, err := recipes.NewService(recipeRepository)
-	if err != nil {
-		return dependencies{}, err
-	}
+	recipes := recipes.NewService(recipeRepository)
 
 	return dependencies{
 		Datasources: depsDatasources{

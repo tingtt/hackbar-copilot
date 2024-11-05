@@ -4,6 +4,13 @@
 
 ## Usage
 
+```sh
+mkdir .data
+go run cmd/registry/main.go -d ./.data/
+```
+
+[http://localhost:8080/recipes.v1graphql.Registry/playground](http://localhost:8080/recipes.v1graphql.Registry/playground)
+
 ```graphql
 query {
   recipes {
@@ -49,10 +56,10 @@ mutation saveRecipe($input: InputRecipeGroup!) {
 ```json
 {
   "input": {
-    "name": "Go",
+    "name": "Phuket Sling",
     "recipes": [
       {
-        "name": "カクテル",
+        "name": "Cocktail",
         "recipeType": {
           "name": "build"
         },
@@ -60,15 +67,15 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           "name": "collins"
         },
         "steps": [
-          "ピーチリキュール 20ml",
-          "ブルーキュラソー 15ml",
-          "グレープフルーツジュース 20ml",
-          "ステア",
-          "トニックウォーター full up"
+          "Peach liqueur 30ml",
+          "Blue curacao 15ml",
+          "Grapefruit juice 30ml",
+          "Stir",
+          "Tonic water - Full up"
         ]
       },
       {
-        "name": "モクテル",
+        "name": "Mocktail",
         "recipeType": {
           "name": "build"
         },
@@ -76,12 +83,12 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           "name": "collins"
         },
         "steps": [
-          "ピーチシロップ 20ml",
-          "ブルーキュラソーシロップ 15ml",
-          "グレープフルーツジュース 20ml",
-          "ステア",
-          "トニックウォーター full up",
-          "ステア"
+          "Peach syrup 20ml",
+          "Blue curacao syrup 10ml",
+          "Grapefruit juice 30ml",
+          "Stir",
+          "Tonic water - Full up",
+          "Stir"
         ]
       }
     ]

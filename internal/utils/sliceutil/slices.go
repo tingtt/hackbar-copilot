@@ -31,7 +31,7 @@ func Some[T any](slice []T, yield func(T) bool) bool {
 	return false
 }
 
-func Find[T any](slice []T, yield func(T) bool) *T {
+func FindOne[T any](slice []T, yield func(T) bool) *T {
 	for _, value := range slice {
 		if yield(value) {
 			return &value

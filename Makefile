@@ -6,7 +6,9 @@ PARALLELS ?= 10
 
 .PHONY: test
 test:
-	$(GO) test ./... -parallel $(PARALLELS)
+	-$(GO) test ./... -parallel $(PARALLELS) -coverprofile=cover.out
+	$(GO) tool cover -html=cover.out -o cover.html
+	rm cover.out
 
 .PHONY: build
 build:

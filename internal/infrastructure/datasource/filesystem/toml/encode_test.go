@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tingtt/options"
 )
 
 func TestEncode(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		i interface{}
 		o []options.Applier[Option]
@@ -27,7 +30,7 @@ func TestEncode(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "",
+			name: "may write encoded toml with indent to io.Writer",
 			args: args{
 				i: parent{Child: child{Name: "test"}},
 				o: nil,
@@ -38,7 +41,7 @@ func TestEncode(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "",
+			name: "may write encoded toml to io.Writer",
 			args: args{
 				i: parent{Child: child{Name: "test"}},
 				o: []Applier{WithIndent("")},
@@ -51,14 +54,17 @@ Name = "test"
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			w := &bytes.Buffer{}
-			if err := Encode(w, tt.args.i, tt.args.o...); (err != nil) != tt.wantErr {
-				t.Errorf("Encode() error = %v, wantErr %v", err, tt.wantErr)
-				return
+			err := Encode(w, tt.args.i, tt.args.o...)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
 			}
-			if gotW := w.String(); gotW != tt.wantW {
-				t.Errorf("Encode() = %v, want %v", gotW, tt.wantW)
-			}
+			assert.Equal(t, w.String(), tt.wantW)
 		})
 	}
 }
