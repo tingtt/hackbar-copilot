@@ -6,16 +6,15 @@ import (
 	"net/http"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 )
 
 func NewHandler(deps graph.Dependencies) http.Handler {
-	return httpHeaderMiddleware(graph.ContextKeyHeader)(
-		handler.NewDefaultServer(
-			graph.NewExecutableSchema(graph.Config{
-				Resolvers: graph.NewResolver(deps),
-			}),
-		),
-	)
+	handler := handler.New(graph.NewExecutableSchema(graph.Config{
+		Resolvers: graph.NewResolver(deps),
+	}))
+	handler.AddTransport(transport.POST{})
+	return httpHeaderMiddleware(graph.ContextKeyHeader)(handler)
 }
 
 func httpHeaderMiddleware(ctxKey graph.ContextKey) func(http.Handler) http.Handler {
