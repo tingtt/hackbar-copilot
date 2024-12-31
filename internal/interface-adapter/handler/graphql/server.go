@@ -9,7 +9,7 @@ import (
 )
 
 func NewHandler(deps graph.Dependencies) http.Handler {
-	return httpHeaderMiddleware(graph.CONTEXT_KEY_HEADER)(
+	return httpHeaderMiddleware(graph.ContextKeyHeader)(
 		handler.NewDefaultServer(
 			graph.NewExecutableSchema(graph.Config{
 				Resolvers: graph.NewResolver(deps),
