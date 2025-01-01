@@ -1,0 +1,29 @@
+extend type Mutation {
+  saveRecipe(input: InputRecipeGroup!): RecipeGroup!
+}
+
+input InputRecipeGroup {
+  name: String!
+  imageURL: String
+  recipes: [InputRecipe!]
+}
+
+input InputRecipe {
+  name: String!
+  recipeType: InputRecipeType
+  glassType: InputGlassType
+  steps: [String!]
+}
+
+input InputRecipeType {
+  name: String! # build, stir, shake etc.
+  description: String
+  save: Boolean
+}
+
+input InputGlassType {
+  name: String! # collins, shot, rock, beer etc.
+  imageURL: String
+  description: String
+  save: Boolean
+}

@@ -1,61 +1,7 @@
-# GraphQL schema example
+# GraphQL schema
 #
 # https://gqlgen.com/getting-started/
 
-type RecipeType {
-  name: String! # build, stir, shake etc.
-  description: String
-}
+type Query
 
-type GlassType {
-  name: String! # collins, shot, rock, beer etc.
-  imageURL: String
-  description: String
-}
-
-type Recipe {
-  name: String!
-  type: RecipeType
-  glass: GlassType
-  steps: [String!]
-}
-
-type RecipeGroup {
-  name: String!
-  imageURL: String
-  recipes: [Recipe!]
-}
-
-type Query {
-  recipes: [RecipeGroup!]!
-}
-
-input InputRecipeType {
-  name: String! # build, stir, shake etc.
-  description: String
-  save: Boolean
-}
-
-input InputGlassType {
-  name: String! # collins, shot, rock, beer etc.
-  imageURL: String
-  description: String
-  save: Boolean
-}
-
-input InputRecipe {
-  name: String!
-  recipeType: InputRecipeType
-  glassType: InputGlassType
-  steps: [String!]
-}
-
-input InputRecipeGroup {
-  name: String!
-  imageURL: String
-  recipes: [InputRecipe!]
-}
-
-type Mutation {
-  saveRecipe(input: InputRecipeGroup!): RecipeGroup!
-}
+type Mutation

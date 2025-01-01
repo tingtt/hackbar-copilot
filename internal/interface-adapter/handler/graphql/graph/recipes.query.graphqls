@@ -1,0 +1,27 @@
+extend type Query {
+  recipes: [RecipeGroup!]!
+}
+
+type RecipeGroup {
+  name: String!
+  imageURL: String
+  recipes: [Recipe!]
+}
+
+type Recipe {
+  name: String!
+  type: RecipeType
+  glass: GlassType
+  steps: [String!]
+}
+
+type RecipeType {
+  name: String! # build, stir, shake etc.
+  description: String
+}
+
+type GlassType {
+  name: String! # collins, shot, rock, beer etc.
+  imageURL: String
+  description: String
+}
