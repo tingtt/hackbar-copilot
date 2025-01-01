@@ -16,4 +16,12 @@ func TestNewResolver(t *testing.T) {
 
 		assert.NotNil(t, resolver)
 	})
+
+	t.Run("will insert local dependency", func(t *testing.T) {
+		t.Parallel()
+
+		resolver := NewResolver(Dependencies{}).(*Resolver)
+
+		assert.NotNil(t, resolver.deps.convertToModel)
+	})
 }

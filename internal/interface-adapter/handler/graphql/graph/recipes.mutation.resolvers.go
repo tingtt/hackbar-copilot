@@ -11,7 +11,7 @@ import (
 
 // SaveRecipe is the resolver for the saveRecipe field.
 func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error) {
-	recipeGroups, err := r.deps.Recipes.Register(input)
+	recipeGroup, err := r.deps.Recipes.Register(input)
 	if err != nil {
 		return nil, err
 	}
@@ -23,5 +23,5 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 	if err != nil {
 		return nil, err
 	}
-	return convertRecipeGroup(recipeTypes, glassTypes)(recipeGroups), nil
+	return r.deps.convertToModel.RecipeGroup(recipeTypes, glassTypes)(recipeGroup), nil
 }

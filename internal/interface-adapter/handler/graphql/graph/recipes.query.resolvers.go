@@ -7,8 +7,6 @@ package graph
 import (
 	"context"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/usecase/recipes"
-	"hackbar-copilot/internal/utils/sliceutil"
 )
 
 // Recipes is the resolver for the recipes field.
@@ -25,39 +23,5 @@ func (r *queryResolver) Recipes(ctx context.Context) ([]*model.RecipeGroup, erro
 	if err != nil {
 		return nil, err
 	}
-	return sliceutil.Map(recipeGroups, convertRecipeGroup(recipeTypes, glassTypes)), nil
-}
-
-func convertRecipeGroup(
-	recipeTypes map[string]model.RecipeType,
-	glassTypes map[string]model.GlassType,
-) func(recipes.RecipeGroup) *model.RecipeGroup {
-	return func(recipeGroup recipes.RecipeGroup) *model.RecipeGroup {
-		return &model.RecipeGroup{
-			Name:     recipeGroup.Name,
-			ImageURL: recipeGroup.ImageURL,
-			Recipes:  sliceutil.Map(recipeGroup.Recipes, convertRecipe(recipeTypes, glassTypes)),
-		}
-	}
-}
-
-func convertRecipe(
-	recipeTypes map[string]model.RecipeType,
-	glassTypes map[string]model.GlassType,
-) func(recipe recipes.Recipe) *model.Recipe {
-	return func(recipe recipes.Recipe) *model.Recipe {
-		r := model.Recipe{
-			Name:  recipe.Name,
-			Steps: recipe.Steps,
-		}
-		recipeType, exists := recipeTypes[recipe.Type]
-		if exists {
-			r.Type = &recipeType
-		}
-		glassType, exists := glassTypes[recipe.Glass]
-		if exists {
-			r.Glass = &glassType
-		}
-		return &r
-	}
+	return r.deps.convertToModel.RecipeGroups(recipeGroups, recipeTypes, glassTypes), nil
 }

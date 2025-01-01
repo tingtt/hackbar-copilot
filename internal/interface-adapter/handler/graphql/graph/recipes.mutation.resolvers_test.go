@@ -34,18 +34,55 @@ func Test_mutationResolver_SaveRecipe(t *testing.T) {
 		mockRecipeService.On("Register", mock.Anything).Return(recipes.RecipeGroup{}, nil)
 		mockRecipeService.On("FindRecipeType").Return(map[string]model.RecipeType{}, nil)
 		mockRecipeService.On("FindGlassType").Return(map[string]model.GlassType{}, nil)
-		r := &mutationResolver{
-			Resolver: &Resolver{
-				deps: Dependencies{
-					Orders:  nil,
-					Recipes: mockRecipeService,
-				},
-			},
-		}
+
+		r := &mutationResolver{&Resolver{Dependencies{
+			Orders:         nil,
+			Recipes:        mockRecipeService,
+			convertToModel: &converter{},
+		}}}
 
 		_, err := r.SaveRecipe(context.Background(), input)
 
 		assert.NoError(t, err)
 		mockRecipeService.AssertCalled(t, "Register", input)
+	})
+
+	t.Run("will call converter.RecipeGroup with values got from recipe.Service", func(t *testing.T) {
+		t.Parallel()
+
+		input := model.InputRecipeGroup{Name: "NewRecipeGroup"}
+		wantCallConvertRecipeGroupArgs := struct {
+			recipeTypes map[string]model.RecipeType
+			glassTypes  map[string]model.GlassType
+			recipeGroup recipes.RecipeGroup
+		}{}
+		convertOut := &model.RecipeGroup{Name: input.Name}
+		want := convertOut
+
+		mockRecipeService := new(MockRecipeService)
+		mockRecipeService.On("Register", mock.Anything).Return(wantCallConvertRecipeGroupArgs.recipeGroup, nil)
+		mockRecipeService.On("FindRecipeType").Return(wantCallConvertRecipeGroupArgs.recipeTypes, nil)
+		mockRecipeService.On("FindGlassType").Return(wantCallConvertRecipeGroupArgs.glassTypes, nil)
+
+		mockConverter := new(MockConverter)
+		mockConverterRecipeGroupFunc := new(MockConverterRecipeGroupFunc)
+		mockConverterRecipeGroupFunc.On("Run", mock.Anything).Return(convertOut)
+		mockConverter.On("RecipeGroup", mock.Anything, mock.Anything).Return(mockConverterRecipeGroupFunc.Run)
+
+		r := &mutationResolver{&Resolver{Dependencies{
+			Orders:         nil,
+			Recipes:        mockRecipeService,
+			convertToModel: mockConverter,
+		}}}
+
+		got, err := r.SaveRecipe(context.Background(), input)
+
+		assert.NoError(t, err)
+		assert.Equal(t, want, got)
+		mockConverter.AssertCalled(t, "RecipeGroup",
+			wantCallConvertRecipeGroupArgs.recipeTypes,
+			wantCallConvertRecipeGroupArgs.glassTypes,
+		)
+		mockConverterRecipeGroupFunc.AssertCalled(t, "Run", wantCallConvertRecipeGroupArgs.recipeGroup)
 	})
 }
