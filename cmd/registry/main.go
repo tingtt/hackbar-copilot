@@ -7,7 +7,7 @@ import (
 	"hackbar-copilot/internal/infrastructure/api/http"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph"
-	"hackbar-copilot/internal/usecase/recipes"
+	"hackbar-copilot/internal/usecase/copilot"
 	"log/slog"
 	"net"
 	"os"
@@ -63,7 +63,7 @@ func serveGraceful(ctx context.Context, server server, datasources depsDatasourc
 	<-ctx.Done()
 	errShutdown := server.Shutdown(ctx)
 	errServe := <-errServeChan
-	errSave := datasources.Recipes.SavePersistently()
+	errSave := datasources.fs.SavePersistently()
 	return errors.Join(errServe, errShutdown, errSave)
 }
 
@@ -93,27 +93,25 @@ type dependencies struct {
 	Usecase     depsUsecase
 }
 type depsDatasources struct {
-	Recipes filesystem.Filesystem
+	fs filesystem.Filesystem
 }
 type depsUsecase struct {
 	GraphQL graph.Dependencies
 }
 
 func loadDependencies(dataDirPath string) (dependencies, error) {
-	recipeRepository, err := filesystem.NewRepository(dataDirPath)
+	fs, err := filesystem.NewRepository(dataDirPath)
 	if err != nil {
 		return dependencies{}, err
 	}
-	recipes := recipes.NewService(recipeRepository)
 
 	return dependencies{
-		Datasources: depsDatasources{
-			Recipes: recipeRepository,
-		},
+		Datasources: depsDatasources{fs},
 		Usecase: depsUsecase{
 			GraphQL: graph.Dependencies{
-				Orders:  nil,
-				Recipes: recipes,
+				Copilot: copilot.New(copilot.Dependencies{
+					Recipe: fs.Recipe(),
+				}),
 			},
 		},
 	}, nil

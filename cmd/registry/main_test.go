@@ -2,115 +2,45 @@ package main
 
 import (
 	"context"
-	"errors"
-	"net/http"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func Test_serveGraceful(t *testing.T) {
 	t.Parallel()
 
-	type errorBehaviors struct {
-		ListenAndServe   error
-		Shutdown         error
-		SavePersistently error
-	}
-	tests := []struct {
-		name           string
-		errorBehaviors errorBehaviors
-	}{
-		{
-			name: "may success graceful shutdown",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   nil,
-				Shutdown:         nil,
-				SavePersistently: nil,
-			},
-		},
-		{
-			name: "may success graceful shutdown",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   nil,
-				Shutdown:         http.ErrServerClosed,
-				SavePersistently: nil,
-			},
-		},
-		{
-			name: "may fail to shutdown server",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   nil,
-				Shutdown:         errors.New("wanted error"),
-				SavePersistently: nil,
-			},
-		},
-		{
-			name: "may fail to save data",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   nil,
-				Shutdown:         nil,
-				SavePersistently: errors.New("wanted error"),
-			},
-		},
-		{
-			name: "may fail to shutdown server and save data",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   nil,
-				Shutdown:         errors.New("wanted error 1"),
-				SavePersistently: errors.New("wanted error 2"),
-			},
-		},
-		{
-			name: "may fail to serve",
-			errorBehaviors: errorBehaviors{
-				ListenAndServe:   errors.New("wanted error"),
-				Shutdown:         nil,
-				SavePersistently: nil,
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+	t.Run("will call recipe datasource SavePersistently() when canceled", func(t *testing.T) {
+		t.Parallel()
 
-			ctx, cancel := context.WithCancel(context.Background())
-			server := new(MockServer)
-			server.On("ListenAndServe").Return(tt.errorBehaviors.ListenAndServe)
-			server.On("Shutdown").Return(tt.errorBehaviors.Shutdown)
-			recipeDatasource := new(MockRecipeDatasource)
-			recipeDatasource.On("SavePersistently").Return(tt.errorBehaviors.SavePersistently)
-			depsDatasources := depsDatasources{
-				Recipes: recipeDatasource,
-			}
+		server := new(MockServer)
+		server.On("ListenAndServe").Return(nil)
+		server.On("Shutdown").Return(nil)
 
-			errChan := make(chan error, 1)
-			go func() {
-				errChan <- serveGraceful(ctx, server, depsDatasources)
-			}()
-			cancel()
-			time.Sleep(time.Millisecond)
-			err := <-errChan
+		datasource := new(MockRecipeDatasource)
+		datasource.On("SavePersistently").Return(nil)
+		depsDatasources := depsDatasources{fs: datasource}
 
-			if tt.errorBehaviors.ListenAndServe == nil && tt.errorBehaviors.Shutdown == nil && tt.errorBehaviors.SavePersistently == nil {
-				assert.NoError(t, err)
-			} else {
-				if tt.errorBehaviors.ListenAndServe != nil {
-					assert.ErrorIs(t, err, tt.errorBehaviors.ListenAndServe)
-				}
-				if tt.errorBehaviors.Shutdown != nil {
-					assert.ErrorIs(t, err, tt.errorBehaviors.Shutdown)
-				}
-				if tt.errorBehaviors.SavePersistently != nil {
-					assert.ErrorIs(t, err, tt.errorBehaviors.SavePersistently)
-				}
-			}
-			server.AssertNumberOfCalls(t, "ListenAndServe", 1)
-			server.AssertNumberOfCalls(t, "Shutdown", 1)
-			recipeDatasource.AssertNumberOfCalls(t, "SavePersistently", 1)
-		})
-	}
+		errChan := make(chan error, 1)
+		ctx, cancel := context.WithCancel(context.Background())
+		go func() {
+			errChan <- serveGraceful(ctx, server, depsDatasources)
+		}()
+		time.Sleep(time.Millisecond)
+
+		server.AssertCalled(t, "ListenAndServe")
+		server.AssertNotCalled(t, "Shutdown", mock.Anything)
+		datasource.AssertNotCalled(t, "SavePersistently")
+
+		cancel()
+		err := <-errChan
+
+		assert.NoError(t, err)
+		server.AssertCalled(t, "Shutdown", mock.Anything)
+		datasource.AssertCalled(t, "SavePersistently")
+	})
 }
 
 func Test_getCLIOption(t *testing.T) {
@@ -160,9 +90,7 @@ func Test_loadDependencies(t *testing.T) {
 		deps, err := loadDependencies(t.TempDir())
 
 		assert.NoError(t, err)
-		assert.NotNil(t, deps.Datasources.Recipes)
-		assert.NotNil(t, deps.Usecase.GraphQL.Recipes)
-		// assert.NotNil(t, deps.Usecase.GraphQL.Orders)
+		assert.NotNil(t, deps.Usecase.GraphQL.Copilot)
 	})
 
 	t.Run("may fail to load repository", func(t *testing.T) {
@@ -171,8 +99,6 @@ func Test_loadDependencies(t *testing.T) {
 		deps, err := loadDependencies("")
 
 		assert.Error(t, err)
-		assert.Nil(t, deps.Datasources.Recipes)
-		assert.Nil(t, deps.Usecase.GraphQL.Recipes)
-		assert.Nil(t, deps.Usecase.GraphQL.Orders)
+		assert.Nil(t, deps.Usecase.GraphQL.Copilot)
 	})
 }

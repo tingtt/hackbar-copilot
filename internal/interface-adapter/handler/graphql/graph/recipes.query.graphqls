@@ -12,7 +12,7 @@ type Recipe {
   name: String!
   type: RecipeType
   glass: GlassType
-  steps: [String!]
+  steps: [Step!]
 }
 
 type RecipeType {
@@ -23,5 +23,11 @@ type RecipeType {
 type GlassType {
   name: String! # collins, shot, rock, beer etc.
   imageURL: String
+  description: String
+}
+
+type Step {
+  material: String
+  amount: String
   description: String
 }

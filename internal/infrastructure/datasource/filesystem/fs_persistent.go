@@ -3,73 +3,40 @@ package filesystem
 import (
 	"errors"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem/toml"
-	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/usecase/recipes"
 	"os"
 )
 
 func loadData(fs fsR) (d data, err error) {
-	d.recipeGroups, err = loadRecipeGroups(fs)
+	err = loadFromToml(fs, "1_recipe_groups.toml", "recipe_group", &d.recipeGroups)
 	if err != nil {
 		return data{}, err
 	}
-	d.recipeTypes, err = loadRecipeTypes(fs)
+	err = loadFromToml(fs, "2_recipe_types.toml", "recipe_type", &d.recipeTypes)
 	if err != nil {
 		return data{}, err
 	}
-	d.glassTypes, err = loadGlassTypes(fs)
+	err = loadFromToml(fs, "3_glass_types.toml", "glass_type", &d.glassTypes)
 	if err != nil {
 		return data{}, err
 	}
 	return d, err
 }
 
-func loadRecipeGroups(fs fsR) ([]recipes.RecipeGroup, error) {
-	dataFile, err := fs.Open("1_recipe_groups.toml")
+func loadFromToml[T any](fs fsR, filename, key string, p *T) error {
+	dataFile, err := fs.Open(filename)
 	if errors.Is(err, os.ErrNotExist) {
-		return nil, nil
+		return nil
 	}
 	if err != nil {
-		return nil, err
+		return err
 	}
-	d := map[string][]recipes.RecipeGroup{"recipe_group": {}}
+	d := map[string]T{key: *new(T)}
 	err = toml.Decode(dataFile, &d)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return d["recipe_group"], nil
-}
-
-func loadRecipeTypes(fs fsR) (map[string]model.RecipeType, error) {
-	dataFile, err := fs.Open("2_recipe_types.toml")
-	if errors.Is(err, os.ErrNotExist) {
-		return make(map[string]model.RecipeType), nil
-	}
-	if err != nil {
-		return nil, err
-	}
-	d := map[string]map[string]model.RecipeType{"recipe_type": {}}
-	err = toml.Decode(dataFile, &d)
-	if err != nil {
-		return nil, err
-	}
-	return d["recipe_type"], nil
-}
-
-func loadGlassTypes(fs fsR) (map[string]model.GlassType, error) {
-	dataFile, err := fs.Open("3_glass_types.toml")
-	if errors.Is(err, os.ErrNotExist) {
-		return make(map[string]model.GlassType), nil
-	}
-	if err != nil {
-		return nil, err
-	}
-	d := map[string]map[string]model.GlassType{"glass_type": {}}
-	err = toml.Decode(dataFile, &d)
-	if err != nil {
-		return nil, err
-	}
-	return d["glass_type"], nil
+	*p = d[key]
+	return nil
 }
 
 func (f *filesystem) SavePersistently() error {

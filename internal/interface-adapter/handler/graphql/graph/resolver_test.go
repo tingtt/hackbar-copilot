@@ -22,6 +22,6 @@ func TestNewResolver(t *testing.T) {
 
 		resolver := NewResolver(Dependencies{}).(*Resolver)
 
-		assert.NotNil(t, resolver.deps.convertToModel)
+		assert.NotNil(t, resolver.recipeAdapter)
 	})
 }

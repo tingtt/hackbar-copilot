@@ -12,7 +12,7 @@ input InputRecipe {
   name: String!
   recipeType: InputRecipeType
   glassType: InputGlassType
-  steps: [String!]
+  steps: [InputStep!]
 }
 
 input InputRecipeType {
@@ -26,4 +26,10 @@ input InputGlassType {
   imageURL: String
   description: String
   save: Boolean
+}
+
+input InputStep {
+  material: String
+  amount: String
+  description: String
 }

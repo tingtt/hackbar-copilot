@@ -3,15 +3,15 @@ package filesystem
 import (
 	"bytes"
 	"errors"
+	"hackbar-copilot/internal/domain/recipe"
+	"hackbar-copilot/internal/domain/recipe/recipetest"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem/toml"
-	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/usecase/recipes"
 	"io"
-	"os"
 	"path"
 	"strconv"
 	"testing"
 
+	"github.com/lithammer/dedent"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -38,9 +38,9 @@ func Test_loadData(t *testing.T) {
 				}(),
 			},
 			wantD: data{
-				recipeGroups: []recipes.RecipeGroup{},
-				recipeTypes:  map[string]model.RecipeType{},
-				glassTypes:   map[string]model.GlassType{},
+				recipeGroups: nil,
+				recipeTypes:  nil,
+				glassTypes:   nil,
 			},
 			wantErr: false,
 		},
@@ -111,323 +111,6 @@ func Test_loadData(t *testing.T) {
 	}
 }
 
-func Test_loadRecipeGroups(t *testing.T) {
-	t.Parallel()
-
-	type args struct {
-		fs fsR
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    []recipes.RecipeGroup
-		wantErr bool
-	}{
-		{
-			name: "may load data successfully",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString(`[[recipe_group]]
-Name = "Phuket Sling"
-
-[[recipe_group.Recipes]]
-Name = "Cocktail"
-Type = "build"
-Glass = "collins"
-Steps = ["Peach liqueur 30ml", "Blue curacao 15ml", "Grapefruit juice 30ml", "Stir", "Tonic water - Full up"]
-
-[[recipe_group.Recipes]]
-Name = "Mocktail"
-Type = "build"
-Glass = "collins"
-Steps = ["Peach syrup 20ml", "Blue curacao syrup 10ml", "Grapefruit juice 30ml", "Tonic water - Full up"]
-`)
-					m.On("Open", "1_recipe_groups.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want: []recipes.RecipeGroup{{
-				Name:     "Phuket Sling",
-				ImageURL: nil,
-				Recipes: []recipes.Recipe{{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
-					Steps: []string{"Peach liqueur 30ml", "Blue curacao 15ml", "Grapefruit juice 30ml", "Stir", "Tonic water - Full up"},
-				}, {
-					Name:  "Mocktail",
-					Type:  "build",
-					Glass: "collins",
-					Steps: []string{"Peach syrup 20ml", "Blue curacao syrup 10ml", "Grapefruit juice 30ml", "Tonic water - Full up"},
-				}},
-			}},
-			wantErr: false,
-		},
-		{
-			name: "may return empty data, if file not exists",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "1_recipe_groups.toml").Return(&MockFile{}, os.ErrNotExist)
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: false,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "1_recipe_groups.toml").Return(&MockFile{}, errors.New("unexpected error"))
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString("invalid toml format")
-					m.On("Open", "1_recipe_groups.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			got, err := loadRecipeGroups(tt.args.fs)
-
-			if tt.wantErr {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-			}
-			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
-func Test_loadRecipeTypes(t *testing.T) {
-	t.Parallel()
-
-	type args struct {
-		fs fsR
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    map[string]model.RecipeType
-		wantErr bool
-	}{
-		{
-			name: "may load data successfully",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString(`[recipe_type]
-[recipe_type.build]
-Name = "build"
-[recipe_type.shake]
-Name = "shake"
-[recipe_type.stir]
-Name = "stir"
-[recipe_type.blend]
-Name = "blend"
-`)
-					m.On("Open", "2_recipe_types.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want: map[string]model.RecipeType{
-				"build": {
-					Name:        "build",
-					Description: nil,
-				},
-				"shake": {
-					Name:        "shake",
-					Description: nil,
-				},
-				"stir": {
-					Name:        "stir",
-					Description: nil,
-				},
-				"blend": {
-					Name:        "blend",
-					Description: nil,
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "may return empty data, if file not exists",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "2_recipe_types.toml").Return(&MockFile{}, os.ErrNotExist)
-					return m
-				}(),
-			},
-			want:    map[string]model.RecipeType{},
-			wantErr: false,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "2_recipe_types.toml").Return(&MockFile{}, errors.New("unexpected error"))
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString("invalid toml format")
-					m.On("Open", "2_recipe_types.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			got, err := loadRecipeTypes(tt.args.fs)
-
-			if tt.wantErr {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-			}
-			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
-func Test_loadGlassTypes(t *testing.T) {
-	t.Parallel()
-
-	type args struct {
-		fs fsR
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    map[string]model.GlassType
-		wantErr bool
-	}{
-		{
-			name: "may load data successfully",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString(`[glass_type]
-[glass_type.collins]
-Name = "collins"
-[glass_type.shot]
-Name = "shot"
-[glass_type.rock]
-Name = "rock"
-[glass_type.beer]
-Name = "beer"
-`)
-					m.On("Open", "3_glass_types.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want: map[string]model.GlassType{
-				"collins": {
-					Name:        "collins",
-					Description: nil,
-				},
-				"shot": {
-					Name:        "shot",
-					Description: nil,
-				},
-				"rock": {
-					Name:        "rock",
-					Description: nil,
-				},
-				"beer": {
-					Name:        "beer",
-					Description: nil,
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "may return empty data, if file not exists",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "3_glass_types.toml").Return(&MockFile{}, os.ErrNotExist)
-					return m
-				}(),
-			},
-			want:    map[string]model.GlassType{},
-			wantErr: false,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", "3_glass_types.toml").Return(&MockFile{}, errors.New("unexpected error"))
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-		{
-			name: "may return error, if unexpected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					r := bytes.NewBufferString("invalid toml format")
-					m.On("Open", "3_glass_types.toml").Return(&MockFile{r}, nil)
-					return m
-				}(),
-			},
-			want:    nil,
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			got, err := loadGlassTypes(tt.args.fs)
-
-			if tt.wantErr {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-			}
-			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
 type MockFSW struct {
 	mock.Mock
 }
@@ -435,6 +118,10 @@ type MockFSW struct {
 func (m *MockFSW) Create(name string) (io.WriteCloser, error) {
 	args := m.Called(name)
 	return args.Get(0).(io.WriteCloser), args.Error(1)
+}
+
+func ptr[T any](v T) *T {
+	return &v
 }
 
 func Test_filesystem_SavePersistently(t *testing.T) {
@@ -449,22 +136,62 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 		}{
 			{
 				data: data{
-					recipeGroups: []recipes.RecipeGroup{{
+					recipeGroups: []recipe.RecipeGroup{{
 						Name:     "Phuket Sling",
 						ImageURL: nil,
-						Recipes: []recipes.Recipe{{
+						Recipes: []recipe.Recipe{{
 							Name:  "Cocktail",
 							Type:  "build",
 							Glass: "collins",
-							Steps: []string{"Peach liqueur 30ml", "Blue curacao 15ml", "Grapefruit juice 30ml", "Stir", "Tonic water - Full up"},
+							Steps: []recipe.Step{
+								{
+									Material: ptr("Peach liqueur"),
+									Amount:   ptr("30ml"),
+								},
+								{
+									Material: ptr("Blue curacao"),
+									Amount:   ptr("15ml"),
+								},
+								{
+									Material: ptr("Grapefruit juice"),
+									Amount:   ptr("30ml"),
+								},
+								{
+									Description: ptr("Stir"),
+								},
+								{
+									Material: ptr("Tonic water"),
+									Amount:   ptr("Full up"),
+								},
+							},
 						}, {
 							Name:  "Mocktail",
 							Type:  "build",
 							Glass: "collins",
-							Steps: []string{"Peach syrup 20ml", "Blue curacao syrup 10ml", "Grapefruit juice 30ml", "Tonic water - Full up"},
+							Steps: []recipe.Step{
+								{
+									Material: ptr("Peach syrup"),
+									Amount:   ptr("20ml"),
+								},
+								{
+									Material: ptr("Blue curacao syrup"),
+									Amount:   ptr("15ml"),
+								},
+								{
+									Material: ptr("Grapefruit juice"),
+									Amount:   ptr("30ml"),
+								},
+								{
+									Description: ptr("Stir"),
+								},
+								{
+									Material: ptr("Tonic water"),
+									Amount:   ptr("Full up"),
+								},
+							},
 						}},
 					}},
-					recipeTypes: map[string]model.RecipeType{
+					recipeTypes: map[string]recipe.RecipeType{
 						"build": {
 							Name:        "build",
 							Description: nil,
@@ -482,7 +209,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							Description: nil,
 						},
 					},
-					glassTypes: map[string]model.GlassType{
+					glassTypes: map[string]recipe.GlassType{
 						"collins": {
 							Name:        "collins",
 							Description: nil,
@@ -535,13 +262,13 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 				}
 				{ // assert written data
 					data := struct {
-						recipeGroups map[string][]recipes.RecipeGroup
-						recipeTypes  map[string]map[string]model.RecipeType
-						glassTypes   map[string]map[string]model.GlassType
+						recipeGroups map[string][]recipe.RecipeGroup
+						recipeTypes  map[string]map[string]recipe.RecipeType
+						glassTypes   map[string]map[string]recipe.GlassType
 					}{
-						recipeGroups: map[string][]recipes.RecipeGroup{},
-						recipeTypes:  map[string]map[string]model.RecipeType{},
-						glassTypes:   map[string]map[string]model.GlassType{},
+						recipeGroups: map[string][]recipe.RecipeGroup{},
+						recipeTypes:  map[string]map[string]recipe.RecipeType{},
+						glassTypes:   map[string]map[string]recipe.GlassType{},
 					}
 					assert.NoError(t, toml.Decode(ioWriters.recipeGroups, &data.recipeGroups))
 					assert.NoError(t, toml.Decode(ioWriters.recipeTypes, &data.recipeTypes))
@@ -606,4 +333,193 @@ func Test_filesystem_saveFile(t *testing.T) {
 			}
 		})
 	}
+}
+
+type loadTest struct {
+	name string
+	key  string
+	raw  string
+	want any
+}
+
+var loadTests = []loadTest{
+	{
+		name: "may load recipe groups",
+		key:  "recipe_group",
+		raw: dedent.Dedent(`
+			[[recipe_group]]
+			Name = "Phuket Sling"
+			ImageURL = "https://example.com/path/to/image/phuket-sling"
+
+			[[recipe_group.Recipes]]
+			Name = "Cocktail"
+			Type = "build"
+			Glass = "collins"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Peach liqueur"
+			Amount = "30ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Blue curacao"
+			Amount = "15ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Grapefruit juice"
+			Amount = "30ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Stir"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Tonic water"
+			Amount = "Full up"
+
+			[[recipe_group]]
+			Name = "Passoamoni"
+			ImageURL = "https://example.com/path/to/image/passoamoni"
+
+			[[recipe_group.Recipes]]
+			Name = "Cocktail"
+			Type = "build"
+			Glass = "collins"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Passoa"
+			Amount = "45ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Grapefruit juice"
+			Amount = "30ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Stir"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Tonic water"
+			Amount = "Full up"
+
+			[[recipe_group]]
+			Name = "Blue Devil"
+			ImageURL = "https://example.com/path/to/image/passoamoni"
+
+			[[recipe_group.Recipes]]
+			Name = "Cocktail"
+			Type = "shake"
+			Glass = "cocktail"
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Chill shaker and glass."
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Put ingredients in a shaker."
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Gin"
+			Amount = "30ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Blue curacao"
+			Amount = "15ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Material = "Lemon juice"
+			Amount = "15ml"
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Put ice in a shaker."
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Shake."
+
+			[[recipe_group.Recipes.Steps]]
+			Description = "Pour into a glass."
+		`),
+		want: recipetest.ExampleRecipeGroups,
+	},
+	{
+		name: "may load recipe types",
+		key:  "recipe_type",
+		raw: dedent.Dedent(`
+			[recipe_type]
+			[recipe_type.shake]
+			Name = "shake"
+			Description = "shake description"
+			[recipe_type.build]
+			Name = "build"
+			Description = "build description"
+			[recipe_type.stir]
+			Name = "stir"
+			Description = "stir description"
+			[recipe_type.blend]
+			Name = "blend"
+			Description = "blend description"
+		`),
+		want: recipetest.ExampleRecipeTypesMap,
+	},
+	{
+		name: "may load glass types",
+		key:  "glass_type",
+		raw: dedent.Dedent(`
+			[glass_type]
+			[glass_type.collins]
+			Name = "collins"
+			ImageURL = "https://example.com/path/to/image/collins"
+			Description = "collins glass description"
+			[glass_type.cocktail]
+			Name = "cocktail"
+			ImageURL = "https://example.com/path/to/image/cocktail"
+			Description = "cocktail glass description"
+			[glass_type.shot]
+			Name = "shot"
+			ImageURL = "https://example.com/path/to/image/shot"
+			Description = "shot glass description"
+			[glass_type.rock]
+			Name = "rock"
+			ImageURL = "https://example.com/path/to/image/rock"
+			Description = "rock glass description"
+			[glass_type.beer]
+			Name = "beer"
+			ImageURL = "https://example.com/path/to/image/beer"
+			Description = "beer glass description"
+		`),
+		want: recipetest.ExampleGlassTypesMap,
+	},
+}
+
+func Test_loadFromToml(t *testing.T) {
+	t.Parallel()
+
+	t.Run("may load data successfully", func(t *testing.T) {
+		t.Parallel()
+
+		for _, tt := range loadTests {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+
+				m := new(MockFSR)
+				r := bytes.NewBufferString(tt.raw)
+				m.On("Open", mock.Anything).Return(&MockFile{r}, nil)
+				var got any
+				var err error
+				switch tt.key {
+				case "recipe_group":
+					typedGot := []recipe.RecipeGroup{}
+					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
+					got = typedGot
+				case "recipe_type":
+					typedGot := map[string]recipe.RecipeType{}
+					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
+					got = typedGot
+				case "glass_type":
+					typedGot := map[string]recipe.GlassType{}
+					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
+					got = typedGot
+				}
+
+				assert.NoError(t, err)
+				assert.Equal(t, tt.want, got)
+			})
+		}
+	})
 }

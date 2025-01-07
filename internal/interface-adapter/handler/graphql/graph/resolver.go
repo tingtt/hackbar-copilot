@@ -1,8 +1,8 @@
 package graph
 
 import (
-	"hackbar-copilot/internal/usecase/orders"
-	"hackbar-copilot/internal/usecase/recipes"
+	"hackbar-copilot/internal/interface-adapter/handler/graphql/adapter"
+	"hackbar-copilot/internal/usecase/copilot"
 )
 
 //go:generate go run github.com/99designs/gqlgen generate
@@ -12,16 +12,15 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 func NewResolver(deps Dependencies) ResolverRoot {
-	deps.convertToModel = &converter{}
+	deps.recipeAdapter = adapter.NewRecipeAdapter()
 	return &Resolver{deps}
 }
 
 type Resolver struct {
-	deps Dependencies
+	Dependencies
 }
 
 type Dependencies struct {
-	Orders         orders.Service
-	Recipes        recipes.Service
-	convertToModel converterI
+	Copilot       copilot.Copilot
+	recipeAdapter adapter.RecipeAdapter
 }

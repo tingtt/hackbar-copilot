@@ -1,14 +1,11 @@
 package filesystem
 
 import (
-	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/usecase/recipes"
-	usecaseutils "hackbar-copilot/internal/usecase/utils"
-	"hackbar-copilot/internal/utils/sliceutil"
+	"hackbar-copilot/internal/domain/recipe"
 )
 
 type Filesystem interface {
-	recipes.Repository
+	Recipe() recipe.Repository
 	SavePersistently() error
 }
 
@@ -59,61 +56,16 @@ type filesystem struct {
 }
 
 type data struct {
-	recipeGroups []recipes.RecipeGroup
-	recipeTypes  map[string]model.RecipeType
-	glassTypes   map[string]model.GlassType
+	recipeGroups []recipe.RecipeGroup
+	recipeTypes  map[string]recipe.RecipeType
+	glassTypes   map[string]recipe.GlassType
 }
 
 func (data data) isEmpty() bool {
 	return len(data.recipeGroups) == 0 && len(data.recipeTypes) == 0 && len(data.glassTypes) == 0
 }
 
-// Find implements recipes.Repository.
-func (f *filesystem) Find() ([]recipes.RecipeGroup, error) {
-	return f.data.recipeGroups, nil
-}
-
-// FindOne implements recipes.Repository.
-func (f *filesystem) FindOne(name string) (recipes.RecipeGroup, error) {
-	recipeGroup := sliceutil.FindOne(f.data.recipeGroups, func(rg recipes.RecipeGroup) bool {
-		return rg.Name == name
-	})
-	if recipeGroup == nil {
-		return recipes.RecipeGroup{}, usecaseutils.ErrNotFound
-	}
-	return *recipeGroup, nil
-}
-
-// Save implements recipes.Repository.
-func (f *filesystem) Save(new recipes.RecipeGroup) error {
-	for i, recipeGroup := range f.data.recipeGroups {
-		if recipeGroup.Name == new.Name {
-			f.data.recipeGroups[i] = new
-			return nil
-		}
-	}
-	f.data.recipeGroups = append(f.data.recipeGroups, new)
-	return nil
-}
-
-// FindRecipeType implements recipes.Repository.
-func (f *filesystem) FindRecipeType() (map[string]model.RecipeType, error) {
-	return f.data.recipeTypes, nil
-}
-
-// FindGlassType implements recipes.Repository.
-func (f *filesystem) FindGlassType() (map[string]model.GlassType, error) {
-	return f.data.glassTypes, nil
-}
-
-// SaveRecipeType implements recipes.Repository.
-func (f *filesystem) SaveRecipeType(new model.RecipeType) error {
-	f.data.recipeTypes[new.Name] = new
-	return nil
-}
-
-// SaveGlassType implements recipes.Repository.
-func (f *filesystem) SaveGlassType(new model.GlassType) error {
-	f.data.glassTypes[new.Name] = new
-	return nil
+// Recipe implements Filesystem.
+func (f *filesystem) Recipe() recipe.Repository {
+	return &recipeRepository{f}
 }

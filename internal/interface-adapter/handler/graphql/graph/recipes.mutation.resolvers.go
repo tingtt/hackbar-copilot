@@ -6,22 +6,59 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
+	usecaseutils "hackbar-copilot/internal/usecase/utils"
 )
 
 // SaveRecipe is the resolver for the saveRecipe field.
 func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error) {
-	recipeGroup, err := r.deps.Recipes.Register(input)
+	currentRecipeGroup, err := r.Copilot.FindRecipeGroup(input.Name)
+	if err != nil && !errors.Is(err, usecaseutils.ErrNotFound) {
+		return nil, err
+	}
+	currentRecipeTypes, err := r.Copilot.FindRecipeType()
 	if err != nil {
 		return nil, err
 	}
-	recipeTypes, err := r.deps.Recipes.FindRecipeType()
+	currentGlassTypes, err := r.Copilot.FindGlassType()
 	if err != nil {
 		return nil, err
 	}
-	glassTypes, err := r.deps.Recipes.FindGlassType()
+	newRecipeGroup := r.recipeAdapter.ApplyRecipeGroup(currentRecipeGroup, input)
+	newRecipeTypes, err := r.recipeAdapter.ApplyRecipeTypes(currentRecipeTypes, input)
 	if err != nil {
 		return nil, err
 	}
-	return r.deps.convertToModel.RecipeGroup(recipeTypes, glassTypes)(recipeGroup), nil
+	newGlassTypes, err := r.recipeAdapter.ApplyGlassTypes(currentGlassTypes, input)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, newRecipeType := range newRecipeTypes {
+		err := r.Copilot.SaveRecipeType(newRecipeType)
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, newGlassType := range newGlassTypes {
+		err := r.Copilot.SaveGlassType(newGlassType)
+		if err != nil {
+			return nil, err
+		}
+	}
+	err = r.Copilot.SaveRecipe(newRecipeGroup)
+	if err != nil {
+		return nil, err
+	}
+
+	recipeTypes, err := r.Copilot.FindRecipeType()
+	if err != nil {
+		return nil, err
+	}
+	glassTypes, err := r.Copilot.FindGlassType()
+	if err != nil {
+		return nil, err
+	}
+	return r.recipeAdapter.RecipeGroup(recipeTypes, glassTypes)(newRecipeGroup), nil
 }

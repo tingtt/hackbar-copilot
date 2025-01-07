@@ -19,7 +19,7 @@ type InputRecipe struct {
 	Name       string           `json:"name"`
 	RecipeType *InputRecipeType `json:"recipeType,omitempty"`
 	GlassType  *InputGlassType  `json:"glassType,omitempty"`
-	Steps      []string         `json:"steps,omitempty"`
+	Steps      []*InputStep     `json:"steps,omitempty"`
 }
 
 type InputRecipeGroup struct {
@@ -34,6 +34,12 @@ type InputRecipeType struct {
 	Save        *bool   `json:"save,omitempty"`
 }
 
+type InputStep struct {
+	Material    *string `json:"material,omitempty"`
+	Amount      *string `json:"amount,omitempty"`
+	Description *string `json:"description,omitempty"`
+}
+
 type Mutation struct {
 }
 
@@ -44,7 +50,7 @@ type Recipe struct {
 	Name  string      `json:"name"`
 	Type  *RecipeType `json:"type,omitempty"`
 	Glass *GlassType  `json:"glass,omitempty"`
-	Steps []string    `json:"steps,omitempty"`
+	Steps []*Step     `json:"steps,omitempty"`
 }
 
 type RecipeGroup struct {
@@ -55,5 +61,11 @@ type RecipeGroup struct {
 
 type RecipeType struct {
 	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+}
+
+type Step struct {
+	Material    *string `json:"material,omitempty"`
+	Amount      *string `json:"amount,omitempty"`
 	Description *string `json:"description,omitempty"`
 }

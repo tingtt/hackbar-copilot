@@ -26,7 +26,11 @@ query {
         name
         description
       }
-      steps
+      steps {
+        material
+        amount
+        description
+      }
     }
   }
 }
@@ -47,7 +51,11 @@ mutation saveRecipe($input: InputRecipeGroup!) {
         name
         description
       }
-      steps
+      steps {
+        material
+        amount
+        description
+      }
     }
   }
 }
@@ -67,11 +75,32 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           "name": "collins"
         },
         "steps": [
-          "Peach liqueur 30ml",
-          "Blue curacao 15ml",
-          "Grapefruit juice 30ml",
-          "Stir",
-          "Tonic water - Full up"
+          {
+            "material": "Peach liqueur",
+            "amount": "30ml"
+          },
+          {
+            "material": "Blue curacao",
+            "amount": "15ml"
+          },
+          {
+            "material": "Grapefruit juice",
+            "amount": "30ml"
+          },
+          {
+            "material": "Tonic water",
+            "amount": "Half up"
+          },
+          {
+            "description": "Stir"
+          },
+          {
+            "material": "Tonic water",
+            "amount": "Full up"
+          },
+          {
+            "description": "Stir (Lightly so as not to lose gas of soda.)"
+          }
         ]
       },
       {
@@ -83,12 +112,32 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           "name": "collins"
         },
         "steps": [
-          "Peach syrup 20ml",
-          "Blue curacao syrup 10ml",
-          "Grapefruit juice 30ml",
-          "Stir",
-          "Tonic water - Full up",
-          "Stir"
+          {
+            "material": "Peach syrup",
+            "amount": "20ml"
+          },
+          {
+            "material": "Blue curacao syrup",
+            "amount": "10ml"
+          },
+          {
+            "material": "Grapefruit juice",
+            "amount": "30ml"
+          },
+          {
+            "material": "Tonic water",
+            "amount": "Half up"
+          },
+          {
+            "description": "Stir"
+          },
+          {
+            "material": "Tonic water",
+            "amount": "Full up"
+          },
+          {
+            "description": "Stir (Lightly so as not to lose gas of soda.)"
+          }
         ]
       }
     ]
