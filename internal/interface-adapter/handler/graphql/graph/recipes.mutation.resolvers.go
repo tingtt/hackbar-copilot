@@ -34,6 +34,10 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 	if err != nil {
 		return nil, err
 	}
+	asMenuArg, err := r.recipeAdapter.ApplyAsMenu(input)
+	if err != nil {
+		return nil, err
+	}
 
 	for _, newRecipeType := range newRecipeTypes {
 		err := r.Copilot.SaveRecipeType(newRecipeType)
@@ -50,6 +54,12 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 	err = r.Copilot.SaveRecipe(newRecipeGroup)
 	if err != nil {
 		return nil, err
+	}
+	if asMenuArg != nil {
+		_, err := r.Copilot.SaveAsMenuGroup(newRecipeGroup.Name, *asMenuArg)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	recipeTypes, err := r.Copilot.FindRecipeType()

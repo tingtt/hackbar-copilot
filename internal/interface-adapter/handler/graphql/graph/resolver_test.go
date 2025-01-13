@@ -23,5 +23,6 @@ func TestNewResolver(t *testing.T) {
 		resolver := NewResolver(Dependencies{}).(*Resolver)
 
 		assert.NotNil(t, resolver.recipeAdapter)
+		assert.NotNil(t, resolver.menuAdapter)
 	})
 }

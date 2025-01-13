@@ -8,6 +8,15 @@ type GlassType struct {
 	Description *string `json:"description,omitempty"`
 }
 
+type InputAsMenuArgs struct {
+	Flavor *string `json:"flavor,omitempty"`
+}
+
+type InputAsMenuItemArgs struct {
+	ImageURL *string `json:"imageURL,omitempty"`
+	Price    int     `json:"price"`
+}
+
 type InputGlassType struct {
 	Name        string  `json:"name"`
 	ImageURL    *string `json:"imageURL,omitempty"`
@@ -16,16 +25,18 @@ type InputGlassType struct {
 }
 
 type InputRecipe struct {
-	Name       string           `json:"name"`
-	RecipeType *InputRecipeType `json:"recipeType,omitempty"`
-	GlassType  *InputGlassType  `json:"glassType,omitempty"`
-	Steps      []*InputStep     `json:"steps,omitempty"`
+	Name       string               `json:"name"`
+	RecipeType *InputRecipeType     `json:"recipeType,omitempty"`
+	GlassType  *InputGlassType      `json:"glassType,omitempty"`
+	Steps      []*InputStep         `json:"steps,omitempty"`
+	AsMenu     *InputAsMenuItemArgs `json:"asMenu,omitempty"`
 }
 
 type InputRecipeGroup struct {
-	Name     string         `json:"name"`
-	ImageURL *string        `json:"imageURL,omitempty"`
-	Recipes  []*InputRecipe `json:"recipes,omitempty"`
+	Name     string           `json:"name"`
+	ImageURL *string          `json:"imageURL,omitempty"`
+	Recipes  []*InputRecipe   `json:"recipes,omitempty"`
+	AsMenu   *InputAsMenuArgs `json:"asMenu,omitempty"`
 }
 
 type InputRecipeType struct {
@@ -38,6 +49,23 @@ type InputStep struct {
 	Material    *string `json:"material,omitempty"`
 	Amount      *string `json:"amount,omitempty"`
 	Description *string `json:"description,omitempty"`
+}
+
+type MenuGroup struct {
+	Name        string      `json:"name"`
+	ImageURL    *string     `json:"imageURL,omitempty"`
+	Flavor      *string     `json:"flavor,omitempty"`
+	Items       []*MenuItem `json:"items,omitempty"`
+	MinPriceYen int         `json:"minPriceYen"`
+}
+
+type MenuItem struct {
+	Name       string   `json:"name"`
+	ImageURL   *string  `json:"imageURL,omitempty"`
+	Materials  []string `json:"materials,omitempty"`
+	OutOfStock bool     `json:"outOfStock"`
+	PriceYen   int      `json:"priceYen"`
+	Recipe     *Recipe  `json:"recipe,omitempty"`
 }
 
 type Mutation struct {

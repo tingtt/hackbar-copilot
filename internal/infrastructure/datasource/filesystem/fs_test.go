@@ -41,3 +41,16 @@ func Test_filesystem_Recipe(t *testing.T) {
 		assert.NotNil(t, fs.Recipe())
 	})
 }
+
+func Test_filesystem_Menu(t *testing.T) {
+	t.Parallel()
+
+	t.Run("will return non-nil struct", func(t *testing.T) {
+		t.Parallel()
+
+		fs, err := NewRepository(t.TempDir())
+
+		assert.NoError(t, err)
+		assert.NotNil(t, fs.Menu())
+	})
+}

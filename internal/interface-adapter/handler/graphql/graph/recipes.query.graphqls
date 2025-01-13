@@ -6,6 +6,7 @@ type RecipeGroup {
   name: String!
   imageURL: String
   recipes: [Recipe!]
+  # asMenu: AsMenu
 }
 
 type Recipe {
@@ -13,6 +14,7 @@ type Recipe {
   type: RecipeType
   glass: GlassType
   steps: [Step!]
+  # asMenu: AsMenuItem
 }
 
 type RecipeType {
@@ -31,3 +33,12 @@ type Step {
   amount: String
   description: String
 }
+
+# type AsMenu {
+#   flavor: String
+# }
+
+# type AsMenuItem {
+#   imageURL: String
+#   price: Int!
+# }

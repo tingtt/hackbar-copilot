@@ -1,11 +1,13 @@
 package filesystem
 
 import (
+	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/recipe"
 )
 
 type Filesystem interface {
 	Recipe() recipe.Repository
+	Menu() menu.Repository
 	SavePersistently() error
 }
 
@@ -59,13 +61,21 @@ type data struct {
 	recipeGroups []recipe.RecipeGroup
 	recipeTypes  map[string]recipe.RecipeType
 	glassTypes   map[string]recipe.GlassType
+	menuGroups   []menu.Group
 }
 
 func (data data) isEmpty() bool {
-	return len(data.recipeGroups) == 0 && len(data.recipeTypes) == 0 && len(data.glassTypes) == 0
+	return len(data.recipeGroups) == 0 &&
+		len(data.recipeTypes) == 0 && len(data.glassTypes) == 0 &&
+		len(data.menuGroups) == 0
 }
 
 // Recipe implements Filesystem.
 func (f *filesystem) Recipe() recipe.Repository {
 	return &recipeRepository{f}
+}
+
+// Menu implements Filesystem.
+func (f *filesystem) Menu() menu.Repository {
+	return &menuRepository{f}
 }

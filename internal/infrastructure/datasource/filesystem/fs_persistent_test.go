@@ -3,6 +3,7 @@ package filesystem
 import (
 	"bytes"
 	"errors"
+	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem/toml"
@@ -41,6 +42,7 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
+				menuGroups:   nil,
 			},
 			wantErr: false,
 		},
@@ -57,6 +59,7 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
+				menuGroups:   nil,
 			},
 			wantErr: true,
 		},
@@ -74,6 +77,7 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
+				menuGroups:   nil,
 			},
 			wantErr: true,
 		},
@@ -91,6 +95,25 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
+				menuGroups:   nil,
+			},
+			wantErr: true,
+		},
+		{
+			name: "may return error, if not expected",
+			args: args{
+				fs: func() fsR {
+					m := new(MockFSR)
+					m.On("Open", mock.Anything).Return(&MockFile{&bytes.Buffer{}}, nil).Times(3)
+					m.On("Open", mock.Anything).Return(&MockFile{}, errors.New("error unexpected")).Once()
+					return m
+				}(),
+			},
+			wantD: data{
+				recipeGroups: nil,
+				recipeTypes:  nil,
+				glassTypes:   nil,
+				menuGroups:   nil,
 			},
 			wantErr: true,
 		},
@@ -227,6 +250,22 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							Description: nil,
 						},
 					},
+					menuGroups: []menu.Group{
+						{
+							Name:     "Phuket Sling",
+							ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+							Flavor:   ptr("Sweet"),
+							Items: []menu.Item{
+								{
+									Name:       "Cocktail",
+									ImageURL:   ptr("https://example.com/path/to/image/cocktail"),
+									Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
+									OutOfStock: false,
+									Price:      700,
+								},
+							},
+						},
+					},
 				},
 				wantErr: false,
 			},
@@ -239,15 +278,18 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					recipeGroups *MockFile
 					recipeTypes  *MockFile
 					glassTypes   *MockFile
+					menuGroups   *MockFile
 				}{
 					recipeGroups: &MockFile{&bytes.Buffer{}},
 					recipeTypes:  &MockFile{&bytes.Buffer{}},
 					glassTypes:   &MockFile{&bytes.Buffer{}},
+					menuGroups:   &MockFile{&bytes.Buffer{}},
 				}
 				m := new(MockFSW)
 				m.On("Create", "1_recipe_groups.toml").Return(ioWriters.recipeGroups, nil)
 				m.On("Create", "2_recipe_types.toml").Return(ioWriters.recipeTypes, nil)
 				m.On("Create", "3_glass_types.toml").Return(ioWriters.glassTypes, nil)
+				m.On("Create", "4_menu_groups.toml").Return(ioWriters.menuGroups, nil)
 				f := &filesystem{
 					write: m,
 					data:  tt.data,
@@ -265,17 +307,21 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						recipeGroups map[string][]recipe.RecipeGroup
 						recipeTypes  map[string]map[string]recipe.RecipeType
 						glassTypes   map[string]map[string]recipe.GlassType
+						menuGroups   map[string][]menu.Group
 					}{
 						recipeGroups: map[string][]recipe.RecipeGroup{},
 						recipeTypes:  map[string]map[string]recipe.RecipeType{},
 						glassTypes:   map[string]map[string]recipe.GlassType{},
+						menuGroups:   map[string][]menu.Group{},
 					}
 					assert.NoError(t, toml.Decode(ioWriters.recipeGroups, &data.recipeGroups))
 					assert.NoError(t, toml.Decode(ioWriters.recipeTypes, &data.recipeTypes))
 					assert.NoError(t, toml.Decode(ioWriters.glassTypes, &data.glassTypes))
+					assert.NoError(t, toml.Decode(ioWriters.menuGroups, &data.menuGroups))
 					assert.Equal(t, tt.data.recipeGroups, data.recipeGroups["recipe_group"])
 					assert.Equal(t, tt.data.recipeTypes, data.recipeTypes["recipe_type"])
 					assert.Equal(t, tt.data.glassTypes, data.glassTypes["glass_type"])
+					assert.Equal(t, tt.data.menuGroups, data.menuGroups["menu_group"])
 				}
 			})
 		}

@@ -101,7 +101,10 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           {
             "description": "Stir (Lightly so as not to lose gas of soda.)"
           }
-        ]
+        ],
+        "asMenu": {
+          "price": 700
+        }
       },
       {
         "name": "Mocktail",
@@ -138,9 +141,15 @@ mutation saveRecipe($input: InputRecipeGroup!) {
           {
             "description": "Stir (Lightly so as not to lose gas of soda.)"
           }
-        ]
+        ],
+        "asMenu": {
+          "price": 700
+        }
       }
-    ]
+    ],
+    "asMenu": {
+      "flavor": "Sweet"
+    }
   }
 }
 ```

@@ -111,6 +111,7 @@ func loadDependencies(dataDirPath string) (dependencies, error) {
 			GraphQL: graph.Dependencies{
 				Copilot: copilot.New(copilot.Dependencies{
 					Recipe: fs.Recipe(),
+					Menu:   fs.Menu(),
 				}),
 			},
 		},

@@ -13,6 +13,7 @@ import (
 
 func NewResolver(deps Dependencies) ResolverRoot {
 	deps.recipeAdapter = adapter.NewRecipeAdapter()
+	deps.menuAdapter = adapter.NewMenuAdapterOut()
 	return &Resolver{deps}
 }
 
@@ -23,4 +24,5 @@ type Resolver struct {
 type Dependencies struct {
 	Copilot       copilot.Copilot
 	recipeAdapter adapter.RecipeAdapter
+	menuAdapter   adapter.MenuAdapter
 }

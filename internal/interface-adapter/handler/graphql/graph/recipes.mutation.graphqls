@@ -6,6 +6,7 @@ input InputRecipeGroup {
   name: String!
   imageURL: String
   recipes: [InputRecipe!]
+  asMenu: InputAsMenuArgs
 }
 
 input InputRecipe {
@@ -13,6 +14,7 @@ input InputRecipe {
   recipeType: InputRecipeType
   glassType: InputGlassType
   steps: [InputStep!]
+  asMenu: InputAsMenuItemArgs
 }
 
 input InputRecipeType {
@@ -32,4 +34,13 @@ input InputStep {
   material: String
   amount: String
   description: String
+}
+
+input InputAsMenuArgs {
+  flavor: String
+}
+
+input InputAsMenuItemArgs {
+  imageURL: String
+  price: Int!
 }
