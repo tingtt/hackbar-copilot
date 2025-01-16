@@ -36,11 +36,12 @@ Provides support for bartender operations copilot.
 │   │   └── handler/
 │   │       └── graphql/
 │   ├── usecase/            # Scopes: application bussiness rules
-│   │   ├── manuals/
-│   │   ├── orders/
-│   │   └── recipes/
+│   │   ├── copilot/
+│   │   └── order/
 │   └── domain/             # Scopes: enterprise bussiness rules
-│       └── alcoholicdrinks/
+│       ├── order/
+│       ├── recipe/
+│       └── menu/
 └── test/
     ├── e2e/    # E2E test environments
     └── ci/     # CI test environments
