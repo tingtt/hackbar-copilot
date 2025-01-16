@@ -47,7 +47,7 @@ func Test_copilot_FindGlassType(t *testing.T) {
 			},
 		}
 
-		recipeSaveLister := new(MockRepository)
+		recipeSaveLister := new(MockRecipeSaveLister)
 		recipeSaveLister.On("AllGlassTypes").Return(glassTypes, nil)
 
 		c := &copilot{recipe: recipeSaveLister}

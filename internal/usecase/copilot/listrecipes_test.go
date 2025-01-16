@@ -11,7 +11,7 @@ import (
 func Test_copilot_ListRecipes(t *testing.T) {
 	t.Parallel()
 
-	t.Run("will return recipe groups", func(t *testing.T) {
+	t.Run("will return sorted recipe groups", func(t *testing.T) {
 		t.Parallel()
 
 		recipeGroup := recipetest.ExampleRecipeGroupsIter
@@ -20,7 +20,7 @@ func Test_copilot_ListRecipes(t *testing.T) {
 			return want[i].Name < want[j].Name
 		})
 
-		recipeSaveLister := new(MockRepository)
+		recipeSaveLister := new(MockRecipeSaveLister)
 		recipeSaveLister.On("All").Return(recipeGroup, nil)
 
 		c := &copilot{recipe: recipeSaveLister}

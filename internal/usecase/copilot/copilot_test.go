@@ -13,7 +13,7 @@ func TestNew(t *testing.T) {
 		t.Parallel()
 
 		copilot := New(Dependencies{
-			Recipe: new(MockRepository),
+			Recipe: new(MockRecipeSaveLister),
 		}).(*copilot)
 
 		assert.NotNil(t, copilot)
