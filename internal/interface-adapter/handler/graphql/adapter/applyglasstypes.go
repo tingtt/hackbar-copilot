@@ -1,7 +1,6 @@
 package adapter
 
 import (
-	"errors"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"hackbar-copilot/internal/utils/sliceutil"
@@ -35,7 +34,7 @@ func (s *recipeAdapterIn) HasUpdateGlassTypes(inputGlassTypes []model.InputGlass
 		if /* GlassType already exists */ _, exists := currentGlassTypes[inputGlassType.Name]; exists {
 			if /* has updates */ inputGlassType.ImageURL != nil || inputGlassType.Description != nil {
 				if /* save is not true */ !(inputGlassType.Save != nil && *inputGlassType.Save) {
-					return nil, errors.New("save does not true")
+					return nil, ErrSaveDoesNotExist
 				}
 			} else {
 				continue

@@ -1,7 +1,6 @@
 package adapter
 
 import (
-	"errors"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"hackbar-copilot/internal/utils/sliceutil"
@@ -35,7 +34,7 @@ func (s *recipeAdapterIn) HasUpdateRecipeTypes(inputRecipeTypes []model.InputRec
 		if /* recipeType already exists */ _, exists := currentRecipeTypes[inputRecipeType.Name]; exists {
 			if /* has updates */ inputRecipeType.Description != nil {
 				if /* save is not true */ !(inputRecipeType.Save != nil && *inputRecipeType.Save) {
-					return nil, errors.New("save does not true")
+					return nil, ErrSaveDoesNotExist
 				}
 			} else {
 				continue
