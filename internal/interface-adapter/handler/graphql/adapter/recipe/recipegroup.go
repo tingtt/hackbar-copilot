@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -7,7 +7,7 @@ import (
 )
 
 // RecipeGroup implements RecipeAdapterOut.
-func (adapter *adapterOut) RecipeGroup(recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) func(recipe.RecipeGroup) *model.RecipeGroup {
+func (adapter *outputAdapter) RecipeGroup(recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) func(recipe.RecipeGroup) *model.RecipeGroup {
 	return func(recipeGroup recipe.RecipeGroup) *model.RecipeGroup {
 		return &model.RecipeGroup{
 			Name:     recipeGroup.Name,
@@ -17,7 +17,7 @@ func (adapter *adapterOut) RecipeGroup(recipeTypes map[string]recipe.RecipeType,
 	}
 }
 
-func (adapter *adapterOut) recipe(recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) func(recipe recipe.Recipe) *model.Recipe {
+func (adapter *outputAdapter) recipe(recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) func(recipe recipe.Recipe) *model.Recipe {
 	return func(_r recipe.Recipe) *model.Recipe {
 		r := model.Recipe{
 			Name:  _r.Name,
@@ -42,7 +42,7 @@ func (adapter *adapterOut) recipe(recipeTypes map[string]recipe.RecipeType, glas
 	}
 }
 
-func (adapter *adapterOut) step(step recipe.Step) *model.Step {
+func (adapter *outputAdapter) step(step recipe.Step) *model.Step {
 	return &model.Step{
 		Material:    step.Material,
 		Amount:      step.Amount,

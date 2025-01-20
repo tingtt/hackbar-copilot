@@ -1,7 +1,8 @@
 package graph
 
 import (
-	"hackbar-copilot/internal/interface-adapter/handler/graphql/adapter"
+	menuadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/menu"
+	recipeadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/recipe"
 	"hackbar-copilot/internal/usecase/copilot"
 )
 
@@ -12,8 +13,8 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 func NewResolver(deps Dependencies) ResolverRoot {
-	deps.recipeAdapter = adapter.NewRecipeAdapter()
-	deps.menuAdapter = adapter.NewMenuAdapterOut()
+	deps.recipeAdapter = recipeadapter.New()
+	deps.menuAdapter = menuadapter.NewOutputAdapter()
 	return &Resolver{deps}
 }
 
@@ -23,6 +24,6 @@ type Resolver struct {
 
 type Dependencies struct {
 	Copilot       copilot.Copilot
-	recipeAdapter adapter.RecipeAdapter
-	menuAdapter   adapter.MenuAdapter
+	recipeAdapter recipeadapter.Adapter
+	menuAdapter   menuadapter.MenuAdapter
 }

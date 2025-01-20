@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"testing"
@@ -12,7 +12,7 @@ func TestNewRecipeAdapter(t *testing.T) {
 	t.Run("will return non-nil struct", func(t *testing.T) {
 		t.Parallel()
 
-		adapter := NewRecipeAdapter()
+		adapter := New()
 
 		assert.NotNil(t, adapter)
 	})
@@ -20,9 +20,9 @@ func TestNewRecipeAdapter(t *testing.T) {
 	t.Run("will return non-nil fields", func(t *testing.T) {
 		t.Parallel()
 
-		adapter := NewRecipeAdapter().(*recipeAdapter)
+		adapter := New().(*recipeAdapter)
 
-		assert.NotNil(t, adapter.RecipeAdapterIn)
-		assert.NotNil(t, adapter.RecipeAdapterOut)
+		assert.NotNil(t, adapter.InputAdapter)
+		assert.NotNil(t, adapter.OutputAdapter)
 	})
 }

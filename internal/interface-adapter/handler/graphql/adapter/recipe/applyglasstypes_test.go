@@ -1,8 +1,9 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
+	"hackbar-copilot/internal/interface-adapter/handler/graphql/adapter"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"testing"
 
@@ -83,7 +84,7 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 				},
 			},
 		},
-		wantErr: ErrSaveDoesNotExist,
+		wantErr: adapter.ErrSaveDoesNotExist,
 	},
 	{
 		name: "no updates",
@@ -107,7 +108,7 @@ func Test_recipeAdapterIn_ApplyGlassTypes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			s := &recipeAdapterIn{}
+			s := &inputAdapter{}
 			got, err := s.ApplyGlassTypes(currentGlassTypes, tt.arg)
 
 			assert.Equal(t, tt.want, got)

@@ -1,4 +1,4 @@
-package adapter
+package menuadapter
 
 import (
 	"hackbar-copilot/internal/domain/menu"
@@ -6,7 +6,7 @@ import (
 )
 
 // MenuGroups implements MenuAdapterOut.
-func (m *menuAdapterOut) MenuGroups(menuGroups []menu.Group, recipeGroups []*model.RecipeGroup) []*model.MenuGroup {
+func (m *outputAdapter) MenuGroups(menuGroups []menu.Group, recipeGroups []*model.RecipeGroup) []*model.MenuGroup {
 	var groups []*model.MenuGroup
 	for _, menuGroup := range menuGroups {
 		recipes := make(map[string]model.Recipe)
@@ -22,7 +22,7 @@ func (m *menuAdapterOut) MenuGroups(menuGroups []menu.Group, recipeGroups []*mod
 	return groups
 }
 
-func (m *menuAdapterOut) menuGroup(menuGroup menu.Group, recipes map[string]model.Recipe) *model.MenuGroup {
+func (m *outputAdapter) menuGroup(menuGroup menu.Group, recipes map[string]model.Recipe) *model.MenuGroup {
 	minPrice, items := m.menuItems(menuGroup.Items, recipes)
 	return &model.MenuGroup{
 		Name:        menuGroup.Name,
@@ -33,7 +33,7 @@ func (m *menuAdapterOut) menuGroup(menuGroup menu.Group, recipes map[string]mode
 	}
 }
 
-func (m *menuAdapterOut) menuItems(menuItems []menu.Item, recipes map[string]model.Recipe) (minPrice int, items []*model.MenuItem) {
+func (m *outputAdapter) menuItems(menuItems []menu.Item, recipes map[string]model.Recipe) (minPrice int, items []*model.MenuItem) {
 	for _, menuItem := range menuItems {
 		if minPrice == 0 {
 			minPrice = menuItem.Price
@@ -51,7 +51,7 @@ func (m *menuAdapterOut) menuItems(menuItems []menu.Item, recipes map[string]mod
 	return minPrice, items
 }
 
-func (m *menuAdapterOut) menuItem(menuItem menu.Item, recipe *model.Recipe) *model.MenuItem {
+func (m *outputAdapter) menuItem(menuItem menu.Item, recipe *model.Recipe) *model.MenuItem {
 	return &model.MenuItem{
 		Name:       menuItem.Name,
 		ImageURL:   menuItem.ImageURL,

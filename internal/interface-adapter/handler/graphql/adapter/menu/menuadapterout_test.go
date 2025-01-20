@@ -1,4 +1,4 @@
-package adapter
+package menuadapter
 
 import (
 	"testing"
@@ -12,7 +12,7 @@ func TestNewMenuAdapterOut(t *testing.T) {
 	t.Run("will return non-nil struct", func(t *testing.T) {
 		t.Parallel()
 
-		adapter := NewMenuAdapterOut()
+		adapter := NewOutputAdapter()
 
 		assert.NotNil(t, adapter)
 	})

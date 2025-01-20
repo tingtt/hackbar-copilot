@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
@@ -6,7 +6,7 @@ import (
 )
 
 // ApplyAsMenu implements RecipeAdapterIn.
-func (s *recipeAdapterIn) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *copilot.SaveAsMenuGroupArg, err error) {
+func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *copilot.SaveAsMenuGroupArg, err error) {
 	asMenuArg = &copilot.SaveAsMenuGroupArg{}
 	if input.AsMenu != nil {
 		asMenuArg.Flavor = input.AsMenu.Flavor

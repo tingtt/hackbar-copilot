@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -7,10 +7,6 @@ import (
 	"reflect"
 	"testing"
 )
-
-func ptr[T any](v T) *T {
-	return &v
-}
 
 func Test_adapterOut_RecipeGroups(t *testing.T) {
 	t.Parallel()
@@ -25,7 +21,7 @@ func Test_adapterOut_RecipeGroups(t *testing.T) {
 			return recipeGroupTest.out
 		})
 
-		adapter := &adapterOut{}
+		adapter := &outputAdapter{}
 		got := adapter.RecipeGroups(in, recipeTypes, glassTypes)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("adapterOut.RecipeGroups() = %v, want %v", got, want)

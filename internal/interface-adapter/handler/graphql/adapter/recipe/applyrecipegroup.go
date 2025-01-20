@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -10,7 +10,7 @@ import (
 )
 
 // ApplyRecipeGroup implements Service.
-func (s *recipeAdapterIn) ApplyRecipeGroup(base recipe.RecipeGroup, input model.InputRecipeGroup) recipe.RecipeGroup {
+func (s *inputAdapter) ApplyRecipeGroup(base recipe.RecipeGroup, input model.InputRecipeGroup) recipe.RecipeGroup {
 	if input.Name != "" {
 		base.Name = input.Name
 	}
@@ -28,7 +28,7 @@ func (s *recipeAdapterIn) ApplyRecipeGroup(base recipe.RecipeGroup, input model.
 	return base
 }
 
-func (s *recipeAdapterIn) iterInputRecipes(base []recipe.Recipe, input []model.InputRecipe) iter.Seq2[recipe.Recipe, model.InputRecipe] {
+func (s *inputAdapter) iterInputRecipes(base []recipe.Recipe, input []model.InputRecipe) iter.Seq2[recipe.Recipe, model.InputRecipe] {
 	return func(yield func(recipe.Recipe, model.InputRecipe) bool) {
 		for _, inputRecipe := range input {
 			found := false
@@ -50,7 +50,7 @@ func (s *recipeAdapterIn) iterInputRecipes(base []recipe.Recipe, input []model.I
 	}
 }
 
-func (s *recipeAdapterIn) applyRecipe(baseRecipe recipe.Recipe, inputRecipe model.InputRecipe) recipe.Recipe {
+func (s *inputAdapter) applyRecipe(baseRecipe recipe.Recipe, inputRecipe model.InputRecipe) recipe.Recipe {
 	baseRecipe.Name = inputRecipe.Name
 	if inputRecipe.RecipeType != nil {
 		baseRecipe.Type = inputRecipe.RecipeType.Name
@@ -64,7 +64,7 @@ func (s *recipeAdapterIn) applyRecipe(baseRecipe recipe.Recipe, inputRecipe mode
 	return baseRecipe
 }
 
-func (s *recipeAdapterIn) step(step *model.InputStep) recipe.Step {
+func (s *inputAdapter) step(step *model.InputStep) recipe.Step {
 	return recipe.Step{
 		Material:    step.Material,
 		Amount:      step.Amount,

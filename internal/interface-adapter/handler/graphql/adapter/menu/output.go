@@ -1,16 +1,16 @@
-package adapter
+package menuadapter
 
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
-type MenuAdapterOut interface {
+type OutputAdapter interface {
 	MenuGroups(menuGroups []menu.Group, recipeGroups []*model.RecipeGroup) []*model.MenuGroup
 }
 
-func NewMenuAdapterOut() MenuAdapterOut {
-	return &menuAdapterOut{}
+func NewOutputAdapter() OutputAdapter {
+	return &outputAdapter{}
 }
 
-type menuAdapterOut struct{}
+type outputAdapter struct{}

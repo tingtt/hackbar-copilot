@@ -1,11 +1,11 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
-type RecipeAdapterOut interface {
+type OutputAdapter interface {
 	RecipeGroups(
 		recipeGroups []recipe.RecipeGroup,
 		recipeTypes map[string]recipe.RecipeType,
@@ -17,8 +17,8 @@ type RecipeAdapterOut interface {
 	) func(recipe.RecipeGroup) *model.RecipeGroup
 }
 
-func NewRecipeAdapterOut() RecipeAdapterOut {
-	return &adapterOut{}
+func NewOutputAdapter() OutputAdapter {
+	return &outputAdapter{}
 }
 
-type adapterOut struct{}
+type outputAdapter struct{}

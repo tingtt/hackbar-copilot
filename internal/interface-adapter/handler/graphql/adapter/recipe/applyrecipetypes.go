@@ -1,14 +1,15 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
+	"hackbar-copilot/internal/interface-adapter/handler/graphql/adapter"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"hackbar-copilot/internal/utils/sliceutil"
 	"slices"
 )
 
 // ApplyRecipeTypes implements Service.
-func (s *recipeAdapterIn) ApplyRecipeTypes(
+func (s *inputAdapter) ApplyRecipeTypes(
 	current map[string]recipe.RecipeType,
 	input model.InputRecipeGroup,
 ) ([]recipe.RecipeType, error) {
@@ -18,7 +19,7 @@ func (s *recipeAdapterIn) ApplyRecipeTypes(
 	)
 }
 
-func (s *recipeAdapterIn) ExtractRecipeTypes(recipes []model.InputRecipe) []model.InputRecipeType {
+func (s *inputAdapter) ExtractRecipeTypes(recipes []model.InputRecipe) []model.InputRecipeType {
 	recipeTypes := make([]model.InputRecipeType, 0, len(recipes))
 	for _, recipe := range recipes {
 		if recipe.RecipeType != nil {
@@ -28,13 +29,13 @@ func (s *recipeAdapterIn) ExtractRecipeTypes(recipes []model.InputRecipe) []mode
 	return recipeTypes
 }
 
-func (s *recipeAdapterIn) HasUpdateRecipeTypes(inputRecipeTypes []model.InputRecipeType, currentRecipeTypes map[string]recipe.RecipeType) ([]recipe.RecipeType, error) {
+func (s *inputAdapter) HasUpdateRecipeTypes(inputRecipeTypes []model.InputRecipeType, currentRecipeTypes map[string]recipe.RecipeType) ([]recipe.RecipeType, error) {
 	hasUpdateRecipeTypes := make([]recipe.RecipeType, 0, len(inputRecipeTypes))
 	for _, inputRecipeType := range inputRecipeTypes {
 		if /* recipeType already exists */ _, exists := currentRecipeTypes[inputRecipeType.Name]; exists {
 			if /* has updates */ inputRecipeType.Description != nil {
 				if /* save is not true */ !(inputRecipeType.Save != nil && *inputRecipeType.Save) {
-					return nil, ErrSaveDoesNotExist
+					return nil, adapter.ErrSaveDoesNotExist
 				}
 			} else {
 				continue

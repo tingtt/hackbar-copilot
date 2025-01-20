@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -89,7 +89,7 @@ func Test_recipeAdapterIn_ApplyRecipeGroup(t *testing.T) {
 	for _, tt := range testApplyRecipeGroup {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			s := &recipeAdapterIn{}
+			s := &inputAdapter{}
 			if got := s.ApplyRecipeGroup(tt.base, tt.input); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("recipeAdapterIn.ApplyRecipeGroup() = %v, want %v", got, tt.want)
 			}

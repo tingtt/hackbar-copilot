@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
@@ -70,7 +70,7 @@ func Test_recipeAdapterIn_ApplyAsMenu(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			s := &recipeAdapterIn{}
+			s := &inputAdapter{}
 			got, err := s.ApplyAsMenu(tt.arg)
 
 			assert.NoError(t, err)

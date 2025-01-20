@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -6,7 +6,7 @@ import (
 	"hackbar-copilot/internal/usecase/copilot"
 )
 
-type RecipeAdapterIn interface {
+type InputAdapter interface {
 	ApplyRecipeGroup(base recipe.RecipeGroup, input model.InputRecipeGroup) recipe.RecipeGroup
 	ApplyRecipeTypes(
 		current map[string]recipe.RecipeType, input model.InputRecipeGroup,
@@ -19,8 +19,8 @@ type RecipeAdapterIn interface {
 	) (asMenuArg *copilot.SaveAsMenuGroupArg, err error)
 }
 
-func NewRecipeAdapterIn() RecipeAdapterIn {
-	return &recipeAdapterIn{}
+func NewInputAdapter() InputAdapter {
+	return &inputAdapter{}
 }
 
-type recipeAdapterIn struct{}
+type inputAdapter struct{}

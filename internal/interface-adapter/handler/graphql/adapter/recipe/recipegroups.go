@@ -1,4 +1,4 @@
-package adapter
+package recipeadapter
 
 import (
 	"hackbar-copilot/internal/domain/recipe"
@@ -7,6 +7,6 @@ import (
 )
 
 // RecipeGroups implements RecipeAdapterOut.
-func (adapter *adapterOut) RecipeGroups(recipeGroups []recipe.RecipeGroup, recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) []*model.RecipeGroup {
+func (adapter *outputAdapter) RecipeGroups(recipeGroups []recipe.RecipeGroup, recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) []*model.RecipeGroup {
 	return sliceutil.Map(recipeGroups, adapter.RecipeGroup(recipeTypes, glassTypes))
 }

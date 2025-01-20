@@ -1,8 +1,9 @@
-package adapter
+package menuadapter
 
 import (
 	"hackbar-copilot/internal/domain/menu/menutest"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
+	recipeadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/recipe"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"testing"
 
@@ -15,7 +16,7 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 	t.Run("will return adapted menu groups", func(t *testing.T) {
 		t.Parallel()
 
-		argRecipeGroups := NewRecipeAdapterOut().RecipeGroups(
+		argRecipeGroups := recipeadapter.NewOutputAdapter().RecipeGroups(
 			recipetest.ExampleRecipeGroups,
 			recipetest.ExampleRecipeTypesMap,
 			recipetest.ExampleGlassTypesMap,
@@ -180,7 +181,7 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 			},
 		}
 
-		adapter := &menuAdapterOut{}
+		adapter := &outputAdapter{}
 		got := adapter.MenuGroups(argMenuGroups, argRecipeGroups)
 		assert.Equal(t, want, got)
 	})
