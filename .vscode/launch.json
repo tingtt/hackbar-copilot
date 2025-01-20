@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "name": "Launch",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/registry/main.go",
+      "env": {},
+      "args": ["-d", "${workspaceFolder}/.data"]
+    }
+  ]
+}
