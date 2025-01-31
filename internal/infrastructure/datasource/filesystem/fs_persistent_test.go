@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"hackbar-copilot/internal/domain/menu"
+	"hackbar-copilot/internal/domain/menu/menutest"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
+	"hackbar-copilot/internal/domain/stock/stocktest"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem/toml"
 	"io"
+	"os"
 	"path"
 	"strconv"
 	"testing"
@@ -43,15 +46,16 @@ func Test_loadData(t *testing.T) {
 				recipeTypes:  nil,
 				glassTypes:   nil,
 				menuGroups:   nil,
+				stocks:       nil,
 			},
 			wantErr: false,
 		},
 		{
-			name: "may return error, if not expected",
+			name: "may return empty data/no file",
 			args: args{
 				fs: func() fsR {
 					m := new(MockFSR)
-					m.On("Open", mock.Anything).Return(&MockFile{}, errors.New("error unexpected")).Once()
+					m.On("Open", mock.Anything).Return(&MockFile{&bytes.Buffer{}}, os.ErrNotExist)
 					return m
 				}(),
 			},
@@ -60,62 +64,9 @@ func Test_loadData(t *testing.T) {
 				recipeTypes:  nil,
 				glassTypes:   nil,
 				menuGroups:   nil,
+				stocks:       nil,
 			},
-			wantErr: true,
-		},
-		{
-			name: "may return error, if not expected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", mock.Anything).Return(&MockFile{&bytes.Buffer{}}, nil).Once()
-					m.On("Open", mock.Anything).Return(&MockFile{}, errors.New("error unexpected")).Once()
-					return m
-				}(),
-			},
-			wantD: data{
-				recipeGroups: nil,
-				recipeTypes:  nil,
-				glassTypes:   nil,
-				menuGroups:   nil,
-			},
-			wantErr: true,
-		},
-		{
-			name: "may return error, if not expected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", mock.Anything).Return(&MockFile{&bytes.Buffer{}}, nil).Twice()
-					m.On("Open", mock.Anything).Return(&MockFile{}, errors.New("error unexpected")).Once()
-					return m
-				}(),
-			},
-			wantD: data{
-				recipeGroups: nil,
-				recipeTypes:  nil,
-				glassTypes:   nil,
-				menuGroups:   nil,
-			},
-			wantErr: true,
-		},
-		{
-			name: "may return error, if not expected",
-			args: args{
-				fs: func() fsR {
-					m := new(MockFSR)
-					m.On("Open", mock.Anything).Return(&MockFile{&bytes.Buffer{}}, nil).Times(3)
-					m.On("Open", mock.Anything).Return(&MockFile{}, errors.New("error unexpected")).Once()
-					return m
-				}(),
-			},
-			wantD: data{
-				recipeGroups: nil,
-				recipeTypes:  nil,
-				glassTypes:   nil,
-				menuGroups:   nil,
-			},
-			wantErr: true,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -266,6 +217,12 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							},
 						},
 					},
+					stocks: map[string]bool{
+						"Peach liqueur":    true,
+						"Blue curacao":     true,
+						"Grapefruit juice": true,
+						"Tonic water":      true,
+					},
 				},
 				wantErr: false,
 			},
@@ -279,17 +236,20 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					recipeTypes  *MockFile
 					glassTypes   *MockFile
 					menuGroups   *MockFile
+					stocks       *MockFile
 				}{
 					recipeGroups: &MockFile{&bytes.Buffer{}},
 					recipeTypes:  &MockFile{&bytes.Buffer{}},
 					glassTypes:   &MockFile{&bytes.Buffer{}},
 					menuGroups:   &MockFile{&bytes.Buffer{}},
+					stocks:       &MockFile{&bytes.Buffer{}},
 				}
 				m := new(MockFSW)
 				m.On("Create", "1_recipe_groups.toml").Return(ioWriters.recipeGroups, nil)
 				m.On("Create", "2_recipe_types.toml").Return(ioWriters.recipeTypes, nil)
 				m.On("Create", "3_glass_types.toml").Return(ioWriters.glassTypes, nil)
 				m.On("Create", "4_menu_groups.toml").Return(ioWriters.menuGroups, nil)
+				m.On("Create", "5_stocks.toml").Return(ioWriters.stocks, nil)
 				f := &filesystem{
 					write: m,
 					data:  tt.data,
@@ -308,20 +268,24 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						recipeTypes  map[string]map[string]recipe.RecipeType
 						glassTypes   map[string]map[string]recipe.GlassType
 						menuGroups   map[string][]menu.Group
+						stocks       map[string]map[string]bool
 					}{
 						recipeGroups: map[string][]recipe.RecipeGroup{},
 						recipeTypes:  map[string]map[string]recipe.RecipeType{},
 						glassTypes:   map[string]map[string]recipe.GlassType{},
 						menuGroups:   map[string][]menu.Group{},
+						stocks:       map[string]map[string]bool{},
 					}
 					assert.NoError(t, toml.Decode(ioWriters.recipeGroups, &data.recipeGroups))
 					assert.NoError(t, toml.Decode(ioWriters.recipeTypes, &data.recipeTypes))
 					assert.NoError(t, toml.Decode(ioWriters.glassTypes, &data.glassTypes))
 					assert.NoError(t, toml.Decode(ioWriters.menuGroups, &data.menuGroups))
+					assert.NoError(t, toml.Decode(ioWriters.stocks, &data.stocks))
 					assert.Equal(t, tt.data.recipeGroups, data.recipeGroups["recipe_group"])
 					assert.Equal(t, tt.data.recipeTypes, data.recipeTypes["recipe_type"])
 					assert.Equal(t, tt.data.glassTypes, data.glassTypes["glass_type"])
 					assert.Equal(t, tt.data.menuGroups, data.menuGroups["menu_group"])
+					assert.Equal(t, tt.data.stocks, data.stocks["stock"])
 				}
 			})
 		}
@@ -531,6 +495,70 @@ var loadTests = []loadTest{
 		`),
 		want: recipetest.ExampleGlassTypesMap,
 	},
+	{
+		name: "may load menu groups",
+		key:  "menu_group",
+		raw: dedent.Dedent(`
+			[[menu_group]]
+			Name = "Phuket Sling"
+			ImageURL = "https://example.com/path/to/image/phuket-sling"
+			Flavor = "Sweet"
+
+			[[menu_group.Items]]
+			Name = "Cocktail"
+			ImageURL = "https://example.com/path/to/image/phuket-sling/cocktail"
+			Materials = ["Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"]
+			OutOfStock = false
+			Price = 700
+
+			[[menu_group.Items]]
+			Name = "Mocktail"
+			ImageURL = "https://example.com/path/to/image/phuket-sling/mocktail"
+			Materials = ["Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"]
+			OutOfStock = false
+			Price = 500
+
+			[[menu_group]]
+			Name = "Passoamoni"
+			ImageURL = "https://example.com/path/to/image/passoamoni"
+			Flavor = "Fruity"
+
+			[[menu_group.Items]]
+			Name = "Cocktail"
+			ImageURL = "https://example.com/path/to/image/passoamoni"
+			Materials = ["Passoa", "Grapefruit juice", "Tonic water"]
+			OutOfStock = false
+			Price = 700
+
+			[[menu_group]]
+			Name = "Blue Devil"
+			ImageURL = "https://example.com/path/to/image/blue-devil"
+			Flavor = "Medium sweet and dry"
+
+			[[menu_group.Items]]
+			Name = "Cocktail"
+			ImageURL = "https://example.com/path/to/image/blue-devil"
+			Materials = ["Gin", "Blue curacao", "Lemon juice"]
+			OutOfStock = false
+			Price = 700
+		`),
+		want: menutest.ExampleGroups,
+	},
+	{
+		name: "may load stocks",
+		key:  "stock",
+		raw: dedent.Dedent(`
+			[stock]
+			"Blue curacao" = true
+      "Gin" = true
+			"Grapefruit juice" = true
+			"Lemon juice" = true
+			"Passoa" = true
+			"Peach liqueur" = true
+			"Tonic water" = true
+		`),
+		want: stocktest.ExampleMaterialsMap,
+	},
 }
 
 func Test_loadFromToml(t *testing.T) {
@@ -559,6 +587,14 @@ func Test_loadFromToml(t *testing.T) {
 					got = typedGot
 				case "glass_type":
 					typedGot := map[string]recipe.GlassType{}
+					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
+					got = typedGot
+				case "menu_group":
+					typedGot := []menu.Group{}
+					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
+					got = typedGot
+				case "stock":
+					typedGot := map[string]bool{}
 					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
 					got = typedGot
 				}

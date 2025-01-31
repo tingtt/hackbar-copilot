@@ -3,6 +3,7 @@ package copilot
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/recipe"
+	"hackbar-copilot/internal/domain/stock"
 	"hackbar-copilot/internal/usecase/sort"
 )
 
@@ -17,6 +18,9 @@ type Copilot interface {
 
 	SaveAsMenuGroup(recipeGroupName string, arg SaveAsMenuGroupArg) (menu.Group, error)
 	ListMenu(sortFunc sort.Yield[menu.Group]) ([]menu.Group, error)
+
+	Materials(sortFunc sort.Yield[stock.Material], optionAppliers ...QueryOptionApplier) ([]stock.Material, error)
+	UpdateStock(inStockMaterials, outOfStockMaterials []string) error
 }
 
 type SaveAsMenuGroupArg struct {
@@ -33,15 +37,18 @@ func New(deps Dependencies) Copilot {
 	return &copilot{
 		recipe: recipe.NewSaveLister(deps.Recipe),
 		menu:   menu.NewSaveLister(deps.Menu),
+		stock:  stock.NewSaveLister(deps.Stock),
 	}
 }
 
 type Dependencies struct {
 	Recipe recipe.Repository
 	Menu   menu.Repository
+	Stock  stock.Repository
 }
 
 type copilot struct {
 	recipe recipe.SaveLister
 	menu   menu.SaveLister
+	stock  stock.SaveLister
 }

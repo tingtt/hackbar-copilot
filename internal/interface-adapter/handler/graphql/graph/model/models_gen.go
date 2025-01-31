@@ -51,6 +51,16 @@ type InputStep struct {
 	Description *string `json:"description,omitempty"`
 }
 
+type InputStockUpdate struct {
+	In  []string `json:"in,omitempty"`
+	Out []string `json:"out,omitempty"`
+}
+
+type Material struct {
+	Name    string `json:"name"`
+	InStock bool   `json:"inStock"`
+}
+
 type MenuGroup struct {
 	Name        string      `json:"name"`
 	ImageURL    *string     `json:"imageURL,omitempty"`

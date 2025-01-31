@@ -112,6 +112,7 @@ func loadDependencies(dataDirPath string) (dependencies, error) {
 				Copilot: copilot.New(copilot.Dependencies{
 					Recipe: fs.Recipe(),
 					Menu:   fs.Menu(),
+					Stock:  fs.Stock(),
 				}),
 			},
 		},

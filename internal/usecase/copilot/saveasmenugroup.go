@@ -12,6 +12,16 @@ func (c *copilot) SaveAsMenuGroup(recipeGroupName string, arg SaveAsMenuGroupArg
 		return menu.Group{}, err
 	}
 
+	materialNames := map[string]bool{}
+	materials, err := c.Materials(SortMaterialByName())
+	if err != nil {
+		return menu.Group{}, err
+	}
+	for _, material := range materials {
+		materialNames[material.Name] = true
+	}
+	newMaterials := []string{}
+
 	mg := menu.Group{
 		Name:     rg.Name,
 		ImageURL: rg.ImageURL,
@@ -38,7 +48,23 @@ func (c *copilot) SaveAsMenuGroup(recipeGroupName string, arg SaveAsMenuGroupArg
 			menuItem.Price = arg.Price
 		}
 		mg.Items = append(mg.Items, menuItem)
+		for _, materialName := range menuItem.Materials {
+			if _, exists := materialNames[materialName]; !exists {
+				if !slices.Contains(newMaterials, materialName) {
+					newMaterials = append(newMaterials, materialName)
+				}
+			}
+		}
 	}
 	err = c.menu.Save(mg)
-	return mg, err
+	if err != nil {
+		return menu.Group{}, err
+	}
+	if len(newMaterials) > 0 {
+		err = c.stock.Save(newMaterials, nil)
+		if err != nil {
+			return menu.Group{}, err
+		}
+	}
+	return mg, nil
 }

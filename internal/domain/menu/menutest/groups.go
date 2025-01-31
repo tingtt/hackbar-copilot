@@ -56,4 +56,4 @@ var ExampleGroups = []menu.Group{
 	},
 }
 
-var ExampleGroupsIter = iterWithNilError(ExampleGroups)
+var ExampleGroupsIter = IterWithNilError(ExampleGroups)

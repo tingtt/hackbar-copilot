@@ -3,6 +3,7 @@ package copilot
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/recipe"
+	"hackbar-copilot/internal/domain/stock"
 	"hackbar-copilot/internal/usecase/sort"
 
 	"github.com/stretchr/testify/mock"
@@ -65,5 +66,17 @@ func (m *MockCopilot) SaveRecipe(rg recipe.RecipeGroup) error {
 // SaveRecipeType implements Copilot.
 func (m *MockCopilot) SaveRecipeType(rt recipe.RecipeType) error {
 	args := m.Called(rt)
+	return args.Error(0)
+}
+
+// Materials implements Copilot.
+func (m *MockCopilot) Materials(sortFunc sort.Yield[stock.Material], optionAppliers ...QueryOptionApplier) ([]stock.Material, error) {
+	args := m.Called()
+	return args.Get(0).([]stock.Material), args.Error(1)
+}
+
+// UpdateStock implements Copilot.
+func (m *MockCopilot) UpdateStock(inStockMaterials []string, outOfStockMaterials []string) error {
+	args := m.Called(inStockMaterials, outOfStockMaterials)
 	return args.Error(0)
 }

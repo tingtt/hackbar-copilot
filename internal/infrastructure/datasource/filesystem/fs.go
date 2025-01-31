@@ -3,11 +3,13 @@ package filesystem
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/recipe"
+	"hackbar-copilot/internal/domain/stock"
 )
 
 type Filesystem interface {
 	Recipe() recipe.Repository
 	Menu() menu.Repository
+	Stock() stock.Repository
 	SavePersistently() error
 }
 
@@ -62,6 +64,7 @@ type data struct {
 	recipeTypes  map[string]recipe.RecipeType
 	glassTypes   map[string]recipe.GlassType
 	menuGroups   []menu.Group
+	stocks       map[string]bool
 }
 
 func (data data) isEmpty() bool {
@@ -78,4 +81,9 @@ func (f *filesystem) Recipe() recipe.Repository {
 // Menu implements Filesystem.
 func (f *filesystem) Menu() menu.Repository {
 	return &menuRepository{f}
+}
+
+// Stock implements Filesystem.
+func (f *filesystem) Stock() stock.Repository {
+	return &stockRepository{f}
 }

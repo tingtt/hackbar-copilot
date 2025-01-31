@@ -6,3 +6,4 @@ cover.*
 
 # data
 .data/
+*.toml

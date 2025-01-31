@@ -1,0 +1,8 @@
+extend type Mutation {
+  updateStock(input: InputStockUpdate!): [Material!]!
+}
+
+input InputStockUpdate {
+  in: [String!]
+  out: [String!]
+}

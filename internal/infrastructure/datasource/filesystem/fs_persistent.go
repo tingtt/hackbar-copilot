@@ -23,6 +23,10 @@ func loadData(fs fsR) (d data, err error) {
 	if err != nil {
 		return data{}, err
 	}
+	err = loadFromToml(fs, "5_stocks.toml", "stock", &d.stocks)
+	if err != nil {
+		return data{}, err
+	}
 	return d, err
 }
 
@@ -48,7 +52,8 @@ func (f *filesystem) SavePersistently() error {
 	err2 := f.saveFile("2_recipe_types.toml", map[string]interface{}{"recipe_type": f.data.recipeTypes})
 	err3 := f.saveFile("3_glass_types.toml", map[string]interface{}{"glass_type": f.data.glassTypes})
 	err4 := f.saveFile("4_menu_groups.toml", map[string]interface{}{"menu_group": f.data.menuGroups})
-	return errors.Join(err1, err2, err3, err4)
+	err5 := f.saveFile("5_stocks.toml", map[string]interface{}{"stock": f.data.stocks})
+	return errors.Join(err1, err2, err3, err4, err5)
 }
 
 func (f *filesystem) saveFile(filename string, data any) error {

@@ -58,12 +58,18 @@ func (r *recipeRepository) Save(new recipe.RecipeGroup) error {
 
 // SaveGlassType implements recipe.Repository.
 func (r *recipeRepository) SaveGlassType(new recipe.GlassType) error {
+	if r.fs.data.glassTypes == nil {
+		r.fs.data.glassTypes = make(map[string]recipe.GlassType)
+	}
 	r.fs.data.glassTypes[new.Name] = new
 	return nil
 }
 
 // SaveRecipeType implements recipe.Repository.
 func (r *recipeRepository) SaveRecipeType(new recipe.RecipeType) error {
+	if r.fs.data.recipeTypes == nil {
+		r.fs.data.recipeTypes = make(map[string]recipe.RecipeType)
+	}
 	r.fs.data.recipeTypes[new.Name] = new
 	return nil
 }

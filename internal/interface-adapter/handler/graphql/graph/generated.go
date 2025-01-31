@@ -53,6 +53,11 @@ type ComplexityRoot struct {
 		Name        func(childComplexity int) int
 	}
 
+	Material struct {
+		InStock func(childComplexity int) int
+		Name    func(childComplexity int) int
+	}
+
 	MenuGroup struct {
 		Flavor      func(childComplexity int) int
 		ImageURL    func(childComplexity int) int
@@ -71,12 +76,14 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		SaveRecipe func(childComplexity int, input model.InputRecipeGroup) int
+		SaveRecipe  func(childComplexity int, input model.InputRecipeGroup) int
+		UpdateStock func(childComplexity int, input model.InputStockUpdate) int
 	}
 
 	Query struct {
-		Menu    func(childComplexity int) int
-		Recipes func(childComplexity int) int
+		Materials func(childComplexity int) int
+		Menu      func(childComplexity int) int
+		Recipes   func(childComplexity int) int
 	}
 
 	Recipe struct {
@@ -106,10 +113,12 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error)
+	UpdateStock(ctx context.Context, input model.InputStockUpdate) ([]*model.Material, error)
 }
 type QueryResolver interface {
 	Menu(ctx context.Context) ([]*model.MenuGroup, error)
 	Recipes(ctx context.Context) ([]*model.RecipeGroup, error)
+	Materials(ctx context.Context) ([]*model.Material, error)
 }
 
 type executableSchema struct {
@@ -151,6 +160,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GlassType.Name(childComplexity), true
+
+	case "Material.inStock":
+		if e.complexity.Material.InStock == nil {
+			break
+		}
+
+		return e.complexity.Material.InStock(childComplexity), true
+
+	case "Material.name":
+		if e.complexity.Material.Name == nil {
+			break
+		}
+
+		return e.complexity.Material.Name(childComplexity), true
 
 	case "MenuGroup.flavor":
 		if e.complexity.MenuGroup.Flavor == nil {
@@ -240,6 +263,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.SaveRecipe(childComplexity, args["input"].(model.InputRecipeGroup)), true
+
+	case "Mutation.updateStock":
+		if e.complexity.Mutation.UpdateStock == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateStock_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateStock(childComplexity, args["input"].(model.InputStockUpdate)), true
+
+	case "Query.materials":
+		if e.complexity.Query.Materials == nil {
+			break
+		}
+
+		return e.complexity.Query.Materials(childComplexity), true
 
 	case "Query.menu":
 		if e.complexity.Query.Menu == nil {
@@ -354,6 +396,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInputRecipeGroup,
 		ec.unmarshalInputInputRecipeType,
 		ec.unmarshalInputInputStep,
+		ec.unmarshalInputInputStockUpdate,
 	)
 	first := true
 
@@ -450,7 +493,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "menu.query.graphqls" "recipes.mutation.graphqls" "recipes.query.graphqls" "schema.graphqls"
+//go:embed "menu.query.graphqls" "recipes.mutation.graphqls" "recipes.query.graphqls" "schema.graphqls" "stock.mutation.graphqls" "stock.query.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -466,6 +509,8 @@ var sources = []*ast.Source{
 	{Name: "recipes.mutation.graphqls", Input: sourceData("recipes.mutation.graphqls"), BuiltIn: false},
 	{Name: "recipes.query.graphqls", Input: sourceData("recipes.query.graphqls"), BuiltIn: false},
 	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
+	{Name: "stock.mutation.graphqls", Input: sourceData("stock.mutation.graphqls"), BuiltIn: false},
+	{Name: "stock.query.graphqls", Input: sourceData("stock.query.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -493,6 +538,29 @@ func (ec *executionContext) field_Mutation_saveRecipe_argsInput(
 	}
 
 	var zeroVal model.InputRecipeGroup
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateStock_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_updateStock_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateStock_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (model.InputStockUpdate, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNInputStockUpdate2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputStockUpdate(ctx, tmp)
+	}
+
+	var zeroVal model.InputStockUpdate
 	return zeroVal, nil
 }
 
@@ -694,6 +762,94 @@ func (ec *executionContext) fieldContext_GlassType_description(_ context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Material_name(ctx context.Context, field graphql.CollectedField, obj *model.Material) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Material_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Material_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Material",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Material_inStock(ctx context.Context, field graphql.CollectedField, obj *model.Material) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Material_inStock(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InStock, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Material_inStock(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Material",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1252,6 +1408,67 @@ func (ec *executionContext) fieldContext_Mutation_saveRecipe(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateStock(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateStock(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateStock(rctx, fc.Args["input"].(model.InputStockUpdate))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Material)
+	fc.Result = res
+	return ec.marshalNMaterial2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMaterialᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateStock(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Material_name(ctx, field)
+			case "inStock":
+				return ec.fieldContext_Material_inStock(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Material", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateStock_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_menu(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_menu(ctx, field)
 	if err != nil {
@@ -1355,6 +1572,56 @@ func (ec *executionContext) fieldContext_Query_recipes(_ context.Context, field 
 				return ec.fieldContext_RecipeGroup_recipes(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type RecipeGroup", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_materials(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_materials(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Materials(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Material)
+	fc.Result = res
+	return ec.marshalNMaterial2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMaterialᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_materials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Material_name(ctx, field)
+			case "inStock":
+				return ec.fieldContext_Material_inStock(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Material", field.Name)
 		},
 	}
 	return fc, nil
@@ -4089,6 +4356,40 @@ func (ec *executionContext) unmarshalInputInputStep(ctx context.Context, obj any
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputInputStockUpdate(ctx context.Context, obj any) (model.InputStockUpdate, error) {
+	var it model.InputStockUpdate
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"in", "out"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "in":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("in"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.In = data
+		case "out":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("out"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Out = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4117,6 +4418,50 @@ func (ec *executionContext) _GlassType(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._GlassType_imageURL(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._GlassType_description(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var materialImplementors = []string{"Material"}
+
+func (ec *executionContext) _Material(ctx context.Context, sel ast.SelectionSet, obj *model.Material) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, materialImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Material")
+		case "name":
+			out.Values[i] = ec._Material_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "inStock":
+			out.Values[i] = ec._Material_inStock(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4271,6 +4616,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "updateStock":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateStock(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4345,6 +4697,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_recipes(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "materials":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_materials(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -4913,6 +5287,11 @@ func (ec *executionContext) unmarshalNInputStep2ᚖhackbarᚑcopilotᚋinternal�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNInputStockUpdate2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputStockUpdate(ctx context.Context, v any) (model.InputStockUpdate, error) {
+	res, err := ec.unmarshalInputInputStockUpdate(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v any) (int, error) {
 	res, err := graphql.UnmarshalInt(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -4926,6 +5305,60 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNMaterial2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMaterialᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Material) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNMaterial2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMaterial(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNMaterial2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMaterial(ctx context.Context, sel ast.SelectionSet, v *model.Material) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Material(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMenuGroup2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuGroupᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuGroup) graphql.Marshaler {

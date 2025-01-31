@@ -14,9 +14,13 @@ func TestNew(t *testing.T) {
 
 		copilot := New(Dependencies{
 			Recipe: new(MockRecipeSaveLister),
+			Menu:   new(MockMenuSaveLister),
+			Stock:  new(MockStockSaveLister),
 		}).(*copilot)
 
 		assert.NotNil(t, copilot)
 		assert.NotNil(t, copilot.recipe)
+		assert.NotNil(t, copilot.menu)
+		assert.NotNil(t, copilot.stock)
 	})
 }

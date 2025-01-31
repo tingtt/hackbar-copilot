@@ -3,8 +3,9 @@ package recipeadapter
 import (
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type ApplyRecipeGroupTest struct {
@@ -14,7 +15,7 @@ type ApplyRecipeGroupTest struct {
 	want  recipe.RecipeGroup
 }
 
-var testApplyRecipeGroup = []ApplyRecipeGroupTest{
+var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 	{
 		name:  "will apply name",
 		base:  recipe.RecipeGroup{},
@@ -86,13 +87,17 @@ var testApplyRecipeGroup = []ApplyRecipeGroupTest{
 func Test_recipeAdapterIn_ApplyRecipeGroup(t *testing.T) {
 	t.Parallel()
 
-	for _, tt := range testApplyRecipeGroup {
+	for _, tt := range applyRecipeGroupTests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			s := &inputAdapter{}
-			if got := s.ApplyRecipeGroup(tt.base, tt.input); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("recipeAdapterIn.ApplyRecipeGroup() = %v, want %v", got, tt.want)
-			}
+			got := s.ApplyRecipeGroup(tt.base, tt.input)
+
+			assert.ElementsMatch(t, got.Recipes, tt.want.Recipes)
+			got.Recipes = nil
+			tt.want.Recipes = nil
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

@@ -1,0 +1,8 @@
+extend type Query {
+  materials: [Material!]!
+}
+
+type Material {
+  name: String!
+  inStock: Boolean!
+}
