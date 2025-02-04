@@ -4,6 +4,10 @@ import (
 	"hackbar-copilot/internal/domain/menu"
 )
 
+func ptr[T any](v T) *T {
+	return &v
+}
+
 var ExampleGroups = []menu.Group{
 	{
 		Name:     "Phuket Sling",

@@ -5,10 +5,6 @@ import (
 	"iter"
 )
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 func IterWithNilError(items []menu.Group) iter.Seq2[menu.Group, error] {
 	return func(yield func(menu.Group, error) bool) {
 		for _, item := range DeepCopy(items) {

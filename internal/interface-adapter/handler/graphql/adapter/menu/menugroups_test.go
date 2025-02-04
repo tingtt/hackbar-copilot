@@ -10,6 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func ptr[T any](v T) *T {
+	return &v
+}
+
 func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 	t.Parallel()
 

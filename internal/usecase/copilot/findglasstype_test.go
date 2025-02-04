@@ -8,10 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 func Test_copilot_FindGlassType(t *testing.T) {
 	t.Parallel()
 
