@@ -107,7 +107,7 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 	},
 }
 
-var ExampleRecipeGroupsIter = iterWithNilError(ExampleRecipeGroups)
+var ExampleRecipeGroupsIter = IterWithNilError(ExampleRecipeGroups)
 var ExampleRecipeGroupsMap = func() map[string]recipe.RecipeGroup {
 	m := make(map[string]recipe.RecipeGroup)
 	for _, v := range ExampleRecipeGroups {

@@ -32,7 +32,7 @@ var ExampleGlassTypes = []recipe.GlassType{
 	},
 }
 
-var ExampleGlassTypesIter = iterWithNilError(ExampleGlassTypes)
+var ExampleGlassTypesIter = IterWithNilErrorGlassTypes(ExampleGlassTypes)
 var ExampleGlassTypesMap = func() map[string]recipe.GlassType {
 	m := make(map[string]recipe.GlassType)
 	for _, v := range ExampleGlassTypes {

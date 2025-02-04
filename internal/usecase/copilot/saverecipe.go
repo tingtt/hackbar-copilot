@@ -17,7 +17,7 @@ func (c *copilot) SaveRecipe(rg recipe.RecipeGroup) error {
 	}
 	for _, mg := range menu {
 		if mg.Name == rg.Name {
-			arg := SaveAsMenuGroupArg{Flavor: mg.Flavor}
+			arg := SaveAsMenuGroupArg{Flavor: mg.Flavor, Items: map[string]MenuFromRecipeGroupArg{}}
 			for _, item := range mg.Items {
 				arg.Items[item.Name] = MenuFromRecipeGroupArg{
 					ImageURL: item.ImageURL,

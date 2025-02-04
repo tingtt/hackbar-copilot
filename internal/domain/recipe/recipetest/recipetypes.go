@@ -23,7 +23,7 @@ var ExampleRecipeTypes = []recipe.RecipeType{
 	},
 }
 
-var ExampleRecipeTypesIter = iterWithNilError(ExampleRecipeTypes)
+var ExampleRecipeTypesIter = IterWithNilErrorRecipeTypes(ExampleRecipeTypes)
 var ExampleRecipeTypesMap = func() map[string]recipe.RecipeType {
 	m := make(map[string]recipe.RecipeType)
 	for _, v := range ExampleRecipeTypes {
