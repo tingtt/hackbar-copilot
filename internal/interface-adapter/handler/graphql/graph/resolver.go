@@ -6,7 +6,7 @@ import (
 	"hackbar-copilot/internal/usecase/copilot"
 )
 
-//go:generate go run github.com/99designs/gqlgen generate
+//go:generate go tool gqlgen generate
 
 // This file will not be regenerated automatically.
 //

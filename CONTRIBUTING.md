@@ -2,12 +2,6 @@
 
 ## Testing / Linting
 
-### Setup
-
-```sh
-make setup
-```
-
 ### Run
 
 ```sh
