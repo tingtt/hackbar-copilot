@@ -14,7 +14,7 @@ func TestNew(t *testing.T) {
 
 		copilot := New(Dependencies{
 			Recipe: new(MockRecipeSaveLister),
-			Menu:   new(MockMenuSaveLister),
+			Menu:   new(MockMenu),
 			Stock:  new(MockStockSaveLister),
 		}).(*copilot)
 

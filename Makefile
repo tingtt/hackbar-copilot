@@ -29,3 +29,18 @@ test: lint
 build:
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -o backbar cmd/registry/main.go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -o hackbar cmd/tui/main.go
+
+.PHONY: e2e-build
+e2e-build:
+	cd test/e2e/; \
+		docker compose build
+
+.PHONY: e2e-up
+e2e-up:
+	cd test/e2e/; \
+		docker compose up --watch
+
+.PHONY: e2e-down
+e2e-down:
+	cd test/e2e/; \
+		docker compose down

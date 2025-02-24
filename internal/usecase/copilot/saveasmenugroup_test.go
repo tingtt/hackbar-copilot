@@ -25,7 +25,7 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 			recipeSaveLister := new(MockRecipeSaveLister)
 			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
-			menuSaveLister := new(MockMenuSaveLister)
+			menuSaveLister := new(MockMenu)
 			menuSaveLister.On("Save", mock.Anything).Return(nil)
 
 			stockSaveLister := new(MockStockSaveLister)
@@ -56,7 +56,7 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 		recipeSaveLister := new(MockRecipeSaveLister)
 		recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
-		menuSaveLister := new(MockMenuSaveLister)
+		menuSaveLister := new(MockMenu)
 		menuSaveLister.On("Save", mock.Anything).Return(nil)
 
 		stockSaveLister := new(MockStockSaveLister)
@@ -124,7 +124,7 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 		}()
 		recipeSaveLister.On("All").Return(recipeGroups, nil)
 
-		menuSaveLister := new(MockMenuSaveLister)
+		menuSaveLister := new(MockMenu)
 		menuSaveLister.On("Save", mock.Anything).Return(nil)
 
 		stockSaveLister := new(MockStockSaveLister)

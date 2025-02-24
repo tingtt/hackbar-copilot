@@ -24,9 +24,10 @@ Provides support for bartender operations copilot.
 .
 ├── .docs/      # Documents
 │   └── DesignDoc.md
-├── cmd/        # Entrypoints
+├── client/     # Client code (TypeScript)
+├── cmd/        # Entrypoints (Go)
 │   └── copilot/
-├── internal/   # Internal packages (organizing with "Clean Architecture")
+├── internal/   # Internal packages (organizing with "Clean Architecture") (Go)
 │   ├── infrastructure      # Scopes: infrastructure, security and persistence data
 │   │   ├── api/
 │   │   │   └── http/
@@ -34,14 +35,18 @@ Provides support for bartender operations copilot.
 │   │       └── filesystem/
 │   ├── interface-adapter/  # Scopes: adaption between infrastructure and usecase
 │   │   └── handler/
+│   │       ├── middleware/
 │   │       └── graphql/
 │   ├── usecase/            # Scopes: application bussiness rules
 │   │   ├── copilot/
-│   │   └── order/
+│   │   ├── order/
+│   │   └── cashout/
 │   └── domain/             # Scopes: enterprise bussiness rules
+│       ├── menu/
 │       ├── order/
+│       ├── ordersummary/
 │       ├── recipe/
-│       └── menu/
+│       └── stock/
 └── test/
     ├── e2e/    # E2E test environments
     └── ci/     # CI test environments

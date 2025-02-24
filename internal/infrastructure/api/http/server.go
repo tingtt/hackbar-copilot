@@ -10,11 +10,11 @@ import (
 	"golang.org/x/net/http2/h2c"
 )
 
-func NewServer(addr string, deps graph.Dependencies) *http.Server {
+func NewServer(addr string, deps graph.Dependencies, option graphql.Option) *http.Server {
 	mux := http.NewServeMux()
 
 	// `/recipes.v1graphql.Registry/`
-	mux.Handle("/recipes.v1graphql.Registry/", graphql.NewHandler(deps))
+	mux.Handle("/recipes.v1graphql.Registry/", graphql.NewHandler(deps, option))
 	// `/recipes.v1graphql.Registry/playground`
 	mux.Handle("/recipes.v1graphql.Registry/playground", playground.Handler("GraphQL playground", "/recipes.v1graphql.Registry/"))
 

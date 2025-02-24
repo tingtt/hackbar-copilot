@@ -5,6 +5,7 @@ import (
 	"errors"
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/menu/menutest"
+	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
 	"hackbar-copilot/internal/domain/stock/stocktest"
@@ -47,6 +48,7 @@ func Test_loadData(t *testing.T) {
 				glassTypes:   nil,
 				menuGroups:   nil,
 				stocks:       nil,
+				orders:       nil,
 			},
 			wantErr: false,
 		},
@@ -65,6 +67,7 @@ func Test_loadData(t *testing.T) {
 				glassTypes:   nil,
 				menuGroups:   nil,
 				stocks:       nil,
+				orders:       nil,
 			},
 			wantErr: false,
 		},
@@ -223,6 +226,16 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						"Grapefruit juice": true,
 						"Tonic water":      true,
 					},
+					orders: []order.Order{
+						{
+							ID:         "",
+							CustomerID: "",
+							MenuItemID: order.MenuItemID{},
+							Timestamps: []order.StatusUpdateTimestamp{},
+							Status:     "",
+							Price:      0,
+						},
+					},
 				},
 				wantErr: false,
 			},
@@ -237,12 +250,14 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					glassTypes   *MockFile
 					menuGroups   *MockFile
 					stocks       *MockFile
+					orders       *MockFile
 				}{
 					recipeGroups: &MockFile{&bytes.Buffer{}},
 					recipeTypes:  &MockFile{&bytes.Buffer{}},
 					glassTypes:   &MockFile{&bytes.Buffer{}},
 					menuGroups:   &MockFile{&bytes.Buffer{}},
 					stocks:       &MockFile{&bytes.Buffer{}},
+					orders:       &MockFile{&bytes.Buffer{}},
 				}
 				m := new(MockFSW)
 				m.On("Create", "1_recipe_groups.toml").Return(ioWriters.recipeGroups, nil)
@@ -250,6 +265,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 				m.On("Create", "3_glass_types.toml").Return(ioWriters.glassTypes, nil)
 				m.On("Create", "4_menu_groups.toml").Return(ioWriters.menuGroups, nil)
 				m.On("Create", "5_stocks.toml").Return(ioWriters.stocks, nil)
+				m.On("Create", "6_orders.toml").Return(ioWriters.orders, nil)
 				f := &filesystem{
 					write: m,
 					data:  tt.data,
@@ -269,23 +285,27 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						glassTypes   map[string]map[string]recipe.GlassType
 						menuGroups   map[string][]menu.Group
 						stocks       map[string]map[string]bool
+						orders       map[string][]order.Order
 					}{
 						recipeGroups: map[string][]recipe.RecipeGroup{},
 						recipeTypes:  map[string]map[string]recipe.RecipeType{},
 						glassTypes:   map[string]map[string]recipe.GlassType{},
 						menuGroups:   map[string][]menu.Group{},
 						stocks:       map[string]map[string]bool{},
+						orders:       map[string][]order.Order{},
 					}
 					assert.NoError(t, toml.Decode(ioWriters.recipeGroups, &data.recipeGroups))
 					assert.NoError(t, toml.Decode(ioWriters.recipeTypes, &data.recipeTypes))
 					assert.NoError(t, toml.Decode(ioWriters.glassTypes, &data.glassTypes))
 					assert.NoError(t, toml.Decode(ioWriters.menuGroups, &data.menuGroups))
 					assert.NoError(t, toml.Decode(ioWriters.stocks, &data.stocks))
+					assert.NoError(t, toml.Decode(ioWriters.orders, &data.orders))
 					assert.Equal(t, tt.data.recipeGroups, data.recipeGroups["recipe_group"])
 					assert.Equal(t, tt.data.recipeTypes, data.recipeTypes["recipe_type"])
 					assert.Equal(t, tt.data.glassTypes, data.glassTypes["glass_type"])
 					assert.Equal(t, tt.data.menuGroups, data.menuGroups["menu_group"])
 					assert.Equal(t, tt.data.stocks, data.stocks["stock"])
+					assert.Equal(t, tt.data.orders, data.orders["order"])
 				}
 			})
 		}

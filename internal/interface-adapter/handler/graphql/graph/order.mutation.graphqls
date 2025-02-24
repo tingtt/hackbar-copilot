@@ -1,0 +1,13 @@
+extend type Mutation {
+  order(input: InputOrder!): Order
+  updateOrderStatus(input: InputOrderStatusUpdate!): Order
+}
+
+input InputOrder {
+  menuItemID: String!
+}
+
+input InputOrderStatusUpdate {
+  id: String!
+  status: OrderStatus!
+}

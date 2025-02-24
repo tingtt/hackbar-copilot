@@ -13,7 +13,7 @@ func TestNewHandler(t *testing.T) {
 	t.Run("will return non-nil struct", func(t *testing.T) {
 		t.Parallel()
 
-		handler := NewHandler(graph.Dependencies{})
+		handler := NewHandler(graph.Dependencies{}, Option{"test-secret"})
 
 		assert.NotNil(t, handler)
 		assert.NotNil(t, handler.ServeHTTP)

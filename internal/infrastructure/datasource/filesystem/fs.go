@@ -2,6 +2,8 @@ package filesystem
 
 import (
 	"hackbar-copilot/internal/domain/menu"
+	"hackbar-copilot/internal/domain/order"
+	"hackbar-copilot/internal/domain/ordersummary"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/stock"
 )
@@ -10,6 +12,8 @@ type Filesystem interface {
 	Recipe() recipe.Repository
 	Menu() menu.Repository
 	Stock() stock.Repository
+	Order() (r order.Repository, close func())
+	OrderSymmary() ordersummary.Repository
 	SavePersistently() error
 }
 
@@ -65,12 +69,17 @@ type data struct {
 	glassTypes   map[string]recipe.GlassType
 	menuGroups   []menu.Group
 	stocks       map[string]bool
+
+	// orders
+	//
+	// orders is sorted by created desc.
+	orders []order.Order
 }
 
 func (data data) isEmpty() bool {
 	return len(data.recipeGroups) == 0 &&
 		len(data.recipeTypes) == 0 && len(data.glassTypes) == 0 &&
-		len(data.menuGroups) == 0
+		len(data.menuGroups) == 0 && len(data.orders) == 0
 }
 
 // Recipe implements Filesystem.
@@ -86,4 +95,19 @@ func (f *filesystem) Menu() menu.Repository {
 // Stock implements Filesystem.
 func (f *filesystem) Stock() stock.Repository {
 	return &stockRepository{f}
+}
+
+// Order implements Filesystem.
+func (f *filesystem) Order() (_ order.Repository, _close func()) {
+	r := &orderRepository{f, nil}
+	return r, func() {
+		if r.save != nil {
+			close(r.save)
+		}
+	}
+}
+
+// OrderSymmary implements Filesystem.
+func (f *filesystem) OrderSymmary() ordersummary.Repository {
+	return &orderSummaryRepository{f}
 }

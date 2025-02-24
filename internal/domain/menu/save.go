@@ -2,7 +2,7 @@ package menu
 
 import "fmt"
 
-func (s *saveLister) Save(g Group) error {
+func (s *saveFindLister) Save(g Group) error {
 	sanitizedGroup := g.Sanitized()
 	if err := sanitizedGroup.Validate(); err != nil {
 		return fmt.Errorf("invalid menu group: %w", err)

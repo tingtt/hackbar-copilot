@@ -115,7 +115,7 @@ func Test_copilot_UpdateStock(t *testing.T) {
 				stockMock := new(MockStockSaveLister)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.UpdatedMaterials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
-				menuMock := new(MockMenuSaveLister)
+				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
 
@@ -137,7 +137,7 @@ func Test_copilot_UpdateStock(t *testing.T) {
 				stockMock := new(MockStockSaveLister)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.UpdatedMaterials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
-				menuMock := new(MockMenuSaveLister)
+				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
 

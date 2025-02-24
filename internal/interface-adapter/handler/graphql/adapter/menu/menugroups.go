@@ -29,17 +29,17 @@ func (m *outputAdapter) menuGroup(menuGroup menu.Group, recipes map[string]model
 		ImageURL:    menuGroup.ImageURL,
 		Flavor:      menuGroup.Flavor,
 		Items:       items,
-		MinPriceYen: minPrice,
+		MinPriceYen: float64(minPrice),
 	}
 }
 
-func (m *outputAdapter) menuItems(menuItems []menu.Item, recipes map[string]model.Recipe) (minPrice int, items []*model.MenuItem) {
+func (m *outputAdapter) menuItems(menuItems []menu.Item, recipes map[string]model.Recipe) (minPrice float64, items []*model.MenuItem) {
 	for _, menuItem := range menuItems {
 		if minPrice == 0 {
-			minPrice = menuItem.Price
+			minPrice = float64(menuItem.Price)
 		}
-		if menuItem.Price < minPrice {
-			minPrice = menuItem.Price
+		if float64(menuItem.Price) < minPrice {
+			minPrice = float64(menuItem.Price)
 		}
 		recipe, ok := recipes[menuItem.Name]
 		if ok {
@@ -57,7 +57,7 @@ func (m *outputAdapter) menuItem(menuItem menu.Item, recipe *model.Recipe) *mode
 		ImageURL:   menuItem.ImageURL,
 		Materials:  menuItem.Materials,
 		OutOfStock: menuItem.OutOfStock,
-		PriceYen:   menuItem.Price,
+		PriceYen:   float64(menuItem.Price),
 		Recipe:     recipe,
 	}
 }

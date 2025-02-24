@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hackbar-copilot/internal/domain/menu/menutest"
+	"hackbar-copilot/internal/domain/order/ordertest"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
 	"hackbar-copilot/internal/domain/stock/stocktest"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
@@ -108,5 +109,15 @@ func registerData(fs filesystem.Filesystem) error {
 	if err != nil {
 		return err
 	}
+
+	orderRepo, close := fs.Order()
+	defer close()
+	for order := range ordertest.ExampleOrdersIter {
+		err := orderRepo.Save(order)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

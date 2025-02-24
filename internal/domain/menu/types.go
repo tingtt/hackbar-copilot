@@ -12,5 +12,5 @@ type Item struct {
 	ImageURL   *string
 	Materials  []string
 	OutOfStock bool
-	Price      int
+	Price      float32
 }

@@ -16,7 +16,7 @@ func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *cop
 		if recipe.AsMenu != nil {
 			items[recipe.Name] = copilot.MenuFromRecipeGroupArg{
 				ImageURL: recipe.AsMenu.ImageURL,
-				Price:    recipe.AsMenu.Price,
+				Price:    float32(recipe.AsMenu.Price),
 			}
 		}
 	}

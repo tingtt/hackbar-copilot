@@ -87,18 +87,20 @@ func Test_loadDependencies(t *testing.T) {
 	t.Run("may load successfully", func(t *testing.T) {
 		t.Parallel()
 
-		deps, err := loadDependencies(t.TempDir())
+		deps, _, err := loadDependencies(t.TempDir())
 
 		assert.NoError(t, err)
 		assert.NotNil(t, deps.Usecase.GraphQL.Copilot)
+		assert.NotNil(t, deps.Usecase.GraphQL.OrderService)
 	})
 
 	t.Run("may fail to load repository", func(t *testing.T) {
 		t.Parallel()
 
-		deps, err := loadDependencies("")
+		deps, _, err := loadDependencies("")
 
 		assert.Error(t, err)
 		assert.Nil(t, deps.Usecase.GraphQL.Copilot)
+		assert.Nil(t, deps.Usecase.GraphQL.OrderService)
 	})
 }

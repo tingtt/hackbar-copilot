@@ -1,0 +1,29 @@
+extend type Query {
+  orders: [Order!]!
+}
+
+type Order {
+  id: String!
+  customerID: String!
+  menuItemID: String!
+  timestamps: [OrderStatusUpdateTimestamp!]!
+  status: OrderStatus!
+  price: Float!
+}
+
+type OrderStatusUpdateTimestamp {
+  status: OrderStatus!
+  timestamp: DateTime!
+}
+
+enum OrderStatus {
+  ORDERED
+  PREPARED
+  DELIVERED
+  CANCELED
+  CHECKEDOUT
+
+  UNKNOWN
+}
+
+scalar DateTime

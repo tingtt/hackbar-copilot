@@ -1,0 +1,15 @@
+proxies:
+  - external_url: "http://localhost:8081/"
+    target: "http://hackbar-copilot:80"
+  - external_url: "http://127.0.0.1:8081/"
+    target: "http://hackbar-copilot:80"
+
+acl:
+  # order
+  "*":
+    - external_url: "http://localhost:8081/"
+      methods: ["*"]
+  # admin
+  "ting.taku@gmail.com":
+    - external_url: "http://127.0.0.1:8081/"
+      methods: ["*"]

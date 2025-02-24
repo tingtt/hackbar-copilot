@@ -20,7 +20,7 @@ func Test_copilot_ListMenu(t *testing.T) {
 			return want[i].Name < want[j].Name
 		})
 
-		menuSaveLister := new(MockMenuSaveLister)
+		menuSaveLister := new(MockMenu)
 		menuSaveLister.On("All").Return(menuGroups, nil)
 
 		c := &copilot{menu: menuSaveLister}

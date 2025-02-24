@@ -8,7 +8,7 @@ import (
 )
 
 type fsR interface {
-	Open(name string) (io.ReadCloser, error)
+	Open(name string) (fs.File, error)
 }
 
 func newFSR(baseDir string) fsR {
@@ -19,7 +19,7 @@ type fsReadble struct {
 	fs fs.FS
 }
 
-func (f fsReadble) Open(name string) (io.ReadCloser, error) {
+func (f fsReadble) Open(name string) (fs.File, error) {
 	return f.fs.Open(name)
 }
 

@@ -42,5 +42,5 @@ input InputAsMenuArgs {
 
 input InputAsMenuItemArgs {
   imageURL: String
-  price: Int!
+  price: Float!
 }

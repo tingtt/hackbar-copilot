@@ -11,6 +11,20 @@ type menuRepository struct {
 	fs *filesystem
 }
 
+// Find implements menu.Repository.
+func (m *menuRepository) Find(groupName string, itemName string) (menu.Item, error) {
+	for _, mg := range m.fs.data.menuGroups {
+		if mg.Name == groupName {
+			for _, mi := range mg.Items {
+				if mi.Name == itemName {
+					return mi, nil
+				}
+			}
+		}
+	}
+	return menu.Item{}, menu.ErrNotFound
+}
+
 // All implements menu.Repository.
 func (m *menuRepository) All() iter.Seq2[menu.Group, error] {
 	return func(yield func(menu.Group, error) bool) {

@@ -2,6 +2,12 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type GlassType struct {
 	Name        string  `json:"name"`
 	ImageURL    *string `json:"imageURL,omitempty"`
@@ -14,7 +20,7 @@ type InputAsMenuArgs struct {
 
 type InputAsMenuItemArgs struct {
 	ImageURL *string `json:"imageURL,omitempty"`
-	Price    int     `json:"price"`
+	Price    float64 `json:"price"`
 }
 
 type InputGlassType struct {
@@ -22,6 +28,15 @@ type InputGlassType struct {
 	ImageURL    *string `json:"imageURL,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Save        *bool   `json:"save,omitempty"`
+}
+
+type InputOrder struct {
+	MenuItemID string `json:"menuItemID"`
+}
+
+type InputOrderStatusUpdate struct {
+	ID     string      `json:"id"`
+	Status OrderStatus `json:"status"`
 }
 
 type InputRecipe struct {
@@ -66,7 +81,7 @@ type MenuGroup struct {
 	ImageURL    *string     `json:"imageURL,omitempty"`
 	Flavor      *string     `json:"flavor,omitempty"`
 	Items       []*MenuItem `json:"items,omitempty"`
-	MinPriceYen int         `json:"minPriceYen"`
+	MinPriceYen float64     `json:"minPriceYen"`
 }
 
 type MenuItem struct {
@@ -74,11 +89,25 @@ type MenuItem struct {
 	ImageURL   *string  `json:"imageURL,omitempty"`
 	Materials  []string `json:"materials,omitempty"`
 	OutOfStock bool     `json:"outOfStock"`
-	PriceYen   int      `json:"priceYen"`
+	PriceYen   float64  `json:"priceYen"`
 	Recipe     *Recipe  `json:"recipe,omitempty"`
 }
 
 type Mutation struct {
+}
+
+type Order struct {
+	ID         string                        `json:"id"`
+	CustomerID string                        `json:"customerID"`
+	MenuItemID string                        `json:"menuItemID"`
+	Timestamps []*OrderStatusUpdateTimestamp `json:"timestamps"`
+	Status     OrderStatus                   `json:"status"`
+	Price      float64                       `json:"price"`
+}
+
+type OrderStatusUpdateTimestamp struct {
+	Status    OrderStatus `json:"status"`
+	Timestamp string      `json:"timestamp"`
 }
 
 type Query struct {
@@ -106,4 +135,53 @@ type Step struct {
 	Material    *string `json:"material,omitempty"`
 	Amount      *string `json:"amount,omitempty"`
 	Description *string `json:"description,omitempty"`
+}
+
+type OrderStatus string
+
+const (
+	OrderStatusOrdered    OrderStatus = "ORDERED"
+	OrderStatusPrepared   OrderStatus = "PREPARED"
+	OrderStatusDelivered  OrderStatus = "DELIVERED"
+	OrderStatusCanceled   OrderStatus = "CANCELED"
+	OrderStatusCheckedout OrderStatus = "CHECKEDOUT"
+	OrderStatusUnknown    OrderStatus = "UNKNOWN"
+)
+
+var AllOrderStatus = []OrderStatus{
+	OrderStatusOrdered,
+	OrderStatusPrepared,
+	OrderStatusDelivered,
+	OrderStatusCanceled,
+	OrderStatusCheckedout,
+	OrderStatusUnknown,
+}
+
+func (e OrderStatus) IsValid() bool {
+	switch e {
+	case OrderStatusOrdered, OrderStatusPrepared, OrderStatusDelivered, OrderStatusCanceled, OrderStatusCheckedout, OrderStatusUnknown:
+		return true
+	}
+	return false
+}
+
+func (e OrderStatus) String() string {
+	return string(e)
+}
+
+func (e *OrderStatus) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrderStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrderStatus", str)
+	}
+	return nil
+}
+
+func (e OrderStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
