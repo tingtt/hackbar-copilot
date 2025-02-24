@@ -1,0 +1,233 @@
+[
+  {
+    "__typename": "MenuGroup",
+    "name": "Blue Devil",
+    "imageURL": "https://example.com/path/to/image/blue-devil",
+    "flavor": "Medium sweet and dry",
+    "items": [
+      {
+        "__typename": "MenuItem",
+        "name": "Cocktail",
+        "imageURL": "https://example.com/path/to/image/blue-devil",
+        "materials": [
+          "Gin",
+          "Blue curacao",
+          "Lemon juice"
+        ],
+        "outOfStock": false,
+        "priceYen": 700,
+        "recipe": {
+          "__typename": "Recipe",
+          "name": "Cocktail",
+          "type": {
+            "__typename": "RecipeType",
+            "name": "shake",
+            "description": "shake description"
+          },
+          "glass": {
+            "__typename": "GlassType",
+            "name": "cocktail",
+            "imageURL": "https://example.com/path/to/image/cocktail",
+            "description": "cocktail glass description"
+          },
+          "steps": [
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Chill shaker and glass."
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Put ingredients in a shaker."
+            },
+            {
+              "__typename": "Step",
+              "material": "Gin",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": "Blue curacao",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": "Lemon juice",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Put ice in a shaker."
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Shake."
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Pour into a glass."
+            }
+          ]
+        }
+      }
+    ],
+    "minPriceYen": 700
+  },
+  {
+    "__typename": "MenuGroup",
+    "name": "Passoamoni",
+    "imageURL": "https://example.com/path/to/image/passoamoni",
+    "flavor": "Fruity",
+    "items": [
+      {
+        "__typename": "MenuItem",
+        "name": "Cocktail",
+        "imageURL": "https://example.com/path/to/image/passoamoni",
+        "materials": [
+          "Passoa",
+          "Grapefruit juice",
+          "Tonic water"
+        ],
+        "outOfStock": false,
+        "priceYen": 700,
+        "recipe": {
+          "__typename": "Recipe",
+          "name": "Cocktail",
+          "type": {
+            "__typename": "RecipeType",
+            "name": "build",
+            "description": "build description"
+          },
+          "glass": {
+            "__typename": "GlassType",
+            "name": "collins",
+            "imageURL": "https://example.com/path/to/image/collins",
+            "description": "collins glass description"
+          },
+          "steps": [
+            {
+              "__typename": "Step",
+              "material": "Passoa",
+              "amount": "45ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": "Grapefruit juice",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Stir"
+            },
+            {
+              "__typename": "Step",
+              "material": "Tonic water",
+              "amount": "Full up",
+              "description": null
+            }
+          ]
+        }
+      }
+    ],
+    "minPriceYen": 700
+  },
+  {
+    "__typename": "MenuGroup",
+    "name": "Phuket Sling",
+    "imageURL": "https://example.com/path/to/image/phuket-sling",
+    "flavor": "Sweet",
+    "items": [
+      {
+        "__typename": "MenuItem",
+        "name": "Cocktail",
+        "imageURL": "https://example.com/path/to/image/phuket-sling/cocktail",
+        "materials": [
+          "Peach liqueur",
+          "Blue curacao",
+          "Grapefruit juice",
+          "Tonic water"
+        ],
+        "outOfStock": false,
+        "priceYen": 700,
+        "recipe": {
+          "__typename": "Recipe",
+          "name": "Cocktail",
+          "type": {
+            "__typename": "RecipeType",
+            "name": "build",
+            "description": "build description"
+          },
+          "glass": {
+            "__typename": "GlassType",
+            "name": "collins",
+            "imageURL": "https://example.com/path/to/image/collins",
+            "description": "collins glass description"
+          },
+          "steps": [
+            {
+              "__typename": "Step",
+              "material": "Peach liqueur",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": "Blue curacao",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": "Grapefruit juice",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "__typename": "Step",
+              "material": null,
+              "amount": null,
+              "description": "Stir"
+            },
+            {
+              "__typename": "Step",
+              "material": "Tonic water",
+              "amount": "Full up",
+              "description": null
+            }
+          ]
+        }
+      },
+      {
+        "__typename": "MenuItem",
+        "name": "Mocktail",
+        "imageURL": "https://example.com/path/to/image/phuket-sling/mocktail",
+        "materials": [
+          "Peach syrup",
+          "Blue curacao syrup",
+          "Grapefruit juice",
+          "Tonic water"
+        ],
+        "outOfStock": false,
+        "priceYen": 500,
+        "recipe": null
+      }
+    ],
+    "minPriceYen": 500
+  }
+]
