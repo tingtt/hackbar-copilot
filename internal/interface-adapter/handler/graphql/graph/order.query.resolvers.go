@@ -9,20 +9,23 @@ import (
 	"fmt"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/interface-adapter/handler/middleware"
 )
 
 // Orders is the resolver for the orders field.
 func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
-	jwtClaims, err := middleware.GetJWT(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("unauthorized: %w", err)
+	var (
+		orders []order.Order
+		err    error
+	)
+	if r.authAdapter.HasBartenderRole(ctx) {
+		orders, err = r.Copilot.LatestOrders()
+	} else {
+		email, err2 := r.authAdapter.GetEmail(ctx)
+		if /* unauthorized */ err2 != nil {
+			return nil, err2
+		}
+		orders, err = r.OrderService.ListOrders(order.CustomerID(email))
 	}
-
-	// TODO: Switch by permission
-	// orders, err := r.Copilot.LatestOrders()
-
-	orders, err := r.OrderService.ListOrders(order.CustomerID(jwtClaims.Email))
 	if err != nil {
 		return nil, fmt.Errorf("failed to list orders: %w", err)
 	}

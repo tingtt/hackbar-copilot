@@ -25,5 +25,6 @@ func TestNewResolver(t *testing.T) {
 		assert.NotNil(t, resolver.recipeAdapter)
 		assert.NotNil(t, resolver.menuAdapter)
 		assert.NotNil(t, resolver.orderAdapter)
+		assert.NotNil(t, resolver.authAdapter)
 	})
 }

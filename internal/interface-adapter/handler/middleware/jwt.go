@@ -2,37 +2,48 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/tingtt/oauth2rbac/pkg/jwtclaims"
 )
-
-type JWTClaims struct {
-	Email string `json:"emails"`
-}
 
 const contextKeyJWT contextKey = "jwt"
 
 var (
-	ErrJWTInvalidClaimsType = errors.New("jwt: invalid claims type")
-	ErrJWTInvalid           = errors.New("jwt: invalid token")
-	ErrJWTNotFound          = errors.New("jwt: token not found")
+	ErrJWTInvalid  = errors.New("jwt: invalid token")
+	ErrJWTNotFound = errors.New("jwt: token not found")
 )
 
-func GetJWT(ctx context.Context) (JWTClaims, error) {
+func GetJWT(ctx context.Context) (jwtclaims.Claims, error) {
 	switch claimsOrErr := ctx.Value(contextKeyJWT).(type) {
-	case JWTClaims:
+	case jwtclaims.Claims:
 		return claimsOrErr, nil
 	case error:
-		return JWTClaims{}, claimsOrErr
+		return jwtclaims.Claims{}, claimsOrErr
 	case nil:
 		panic("JWT middleware is not used.")
 	default:
 		panic(fmt.Sprintf("Unknown JWT claims type: %T", claimsOrErr))
 	}
+}
+
+func setJWT(req *http.Request, claims jwtclaims.Claims) {
+	if req == nil {
+		panic("req is nil")
+	}
+	*req = *req.WithContext(context.WithValue(req.Context(), contextKeyJWT, claims))
+}
+
+func setJWTError(req *http.Request, err error) {
+	if req == nil {
+		panic("req is nil")
+	}
+	*req = *req.WithContext(context.WithValue(req.Context(), contextKeyJWT, err))
 }
 
 func JWT(secret []byte) (middleware func(http.Handler) http.Handler, usedContextKeys []contextKey) {
@@ -50,29 +61,33 @@ func JWT(secret []byte) (middleware func(http.Handler) http.Handler, usedContext
 				tokenStr := strings.TrimPrefix(authorization, "Bearer ")
 				claims, err := parseJWT(tokenStr, secret)
 				if err != nil {
-					*r = *r.WithContext(context.WithValue(r.Context(), contextKeyJWT, err))
+					setJWTError(r, err)
 					return
 				}
-				*r = *r.WithContext(context.WithValue(r.Context(), contextKeyJWT, claims))
+				setJWT(r, claims)
 				return
 			}
 
 			cookie, err := r.Cookie("jwt")
 			if err != nil {
-				*r = *r.WithContext(context.WithValue(r.Context(), contextKeyJWT, fmt.Errorf("jwt: %w", err)))
+				setJWTError(r, fmt.Errorf("jwt: %w", err))
+				return
+			}
+			if cookie == nil {
+				setJWTError(r, ErrJWTNotFound)
 				return
 			}
 			claims, err := parseJWT(cookie.Value, secret)
 			if err != nil {
-				*r = *r.WithContext(context.WithValue(r.Context(), contextKeyJWT, err))
+				setJWTError(r, err)
 				return
 			}
-			*r = *r.WithContext(context.WithValue(r.Context(), contextKeyJWT, claims))
+			setJWT(r, claims)
 		})
 	}, []contextKey{contextKeyJWT}
 }
 
-func parseJWT(tokenStr string, secret []byte) (JWTClaims, error) {
+func parseJWT(tokenStr string, secret []byte) (jwtclaims.Claims, error) {
 	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -82,25 +97,11 @@ func parseJWT(tokenStr string, secret []byte) (JWTClaims, error) {
 		return secret, nil
 	})
 	if err != nil {
-		return JWTClaims{}, err
+		return jwtclaims.Claims{}, err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		emails, ok := claims["emails"].([]interface{})
-		if ok {
-			if len(emails) == 0 {
-				return JWTClaims{}, fmt.Errorf("%w (email not found)", ErrJWTInvalidClaimsType)
-			}
-			contextClaims := JWTClaims{}
-			if email, ok := emails[0].(string); ok {
-				contextClaims.Email = email
-			} else {
-				return JWTClaims{}, fmt.Errorf("%w (email type)", ErrJWTInvalidClaimsType)
-			}
-			return contextClaims, nil
-		} else {
-			return JWTClaims{}, fmt.Errorf("%w (email[] type)", ErrJWTInvalidClaimsType)
-		}
-	} else {
-		return JWTClaims{}, ErrJWTInvalid
+		jsonClaims, _ := json.Marshal(claims)
+		return jwtclaims.Unmarshal(jsonClaims)
 	}
+	return jwtclaims.Claims{}, ErrJWTInvalid
 }

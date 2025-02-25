@@ -6,18 +6,17 @@ package graph
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
-	"hackbar-copilot/internal/interface-adapter/handler/middleware"
 	"time"
 )
 
 // Order is the resolver for the order field.
 func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*model.Order, error) {
-	jwtClaims, err := middleware.GetJWT(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("unauthorized: %w", err)
+	email, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
 	}
 
 	menuItemID, err := order.ParseMenuItemID(input.MenuItemID)
@@ -25,7 +24,7 @@ func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*
 		return nil, err
 	}
 
-	savedOrder, err := r.OrderService.Order(order.CustomerID(jwtClaims.Email), menuItemID)
+	savedOrder, err := r.OrderService.Order(order.CustomerID(email), menuItemID)
 	if err != nil {
 		return nil, err
 	}
@@ -35,11 +34,14 @@ func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*
 
 // UpdateOrderStatus is the resolver for the updateOrderStatus field.
 func (r *mutationResolver) UpdateOrderStatus(ctx context.Context, input model.InputOrderStatusUpdate) (*model.Order, error) {
-	_, err := middleware.GetJWT(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("unauthorized: %w", err)
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
 	}
-	// TODO: check permission
+
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, errors.New("forbidden")
+	}
 
 	status, err := r.orderAdapter.ApplyStatus(input.Status)
 	if err != nil {

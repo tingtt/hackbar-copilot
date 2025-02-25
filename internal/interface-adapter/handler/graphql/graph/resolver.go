@@ -1,6 +1,7 @@
 package graph
 
 import (
+	authadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/auth"
 	menuadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/menu"
 	orderadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/order"
 	recipeadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/recipe"
@@ -18,6 +19,7 @@ func NewResolver(deps Dependencies) ResolverRoot {
 	deps.recipeAdapter = recipeadapter.New()
 	deps.menuAdapter = menuadapter.NewOutputAdapter()
 	deps.orderAdapter = orderadapter.New()
+	deps.authAdapter = authadapter.New()
 	return &Resolver{deps}
 }
 
@@ -32,4 +34,6 @@ type Dependencies struct {
 
 	OrderService order.Order
 	orderAdapter orderadapter.Adapter
+
+	authAdapter authadapter.JWTAdapter
 }
