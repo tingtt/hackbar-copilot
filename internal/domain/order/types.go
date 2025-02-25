@@ -5,12 +5,12 @@ import (
 )
 
 type Order struct {
-	ID
-	CustomerID
-	MenuItemID
+	ID         ID
+	CustomerID CustomerID
+	MenuItemID MenuItemID
 	Timestamps []StatusUpdateTimestamp
-	Status
-	Price float32
+	Status     Status
+	Price      float32
 }
 
 type SavedOrder struct {
@@ -52,6 +52,6 @@ const (
 )
 
 type StatusUpdateTimestamp struct {
-	Status
+	Status    Status
 	Timestamp time.Time
 }
