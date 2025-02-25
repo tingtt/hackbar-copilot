@@ -124,9 +124,11 @@ func loadDependencies(dataDirPath string) (dependencies, func() /* close func */
 		Usecase: depsUsecase{
 			GraphQL: graph.Dependencies{
 				Copilot: copilot.New(copilot.Dependencies{
-					Recipe: fs.Recipe(),
-					Menu:   fs.Menu(),
-					Stock:  fs.Stock(),
+					Recipe:       fs.Recipe(),
+					Menu:         fs.Menu(),
+					Stock:        fs.Stock(),
+					Order:        orderRepo,
+					OrderSummary: fs.OrderSymmary(),
 				}),
 				OrderService: order.New(order.Dependencies{
 					Menu:  fs.Menu(),
