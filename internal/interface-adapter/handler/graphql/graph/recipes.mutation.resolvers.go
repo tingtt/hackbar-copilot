@@ -13,6 +13,14 @@ import (
 
 // SaveRecipe is the resolver for the saveRecipe field.
 func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error) {
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
+	}
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, errors.New("forbidden")
+	}
+
 	currentRecipeGroup, err := r.Copilot.FindRecipeGroup(input.Name)
 	if err != nil && !errors.Is(err, usecaseutils.ErrNotFound) {
 		return nil, err

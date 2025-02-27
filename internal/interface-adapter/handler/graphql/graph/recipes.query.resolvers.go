@@ -6,12 +6,21 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"hackbar-copilot/internal/usecase/copilot"
 )
 
 // Recipes is the resolver for the recipes field.
 func (r *queryResolver) Recipes(ctx context.Context) ([]*model.RecipeGroup, error) {
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
+	}
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, errors.New("forbidden")
+	}
+
 	recipeGroups, err := r.Copilot.ListRecipes(copilot.SortRecipeGroupByName())
 	if err != nil {
 		return nil, err

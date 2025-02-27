@@ -6,12 +6,21 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
 // UpdateStock is the resolver for the updateStock field.
 func (r *mutationResolver) UpdateStock(ctx context.Context, input model.InputStockUpdate) ([]*model.Material, error) {
-	err := r.Copilot.UpdateStock(input.In, input.Out)
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
+	}
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, errors.New("forbidden")
+	}
+
+	err = r.Copilot.UpdateStock(input.In, input.Out)
 	if err != nil {
 		return nil, err
 	}

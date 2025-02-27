@@ -6,12 +6,21 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"hackbar-copilot/internal/usecase/copilot"
 )
 
 // Materials is the resolver for the materials field.
 func (r *queryResolver) Materials(ctx context.Context) ([]*model.Material, error) {
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
+	}
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, errors.New("forbidden")
+	}
+
 	materials, err := r.Copilot.Materials(copilot.SortMaterialByName())
 	if err != nil {
 		return nil, err
