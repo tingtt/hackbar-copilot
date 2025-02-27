@@ -31,10 +31,13 @@ func (o *orderRepository) Latest(optionAppliers ...options.Applier[order.ListerO
 	return func(yield func(order.Order, error) bool) {
 		for _, o := range o.fs.data.orders {
 			if option.Since != nil && o.CreatedAt().Before(*option.Since) {
-				continue
+				break
 			}
 			if option.CustomerID != nil && o.CustomerID != *option.CustomerID {
 				continue
+			}
+			if option.IgnoreCheckedOut && o.Status == order.StatusCheckedOut {
+				break
 			}
 			if !yield(o, nil) {
 				return
