@@ -1,0 +1,15 @@
+extend type Mutation {
+  checkout(input: InputCheckout!): Checkout!
+}
+
+input InputCheckout {
+  customerID: String!
+  orderIDs: [String!]!
+  diffs: [InputPriceDiff!]!
+  paymentType: CheckoutType!
+}
+
+input InputPriceDiff {
+  price: Float!
+  description: String
+}

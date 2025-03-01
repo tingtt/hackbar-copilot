@@ -9,11 +9,12 @@ import (
 // LatestOrders implements Copilot.
 func (c *copilot) LatestOrders() ([]order.Order, error) {
 	optionAppliers := []options.Applier[order.ListerOption]{}
-	for summary, err := range c.ordersummary.Latest() {
+	for cashout, err := range c.cashout.Latest() {
 		if err != nil {
 			return nil, err
 		}
-		optionAppliers = append(optionAppliers, order.Since(summary.Timestamp))
+		// apply filter since by latest cashout timestamp
+		optionAppliers = append(optionAppliers, order.Since(cashout.Timestamp))
 		break
 	}
 

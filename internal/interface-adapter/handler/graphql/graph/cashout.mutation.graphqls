@@ -1,0 +1,8 @@
+extend type Mutation {
+  cashout(input: CashoutInput!): Cashout!
+}
+
+input CashoutInput {
+  checkoutIDs: [String!]!
+  staffID: String!
+}

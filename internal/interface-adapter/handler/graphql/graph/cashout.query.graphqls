@@ -1,0 +1,10 @@
+extend type Query {
+  cashouts(since: DateTime!, until: DateTime!): [Cashout!]!
+}
+
+type Cashout {
+  checkouts: [Checkout!]!
+  revenue: Float!
+  timestamp: DateTime!
+  staffID: String!
+}

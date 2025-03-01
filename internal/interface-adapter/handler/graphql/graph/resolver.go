@@ -5,8 +5,10 @@ import (
 	menuadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/menu"
 	orderadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/order"
 	recipeadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/recipe"
+	"hackbar-copilot/internal/usecase/cashier"
 	"hackbar-copilot/internal/usecase/copilot"
 	"hackbar-copilot/internal/usecase/order"
+	"reflect"
 )
 
 //go:generate go tool gqlgen generate
@@ -20,6 +22,7 @@ func NewResolver(deps Dependencies) ResolverRoot {
 	deps.menuAdapter = menuadapter.NewOutputAdapter()
 	deps.orderAdapter = orderadapter.New()
 	deps.authAdapter = authadapter.New()
+	deps.validate()
 	return &Resolver{deps}
 }
 
@@ -35,5 +38,16 @@ type Dependencies struct {
 	OrderService order.Order
 	orderAdapter orderadapter.Adapter
 
+	Cashier cashier.Cashier
+
 	authAdapter authadapter.JWTAdapter
+}
+
+func (d *Dependencies) validate() {
+	for i := range reflect.ValueOf(d).NumField() {
+		if reflect.ValueOf(d).Field(i).IsNil() {
+			t := reflect.TypeOf(d).Field(i).Type
+			panic(t.PkgPath() + "." + t.Name() + " cannot be nil")
+		}
+	}
 }

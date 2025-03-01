@@ -2,7 +2,7 @@ package filesystem
 
 import (
 	"fmt"
-	"hackbar-copilot/internal/domain/ordersummary"
+	"hackbar-copilot/internal/domain/cashout"
 	"io/fs"
 	"iter"
 	"slices"
@@ -11,20 +11,20 @@ import (
 	"github.com/tingtt/options"
 )
 
-var _ ordersummary.Repository = (*orderSummaryRepository)(nil)
+var _ cashout.Repository = (*cashoutRepository)(nil)
 
-type orderSummaryRepository struct {
+type cashoutRepository struct {
 	fs *filesystem
 }
 
 // Latest implements ordersummary.Repository.
-func (o *orderSummaryRepository) Latest(optionAppliers ...options.Applier[ordersummary.ListerOption]) iter.Seq2[ordersummary.Summary, error] {
+func (o *cashoutRepository) Latest(optionAppliers ...options.Applier[cashout.ListerOption]) iter.Seq2[cashout.Cashout, error] {
 	option := options.Create(optionAppliers...)
 
-	return func(yield func(ordersummary.Summary, error) bool) {
+	return func(yield func(cashout.Cashout, error) bool) {
 		dirs, err := fs.ReadDir(o.fs.read, ".")
 		if err != nil {
-			if !yield(ordersummary.Summary{}, err) {
+			if !yield(cashout.Cashout{}, err) {
 				return
 			}
 		}
@@ -38,21 +38,24 @@ func (o *orderSummaryRepository) Latest(optionAppliers ...options.Applier[orders
 			if strings.Contains(filename, "6_orders_summarized_") && strings.HasSuffix(filename, ".toml") {
 				file, err := o.fs.read.Open(filename)
 				if err != nil {
-					if !yield(ordersummary.Summary{}, err) {
+					if !yield(cashout.Cashout{}, err) {
 						return
 					}
 				}
 				defer file.Close()
 
-				summary := ordersummary.Summary{}
+				summary := cashout.Cashout{}
 				err = loadFromToml(o.fs.read, filename, "ordersummary", &summary)
 				if err != nil {
-					if !yield(ordersummary.Summary{}, err) {
+					if !yield(cashout.Cashout{}, err) {
 						return
 					}
 				}
 
 				if option.Since != nil && summary.Timestamp.Before(*option.Since) {
+					break
+				}
+				if option.Until != nil && summary.Timestamp.After(*option.Until) {
 					continue
 				}
 				if !yield(summary, nil) {
@@ -64,7 +67,7 @@ func (o *orderSummaryRepository) Latest(optionAppliers ...options.Applier[orders
 }
 
 // Save implements ordersummary.Repository.
-func (o *orderSummaryRepository) Save(s ordersummary.Summary) error {
+func (o *cashoutRepository) Save(s cashout.Cashout) error {
 	filename := fmt.Sprintf("6_orders_summarized_%d.toml", s.Timestamp.Unix())
 	return o.fs.saveFile(filename, map[string]interface{}{"ordersummary": s})
 }

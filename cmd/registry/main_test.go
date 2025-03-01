@@ -92,6 +92,7 @@ func Test_loadDependencies(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, deps.Usecase.GraphQL.Copilot)
 		assert.NotNil(t, deps.Usecase.GraphQL.OrderService)
+		assert.NotNil(t, deps.Usecase.GraphQL.Cashier)
 	})
 
 	t.Run("may fail to load repository", func(t *testing.T) {
@@ -102,5 +103,6 @@ func Test_loadDependencies(t *testing.T) {
 		assert.Error(t, err)
 		assert.Nil(t, deps.Usecase.GraphQL.Copilot)
 		assert.Nil(t, deps.Usecase.GraphQL.OrderService)
+		assert.Nil(t, deps.Usecase.GraphQL.Cashier)
 	})
 }

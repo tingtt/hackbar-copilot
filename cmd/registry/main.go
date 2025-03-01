@@ -8,6 +8,7 @@ import (
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph"
+	"hackbar-copilot/internal/usecase/cashier"
 	"hackbar-copilot/internal/usecase/copilot"
 	"hackbar-copilot/internal/usecase/order"
 	"log/slog"
@@ -124,15 +125,20 @@ func loadDependencies(dataDirPath string) (dependencies, func() /* close func */
 		Usecase: depsUsecase{
 			GraphQL: graph.Dependencies{
 				Copilot: copilot.New(copilot.Dependencies{
-					Recipe:       fs.Recipe(),
-					Menu:         fs.Menu(),
-					Stock:        fs.Stock(),
-					Order:        orderRepo,
-					OrderSummary: fs.OrderSymmary(),
+					Recipe:  fs.Recipe(),
+					Menu:    fs.Menu(),
+					Stock:   fs.Stock(),
+					Order:   orderRepo,
+					Cashout: fs.Cashout(),
 				}),
 				OrderService: order.New(order.Dependencies{
 					Menu:  fs.Menu(),
 					Order: orderRepo,
+				}),
+				Cashier: cashier.New(cashier.Dependencies{
+					Order:    orderRepo,
+					Checkout: fs.Checkout(),
+					Cashout:  fs.Cashout(),
 				}),
 			},
 		},

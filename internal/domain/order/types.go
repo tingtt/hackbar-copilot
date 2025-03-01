@@ -43,14 +43,6 @@ const (
 	StatusCheckedOut Status = "CheckedOut"
 )
 
-type CheckoutType string
-
-const (
-	CheckoutTypeCreditCard CheckoutType = "CreditCard"
-	CheckoutTypeQR         CheckoutType = "QR"
-	CheckoutTypeCash       CheckoutType = "Cash"
-)
-
 type StatusUpdateTimestamp struct {
 	Status    Status
 	Timestamp time.Time

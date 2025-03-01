@@ -11,7 +11,7 @@ import (
 type SaveFindListListener interface {
 	saver
 	finder
-	lister
+	Lister
 	listener
 }
 
@@ -43,7 +43,7 @@ func IgnoreCheckedOut() options.Applier[ListerOption] {
 	}
 }
 
-type lister interface {
+type Lister interface {
 	Latest(optionAppliers ...options.Applier[ListerOption]) iter.Seq2[Order, error]
 }
 

@@ -1,9 +1,10 @@
 package filesystem
 
 import (
+	"hackbar-copilot/internal/domain/cashout"
+	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/order"
-	"hackbar-copilot/internal/domain/ordersummary"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/stock"
 )
@@ -13,7 +14,8 @@ type Filesystem interface {
 	Menu() menu.Repository
 	Stock() stock.Repository
 	Order() (r order.Repository, close func())
-	OrderSymmary() ordersummary.Repository
+	Cashout() cashout.Repository
+	Checkout() checkout.Repository
 	SavePersistently() error
 }
 
@@ -74,6 +76,11 @@ type data struct {
 	//
 	// orders is sorted by created desc.
 	orders []order.Order
+
+	// checkouts
+	//
+	// checkouts is sorted by created desc.
+	checkouts []checkout.Checkout
 }
 
 func (data data) isEmpty() bool {
@@ -107,7 +114,12 @@ func (f *filesystem) Order() (_ order.Repository, _close func()) {
 	}
 }
 
-// OrderSymmary implements Filesystem.
-func (f *filesystem) OrderSymmary() ordersummary.Repository {
-	return &orderSummaryRepository{f}
+// Cashout implements Filesystem.
+func (f *filesystem) Cashout() cashout.Repository {
+	return &cashoutRepository{f}
+}
+
+// Checkout implements Filesystem.
+func (f *filesystem) Checkout() checkout.Repository {
+	return &checkoutRepository{f}
 }
