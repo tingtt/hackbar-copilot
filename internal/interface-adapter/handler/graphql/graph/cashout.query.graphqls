@@ -1,5 +1,10 @@
 extend type Query {
-  cashouts(since: DateTime!, until: DateTime!): [Cashout!]!
+  cashouts(input: InputCashoutQuery!): [Cashout!]!
+}
+
+input InputCashoutQuery {
+  since: DateTime!
+  until: DateTime!
 }
 
 type Cashout {

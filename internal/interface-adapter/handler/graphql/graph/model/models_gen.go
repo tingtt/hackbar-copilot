@@ -45,6 +45,11 @@ type InputAsMenuItemArgs struct {
 	Price    float64 `json:"price"`
 }
 
+type InputCashoutQuery struct {
+	Since string `json:"since"`
+	Until string `json:"until"`
+}
+
 type InputCheckout struct {
 	CustomerID  string            `json:"customerID"`
 	OrderIDs    []string          `json:"orderIDs"`

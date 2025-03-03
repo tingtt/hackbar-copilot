@@ -121,7 +121,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Cashouts  func(childComplexity int, since string, until string) int
+		Cashouts  func(childComplexity int, input model.InputCashoutQuery) int
 		Checkouts func(childComplexity int) int
 		Materials func(childComplexity int) int
 		Menu      func(childComplexity int) int
@@ -163,7 +163,7 @@ type MutationResolver interface {
 	UpdateStock(ctx context.Context, input model.InputStockUpdate) ([]*model.Material, error)
 }
 type QueryResolver interface {
-	Cashouts(ctx context.Context, since string, until string) ([]*model.Cashout, error)
+	Cashouts(ctx context.Context, input model.InputCashoutQuery) ([]*model.Cashout, error)
 	Checkouts(ctx context.Context) ([]*model.Checkout, error)
 	Menu(ctx context.Context) ([]*model.MenuGroup, error)
 	Orders(ctx context.Context) ([]*model.Order, error)
@@ -531,7 +531,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Cashouts(childComplexity, args["since"].(string), args["until"].(string)), true
+		return e.complexity.Query.Cashouts(childComplexity, args["input"].(model.InputCashoutQuery)), true
 
 	case "Query.checkouts":
 		if e.complexity.Query.Checkouts == nil {
@@ -663,6 +663,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCashoutInput,
 		ec.unmarshalInputInputAsMenuArgs,
 		ec.unmarshalInputInputAsMenuItemArgs,
+		ec.unmarshalInputInputCashoutQuery,
 		ec.unmarshalInputInputCheckout,
 		ec.unmarshalInputInputGlassType,
 		ec.unmarshalInputInputOrder,
@@ -964,41 +965,23 @@ func (ec *executionContext) field_Query___type_argsName(
 func (ec *executionContext) field_Query_cashouts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_cashouts_argsSince(ctx, rawArgs)
+	arg0, err := ec.field_Query_cashouts_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["since"] = arg0
-	arg1, err := ec.field_Query_cashouts_argsUntil(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["until"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Query_cashouts_argsSince(
+func (ec *executionContext) field_Query_cashouts_argsInput(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("since"))
-	if tmp, ok := rawArgs["since"]; ok {
-		return ec.unmarshalNDateTime2string(ctx, tmp)
+) (model.InputCashoutQuery, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNInputCashoutQuery2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputCashoutQuery(ctx, tmp)
 	}
 
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_cashouts_argsUntil(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("until"))
-	if tmp, ok := rawArgs["until"]; ok {
-		return ec.unmarshalNDateTime2string(ctx, tmp)
-	}
-
-	var zeroVal string
+	var zeroVal model.InputCashoutQuery
 	return zeroVal, nil
 }
 
@@ -2469,11 +2452,14 @@ func (ec *executionContext) _Mutation_order(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalOOrder2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_order(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2535,11 +2521,14 @@ func (ec *executionContext) _Mutation_updateOrderStatus(ctx context.Context, fie
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalOOrder2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateOrderStatus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3161,7 +3150,7 @@ func (ec *executionContext) _Query_cashouts(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Cashouts(rctx, fc.Args["since"].(string), fc.Args["until"].(string))
+		return ec.resolvers.Query().Cashouts(rctx, fc.Args["input"].(model.InputCashoutQuery))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6198,6 +6187,40 @@ func (ec *executionContext) unmarshalInputInputAsMenuItemArgs(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputInputCashoutQuery(ctx context.Context, obj any) (model.InputCashoutQuery, error) {
+	var it model.InputCashoutQuery
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"since", "until"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "since":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("since"))
+			data, err := ec.unmarshalNDateTime2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Since = data
+		case "until":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("until"))
+			data, err := ec.unmarshalNDateTime2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Until = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputInputCheckout(ctx context.Context, obj any) (model.InputCheckout, error) {
 	var it model.InputCheckout
 	asMap := map[string]any{}
@@ -6968,10 +6991,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_order(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "updateOrderStatus":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateOrderStatus(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "saveRecipe":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_saveRecipe(ctx, field)
@@ -8020,6 +8049,11 @@ func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.S
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalNInputCashoutQuery2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputCashoutQuery(ctx context.Context, v any) (model.InputCashoutQuery, error) {
+	res, err := ec.unmarshalInputInputCashoutQuery(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNInputCheckout2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputCheckout(ctx context.Context, v any) (model.InputCheckout, error) {
 	res, err := ec.unmarshalInputInputCheckout(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8193,6 +8227,10 @@ func (ec *executionContext) marshalNMenuItem2ᚖhackbarᚑcopilotᚋinternalᚋi
 		return graphql.Null
 	}
 	return ec._MenuItem(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOrder2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v model.Order) graphql.Marshaler {
+	return ec._Order(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrder2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Order) graphql.Marshaler {
@@ -8895,13 +8933,6 @@ func (ec *executionContext) marshalOMenuItem2ᚕᚖhackbarᚑcopilotᚋinternal�
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalOOrder2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Order(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalORecipe2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐRecipeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Recipe) graphql.Marshaler {

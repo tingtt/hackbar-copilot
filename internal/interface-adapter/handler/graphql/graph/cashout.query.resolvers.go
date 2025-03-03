@@ -12,7 +12,7 @@ import (
 )
 
 // Cashouts is the resolver for the cashouts field.
-func (r *queryResolver) Cashouts(ctx context.Context, since string, until string) ([]*model.Cashout, error) {
+func (r *queryResolver) Cashouts(ctx context.Context, input model.InputCashoutQuery) ([]*model.Cashout, error) {
 	_, err := r.authAdapter.GetEmail(ctx)
 	if /* unauthorized */ err != nil {
 		return nil, err
@@ -21,11 +21,11 @@ func (r *queryResolver) Cashouts(ctx context.Context, since string, until string
 		return nil, errors.New("forbidden")
 	}
 
-	sinceParsed, err := time.Parse(time.RFC3339, since)
+	sinceParsed, err := time.Parse(time.RFC3339, input.Since)
 	if err != nil {
 		return nil, err
 	}
-	untilParsed, err := time.Parse(time.RFC3339, until)
+	untilParsed, err := time.Parse(time.RFC3339, input.Until)
 	if err != nil {
 		return nil, err
 	}
