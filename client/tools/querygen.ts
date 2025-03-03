@@ -1,10 +1,8 @@
 import yargs from "yargs"
 import fs from "fs"
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-import graphqlQueryGen from "graphql-query-gen"
-import { listFunctionTypes } from "./lib/querygen/listFunction"
 import { WithDonoteditHeader } from "./lib/donoteditHeader"
+import { generateInterface, listFunctionTypes } from "./lib/interfacegen"
+import { analizeQueries } from "./lib/querygen"
 
 // Options:
 //   -i, --schema   Path to the schema file.
@@ -26,68 +24,98 @@ const args = await yargs(process.argv.slice(2)).options({
 
 const schemaRaw = fs.readFileSync(args.schema, "utf-8")
 
+/**
+ * Generate query from schema.
+ */
+
 console.log(`Generating query from '${args.schema}'.`)
 
-const generated = graphqlQueryGen.processSchema(schemaRaw) as {
-  operations: { name: string; options: { name: string; query: string }[] }[]
-}
+const IMPORT_TYPE_AS = "types"
+const { queries, mutations } = analizeQueries(schemaRaw, IMPORT_TYPE_AS)
 
 console.log(`Writing generated query to '${args.dest}'.`)
-generated.operations
-  .filter(
-    (operation) => operation.options.length !== 0 && operation.name === "Query",
+
+{
+  const importsRaw = `import { gql } from "@apollo/client/core"\nimport * as ${IMPORT_TYPE_AS} from "./types"\n`
+
+  const queryTSRaw = queries.reduce((acc, query) => {
+    const queryName = "get" + query.name[0].toUpperCase() + query.name.slice(1)
+    acc += `\n`
+    acc += `export const ${queryName} = (`
+    if (query.variables.length !== 0) {
+      acc += `variables: {\n`
+      acc += query.variables.reduce((acc, variable) => {
+        acc += `  ${variable.name}: ${variable.argType}\n`
+        return acc
+      }, "")
+      acc += `}`
+    }
+    acc += `) => ({\n`
+    acc += `  query: gql\`\n`
+    acc += query.query + `\`,\n`
+    if (query.variables.length !== 0) {
+      acc += `  variables,\n`
+    }
+    acc += `})\n`
+    return acc
+  }, "")
+
+  fs.writeFileSync(
+    `${args.dest}/query.ts`,
+    WithDonoteditHeader(importsRaw + "\n" + queryTSRaw),
   )
-  .forEach(({ name, options: queries }) => {
-    const filename = name.toLowerCase()
-    console.log(`- ${filename}.ts`)
 
-    const importsRaw = `import { gql } from "@apollo/client/core"\n`
-    const tsRaw = queries.reduce((acc, { name: queryNameRaw, query }) => {
-      const queryName =
-        "get" + queryNameRaw[0].toUpperCase() + queryNameRaw.slice(1)
-      console.log(`  - ${queryName}`)
-      acc += `\n`
-      acc += `export const ${queryName} = gql\`\n`
-      acc += query.replace("query {", `query ${queryName} {`) + `\n`
-      acc += `\`\n`
-      return acc
-    }, WithDonoteditHeader(importsRaw))
+  const mutationTSRaw = mutations.reduce((acc, query) => {
+    acc += `\n`
+    acc += `export const ${query.name} = (`
+    if (query.variables.length !== 0) {
+      acc += `variables: {\n`
+      acc += query.variables.reduce((acc, variable) => {
+        acc += `  ${variable.name}: ${variable.argType}\n`
+        return acc
+      }, "")
+      acc += `}`
+    }
+    acc += `) => ({\n`
+    acc += `  mutation : gql\`\n`
+    acc += query.query + `\`,\n`
+    if (query.variables.length !== 0) {
+      acc += `  variables,\n`
+    }
+    acc += `})\n`
+    return acc
+  }, "")
 
-    fs.writeFileSync(`${args.dest}/${filename}.ts`, tsRaw)
-  })
+  fs.writeFileSync(
+    `${args.dest}/mutation.ts`,
+    WithDonoteditHeader(importsRaw + "\n" + mutationTSRaw),
+  )
+}
+
+/**
+ * Generate interface from schema.
+ */
 
 console.log(`Generating interface from '${args.schema}'.`)
 
-const IMPORT_TYPE_AS = "types"
 const interfaceAST = listFunctionTypes(schemaRaw, IMPORT_TYPE_AS)
 
 console.log(`Writing generated interface to '${args.dest}/interface.*.ts'.`)
 
 const importsRaw = `import * as ${IMPORT_TYPE_AS} from "./types"\n`
 
-const tsRawQueryClientInterface =
-  interfaceAST.queries.reduce(
-    (acc, { name, args, returnType }) => {
-      acc += `  ${name}(`
-      acc += args.map((arg) => `${arg.name}: ${arg.argType}`).join(", ")
-      acc += `): ${returnType}\n`
-      return acc
-    },
-    WithDonoteditHeader(importsRaw + `\nexport interface QueryClient {\n`),
-  ) + `}\n`
-fs.writeFileSync(`${args.dest}/interface.client.ts`, tsRawQueryClientInterface)
+fs.writeFileSync(
+  `${args.dest}/interface.client.ts`,
+  WithDonoteditHeader(
+    importsRaw + "\n" + generateInterface("QueryClient", interfaceAST.queries),
+  ),
+)
 
-const tsRawMutationClientInterface =
-  interfaceAST.mutations.reduce(
-    (acc, { name, args, returnType }) => {
-      acc += `  ${name}(`
-      acc += args.map((arg) => `${arg.name}: ${arg.argType}`).join(", ")
-      acc += `): ${returnType}\n`
-      return acc
-    },
-    WithDonoteditHeader(importsRaw + `\nexport interface MutationClient {\n`),
-  ) + `}\n`
 fs.writeFileSync(
   `${args.dest}/interface.mutation.ts`,
-  tsRawMutationClientInterface,
+  WithDonoteditHeader(
+    importsRaw +
+      "\n" +
+      generateInterface("MutationClient", interfaceAST.mutations),
+  ),
 )

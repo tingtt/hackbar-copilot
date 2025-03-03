@@ -9,6 +9,11 @@ import type {
   InputOrderStatusUpdate,
   InputRecipeGroup,
   InputStockUpdate,
+  Cashout,
+  Checkout,
+  CashoutInput,
+  InputCheckout,
+  InputCashoutQuery,
 } from "../gen/types"
 
 import dummyMenuData from "./data/menu.json"
@@ -29,15 +34,22 @@ export class DummyHackbarClient implements QueryClient, MutationClient {
   async materials(): Promise<Material[]> {
     return dummyMaterialsData as Material[]
   }
+  async checkouts(): Promise<Checkout[]> {
+    throw new Error("Method not implemented.")
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async cashouts(input: InputCashoutQuery): Promise<Cashout[]> {
+    throw new Error("Method not implemented.")
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async order(input: InputOrder): Promise<Order | undefined> {
+  async order(input: InputOrder): Promise<Order> {
     throw new Error("order() not implemented.")
   }
   async updateOrderStatus(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: InputOrderStatusUpdate,
-  ): Promise<Order | undefined> {
+  ): Promise<Order> {
     throw new Error("updateOrderStatus() not implemented.")
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,5 +59,13 @@ export class DummyHackbarClient implements QueryClient, MutationClient {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async updateStock(input: InputStockUpdate): Promise<Material[]> {
     throw new Error("updateStock() not implemented.")
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async checkout(input: InputCheckout): Promise<Checkout> {
+    throw new Error("Method not implemented.")
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async cashout(input: CashoutInput): Promise<Cashout> {
+    throw new Error("Method not implemented.")
   }
 }

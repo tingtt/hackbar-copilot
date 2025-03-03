@@ -3,6 +3,8 @@
 import * as types from "./types"
 
 export interface QueryClient {
+  cashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]>
+  checkouts(): Promise<types.Checkout[]>
   menu(): Promise<types.MenuGroup[]>
   orders(): Promise<types.Order[]>
   recipes(): Promise<types.RecipeGroup[]>

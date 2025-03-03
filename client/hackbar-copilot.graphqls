@@ -13,6 +13,88 @@ type Query
 type Mutation
 
 #*
+#* src: cashout.mutation.graphqls
+#*
+
+extend type Mutation {
+  cashout(input: CashoutInput!): Cashout!
+}
+
+input CashoutInput {
+  checkoutIDs: [String!]!
+  staffID: String!
+}
+
+#*
+#* src: cashout.query.graphqls
+#*
+
+extend type Query {
+  cashouts(input: InputCashoutQuery!): [Cashout!]!
+}
+
+input InputCashoutQuery {
+  since: DateTime!
+  until: DateTime!
+}
+
+type Cashout {
+  checkouts: [Checkout!]!
+  revenue: Float!
+  timestamp: DateTime!
+  staffID: String!
+}
+
+#*
+#* src: checkout.mutation.graphqls
+#*
+
+extend type Mutation {
+  checkout(input: InputCheckout!): Checkout!
+}
+
+input InputCheckout {
+  customerID: String!
+  orderIDs: [String!]!
+  diffs: [InputPriceDiff!]!
+  paymentType: CheckoutType!
+}
+
+input InputPriceDiff {
+  price: Float!
+  description: String
+}
+
+#*
+#* src: checkout.query.graphqls
+#*
+
+extend type Query {
+  checkouts: [Checkout!]!
+}
+
+type Checkout {
+  id: String!
+  customerID: String!
+  orderIDs: [String!]!
+  diffs: [PaymentDiff!]!
+  totalPrice: Float!
+  paymentType: CheckoutType!
+  timestamp: DateTime!
+}
+
+type PaymentDiff {
+  price: Float!
+  description: String
+}
+
+enum CheckoutType {
+  CREDIT
+  QR
+  CASH
+}
+
+#*
 #* src: menu.query.graphqls
 #*
 
@@ -42,8 +124,8 @@ type MenuItem {
 #*
 
 extend type Mutation {
-  order(input: InputOrder!): Order
-  updateOrderStatus(input: InputOrderStatusUpdate!): Order
+  order(input: InputOrder!): Order!
+  updateOrderStatus(input: InputOrderStatusUpdate!): Order!
 }
 
 input InputOrder {

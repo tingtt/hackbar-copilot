@@ -28,6 +28,36 @@ export type Scalars = {
   DateTime: { input: string; output: string }
 }
 
+export type Cashout = {
+  __typename?: "Cashout"
+  checkouts: Array<Checkout>
+  revenue: Scalars["Float"]["output"]
+  staffID: Scalars["String"]["output"]
+  timestamp: Scalars["DateTime"]["output"]
+}
+
+export type CashoutInput = {
+  checkoutIDs: Array<Scalars["String"]["input"]>
+  staffID: Scalars["String"]["input"]
+}
+
+export type Checkout = {
+  __typename?: "Checkout"
+  customerID: Scalars["String"]["output"]
+  diffs: Array<PaymentDiff>
+  id: Scalars["String"]["output"]
+  orderIDs: Array<Scalars["String"]["output"]>
+  paymentType: CheckoutType
+  timestamp: Scalars["DateTime"]["output"]
+  totalPrice: Scalars["Float"]["output"]
+}
+
+export enum CheckoutType {
+  Cash = "CASH",
+  Credit = "CREDIT",
+  Qr = "QR",
+}
+
 export type GlassType = {
   __typename?: "GlassType"
   description?: Maybe<Scalars["String"]["output"]>
@@ -44,6 +74,18 @@ export type InputAsMenuItemArgs = {
   price: Scalars["Float"]["input"]
 }
 
+export type InputCashoutQuery = {
+  since: Scalars["DateTime"]["input"]
+  until: Scalars["DateTime"]["input"]
+}
+
+export type InputCheckout = {
+  customerID: Scalars["String"]["input"]
+  diffs: Array<InputPriceDiff>
+  orderIDs: Array<Scalars["String"]["input"]>
+  paymentType: CheckoutType
+}
+
 export type InputGlassType = {
   description?: InputMaybe<Scalars["String"]["input"]>
   imageURL?: InputMaybe<Scalars["String"]["input"]>
@@ -58,6 +100,11 @@ export type InputOrder = {
 export type InputOrderStatusUpdate = {
   id: Scalars["String"]["input"]
   status: OrderStatus
+}
+
+export type InputPriceDiff = {
+  description?: InputMaybe<Scalars["String"]["input"]>
+  price: Scalars["Float"]["input"]
 }
 
 export type InputRecipe = {
@@ -119,10 +166,20 @@ export type MenuItem = {
 
 export type Mutation = {
   __typename?: "Mutation"
-  order?: Maybe<Order>
+  cashout: Cashout
+  checkout: Checkout
+  order: Order
   saveRecipe: RecipeGroup
-  updateOrderStatus?: Maybe<Order>
+  updateOrderStatus: Order
   updateStock: Array<Material>
+}
+
+export type MutationCashoutArgs = {
+  input: CashoutInput
+}
+
+export type MutationCheckoutArgs = {
+  input: InputCheckout
 }
 
 export type MutationOrderArgs = {
@@ -166,12 +223,24 @@ export type OrderStatusUpdateTimestamp = {
   timestamp: Scalars["DateTime"]["output"]
 }
 
+export type PaymentDiff = {
+  __typename?: "PaymentDiff"
+  description?: Maybe<Scalars["String"]["output"]>
+  price: Scalars["Float"]["output"]
+}
+
 export type Query = {
   __typename?: "Query"
+  cashouts: Array<Cashout>
+  checkouts: Array<Checkout>
   materials: Array<Material>
   menu: Array<MenuGroup>
   orders: Array<Order>
   recipes: Array<RecipeGroup>
+}
+
+export type QueryCashoutsArgs = {
+  input: InputCashoutQuery
 }
 
 export type Recipe = {

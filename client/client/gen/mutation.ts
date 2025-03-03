@@ -3,10 +3,10 @@
 import { gql } from "@apollo/client/core"
 import * as types from "./types"
 
-export const getCashouts = (variables: { input: types.InputCashoutQuery }) => ({
-  query: gql`
-    query getCashouts($input: InputCashoutQuery!) {
-      cashouts(input: $input) {
+export const cashout = (variables: { input: types.CashoutInput }) => ({
+  mutation: gql`
+    mutation cashout($input: CashoutInput!) {
+      cashout(input: $input) {
         __typename
         checkouts {
           id
@@ -29,10 +29,10 @@ export const getCashouts = (variables: { input: types.InputCashoutQuery }) => ({
   variables,
 })
 
-export const getCheckouts = () => ({
-  query: gql`
-    query getCheckouts {
-      checkouts {
+export const checkout = (variables: { input: types.InputCheckout }) => ({
+  mutation: gql`
+    mutation checkout($input: InputCheckout!) {
+      checkout(input: $input) {
         __typename
         id
         customerID
@@ -47,50 +47,13 @@ export const getCheckouts = () => ({
       }
     }
   `,
+  variables,
 })
 
-export const getMenu = () => ({
-  query: gql`
-    query getMenu {
-      menu {
-        __typename
-        name
-        imageURL
-        flavor
-        items {
-          name
-          imageURL
-          materials
-          outOfStock
-          priceYen
-          recipe {
-            name
-            type {
-              name
-              description
-            }
-            glass {
-              name
-              imageURL
-              description
-            }
-            steps {
-              material
-              amount
-              description
-            }
-          }
-        }
-        minPriceYen
-      }
-    }
-  `,
-})
-
-export const getOrders = () => ({
-  query: gql`
-    query getOrders {
-      orders {
+export const order = (variables: { input: types.InputOrder }) => ({
+  mutation: gql`
+    mutation order($input: InputOrder!) {
+      order(input: $input) {
         __typename
         id
         customerID
@@ -104,12 +67,35 @@ export const getOrders = () => ({
       }
     }
   `,
+  variables,
 })
 
-export const getRecipes = () => ({
-  query: gql`
-    query getRecipes {
-      recipes {
+export const updateOrderStatus = (variables: {
+  input: types.InputOrderStatusUpdate
+}) => ({
+  mutation: gql`
+    mutation updateOrderStatus($input: InputOrderStatusUpdate!) {
+      updateOrderStatus(input: $input) {
+        __typename
+        id
+        customerID
+        menuItemID
+        timestamps {
+          status
+          timestamp
+        }
+        status
+        price
+      }
+    }
+  `,
+  variables,
+})
+
+export const saveRecipe = (variables: { input: types.InputRecipeGroup }) => ({
+  mutation: gql`
+    mutation saveRecipe($input: InputRecipeGroup!) {
+      saveRecipe(input: $input) {
         __typename
         name
         imageURL
@@ -133,16 +119,18 @@ export const getRecipes = () => ({
       }
     }
   `,
+  variables,
 })
 
-export const getMaterials = () => ({
-  query: gql`
-    query getMaterials {
-      materials {
+export const updateStock = (variables: { input: types.InputStockUpdate }) => ({
+  mutation: gql`
+    mutation updateStock($input: InputStockUpdate!) {
+      updateStock(input: $input) {
         __typename
         name
         inStock
       }
     }
   `,
+  variables,
 })

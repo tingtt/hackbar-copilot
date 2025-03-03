@@ -7,6 +7,7 @@ import {
 import { setContext } from "@apollo/client/link/context"
 import type * as types from "./gen/types"
 import * as query from "./gen/query"
+import * as mutation from "./gen/mutation"
 import type { QueryClient } from "./gen/interface.client"
 import type { MutationClient } from "./gen/interface.mutation"
 
@@ -26,46 +27,78 @@ export class HackbarClient implements QueryClient, MutationClient {
   }
 
   async menu(): Promise<types.MenuGroup[]> {
-    const res = await this.client.query<{ menu: types.MenuGroup[] }>({
-      query: query.getMenu,
-    })
+    const res = await this.client.query<{ menu: types.MenuGroup[] }>(
+      query.getMenu(),
+    )
     return res.data.menu
   }
   async orders(): Promise<types.Order[]> {
-    const res = await this.client.query<{ orders: types.Order[] }>({
-      query: query.getOrders,
-    })
+    const res = await this.client.query<{ orders: types.Order[] }>(
+      query.getOrders(),
+    )
     return res.data.orders
   }
   async recipes(): Promise<types.RecipeGroup[]> {
-    const res = await this.client.query<{ recipes: types.RecipeGroup[] }>({
-      query: query.getRecipes,
-    })
+    const res = await this.client.query<{ recipes: types.RecipeGroup[] }>(
+      query.getRecipes(),
+    )
     return res.data.recipes
   }
   async materials(): Promise<types.Material[]> {
-    const res = await this.client.query<{ materials: types.Material[] }>({
-      query: query.getMaterials,
-    })
+    const res = await this.client.query<{ materials: types.Material[] }>(
+      query.getMaterials(),
+    )
     return res.data.materials
   }
+  async checkouts(): Promise<types.Checkout[]> {
+    const res = await this.client.query<{ checkouts: types.Checkout[] }>(
+      query.getCheckouts(),
+    )
+    return res.data.checkouts
+  }
+  async cashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]> {
+    const res = await this.client.query<{ cashouts: types.Cashout[] }>(
+      query.getCashouts({ input }),
+    )
+    return res.data.cashouts
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async order(input: types.InputOrder): Promise<types.Order | undefined> {
-    throw new Error("Method not implemented.")
+  async order(input: types.InputOrder): Promise<types.Order> {
+    const res = await this.client.mutate<{ order: types.Order }>(
+      mutation.order({ input }),
+    )
+    return res.data!.order
   }
   async updateOrderStatus(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: types.InputOrderStatusUpdate,
-  ): Promise<types.Order | undefined> {
-    throw new Error("Method not implemented.")
+  ): Promise<types.Order> {
+    const res = await this.client.mutate<{ order: types.Order }>(
+      mutation.updateOrderStatus({ input }),
+    )
+    return res.data!.order
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async saveRecipe(input: types.InputRecipeGroup): Promise<types.RecipeGroup> {
-    throw new Error("Method not implemented.")
+    const res = await this.client.mutate<{ recipe: types.RecipeGroup }>(
+      mutation.saveRecipe({ input }),
+    )
+    return res.data!.recipe
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async updateStock(input: types.InputStockUpdate): Promise<types.Material[]> {
-    throw new Error("Method not implemented.")
+    const res = await this.client.mutate<{ materials: types.Material[] }>(
+      mutation.updateStock({ input }),
+    )
+    return res.data!.materials
+  }
+  async checkout(input: types.InputCheckout): Promise<types.Checkout> {
+    const res = await this.client.mutate<{ checkout: types.Checkout }>(
+      mutation.checkout({ input }),
+    )
+    return res.data!.checkout
+  }
+  async cashout(input: types.CashoutInput): Promise<types.Cashout> {
+    const res = await this.client.mutate<{ cashout: types.Cashout }>(
+      mutation.cashout({ input }),
+    )
+    return res.data!.cashout
   }
 }
