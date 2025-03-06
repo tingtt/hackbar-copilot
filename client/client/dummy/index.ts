@@ -22,23 +22,23 @@ import dummyRecipesData from "./data/recipes.json"
 import dummyMaterialsData from "./data/materials.json"
 
 export class DummyHackbarClient implements QueryClient, MutationClient {
-  async menu(): Promise<MenuGroup[]> {
+  async getMenu(): Promise<MenuGroup[]> {
     return dummyMenuData as MenuGroup[]
   }
-  async orders(): Promise<Order[]> {
+  async getOrders(): Promise<Order[]> {
     return dummyOrdersData as Order[]
   }
-  async recipes(): Promise<RecipeGroup[]> {
+  async getRecipes(): Promise<RecipeGroup[]> {
     return dummyRecipesData as RecipeGroup[]
   }
-  async materials(): Promise<Material[]> {
+  async getMaterials(): Promise<Material[]> {
     return dummyMaterialsData as Material[]
   }
-  async checkouts(): Promise<Checkout[]> {
+  async getCheckouts(): Promise<Checkout[]> {
     throw new Error("Method not implemented.")
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async cashouts(input: InputCashoutQuery): Promise<Cashout[]> {
+  async getCashouts(input: InputCashoutQuery): Promise<Cashout[]> {
     throw new Error("Method not implemented.")
   }
 

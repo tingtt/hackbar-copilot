@@ -107,7 +107,15 @@ const importsRaw = `import * as ${IMPORT_TYPE_AS} from "./types"\n`
 fs.writeFileSync(
   `${args.dest}/interface.client.ts`,
   WithDonoteditHeader(
-    importsRaw + "\n" + generateInterface("QueryClient", interfaceAST.queries),
+    importsRaw +
+      "\n" +
+      generateInterface(
+        "QueryClient",
+        interfaceAST.queries.map((query) => {
+          query.name = "get" + query.name[0].toUpperCase() + query.name.slice(1)
+          return query
+        }),
+      ),
   ),
 )
 

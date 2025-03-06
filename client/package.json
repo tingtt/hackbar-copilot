@@ -1,6 +1,6 @@
 {
   "name": "@tingtt/hackbar-copilot",
-  "version": "v0.2.3",
+  "version": "v0.2.4",
   "publishConfig": {
     "access": "public"
   },

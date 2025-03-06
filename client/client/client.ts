@@ -26,37 +26,37 @@ export class HackbarClient implements QueryClient, MutationClient {
     this.client = new ApolloClient({ link, cache: new InMemoryCache() })
   }
 
-  async menu(): Promise<types.MenuGroup[]> {
+  async getMenu(): Promise<types.MenuGroup[]> {
     const res = await this.client.query<{ menu: types.MenuGroup[] }>(
       query.getMenu(),
     )
     return res.data.menu
   }
-  async orders(): Promise<types.Order[]> {
+  async getOrders(): Promise<types.Order[]> {
     const res = await this.client.query<{ orders: types.Order[] }>(
       query.getOrders(),
     )
     return res.data.orders
   }
-  async recipes(): Promise<types.RecipeGroup[]> {
+  async getRecipes(): Promise<types.RecipeGroup[]> {
     const res = await this.client.query<{ recipes: types.RecipeGroup[] }>(
       query.getRecipes(),
     )
     return res.data.recipes
   }
-  async materials(): Promise<types.Material[]> {
+  async getMaterials(): Promise<types.Material[]> {
     const res = await this.client.query<{ materials: types.Material[] }>(
       query.getMaterials(),
     )
     return res.data.materials
   }
-  async checkouts(): Promise<types.Checkout[]> {
+  async getCheckouts(): Promise<types.Checkout[]> {
     const res = await this.client.query<{ checkouts: types.Checkout[] }>(
       query.getCheckouts(),
     )
     return res.data.checkouts
   }
-  async cashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]> {
+  async getCashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]> {
     const res = await this.client.query<{ cashouts: types.Cashout[] }>(
       query.getCashouts({ input }),
     )

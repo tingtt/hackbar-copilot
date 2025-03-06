@@ -3,10 +3,10 @@
 import * as types from "./types"
 
 export interface QueryClient {
-  cashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]>
-  checkouts(): Promise<types.Checkout[]>
-  menu(): Promise<types.MenuGroup[]>
-  orders(): Promise<types.Order[]>
-  recipes(): Promise<types.RecipeGroup[]>
-  materials(): Promise<types.Material[]>
+  getCashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]>
+  getCheckouts(): Promise<types.Checkout[]>
+  getMenu(): Promise<types.MenuGroup[]>
+  getOrders(): Promise<types.Order[]>
+  getRecipes(): Promise<types.RecipeGroup[]>
+  getMaterials(): Promise<types.Material[]>
 }
