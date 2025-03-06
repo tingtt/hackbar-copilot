@@ -2,6 +2,17 @@
 
 ## Usage (Next.js App Router)
 
+```ts
+//* next.config.ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  transpilePackages: ["@tingtt/hackbar-copilot"],
+};
+
+export default nextConfig;
+```
+
 ```tsx
 //* `src/app/layout.tsx` or `app/layout.tsx
 import { HackbarCopilotAPIProvider, HackbarClient, useClient } from "@tingtt/hackbar-copilot/client"
