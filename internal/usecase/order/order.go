@@ -10,7 +10,7 @@ import (
 type Order interface {
 	ListMenu(sortFunc sort.Yield[menu.Group]) ([]menu.Group, error)
 	Order(customerID order.CustomerID, menuItemID order.MenuItemID) (order.Order, error)
-	ListOrders(customerID order.CustomerID) ([]order.Order, error)
+	ListUncheckedOrders(customerID order.CustomerID) ([]order.Order, error)
 }
 
 func New(deps Dependencies) Order {

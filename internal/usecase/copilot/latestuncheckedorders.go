@@ -6,8 +6,8 @@ import (
 	"github.com/tingtt/options"
 )
 
-// LatestOrders implements Copilot.
-func (c *copilot) LatestOrders() ([]order.Order, error) {
+// LatestUncheckedOrders implements Copilot.
+func (c *copilot) LatestUncheckedOrders() ([]order.Order, error) {
 	optionAppliers := []options.Applier[order.ListerOption]{}
 	for cashout, err := range c.cashout.Latest() {
 		if err != nil {

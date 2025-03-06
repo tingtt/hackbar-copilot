@@ -18,13 +18,13 @@ func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
 		err    error
 	)
 	if r.authAdapter.HasBartenderRole(ctx) {
-		orders, err = r.Copilot.LatestOrders()
+		orders, err = r.Copilot.LatestUncheckedOrders()
 	} else {
 		email, err2 := r.authAdapter.GetEmail(ctx)
 		if /* unauthorized */ err2 != nil {
 			return nil, err2
 		}
-		orders, err = r.OrderService.ListOrders(order.CustomerID(email))
+		orders, err = r.OrderService.ListUncheckedOrders(order.CustomerID(email))
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to list orders: %w", err)

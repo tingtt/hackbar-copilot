@@ -26,7 +26,7 @@ type Copilot interface {
 	Materials(sortFunc sort.Yield[stock.Material], optionAppliers ...QueryOptionApplier) ([]stock.Material, error)
 	UpdateStock(inStockMaterials, outOfStockMaterials []string) error
 
-	LatestOrders() ([]order.Order, error)
+	LatestUncheckedOrders() ([]order.Order, error)
 	ListenOrder() (chan order.SavedOrder, error)
 	UpdateOrderStatus(id order.ID, status order.Status, timestamp time.Time) (order.Order, error)
 }

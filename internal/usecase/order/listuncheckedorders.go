@@ -4,8 +4,8 @@ import (
 	"hackbar-copilot/internal/domain/order"
 )
 
-// ListOrders implements Order.
-func (o *orderimpl) ListOrders(customerID order.CustomerID) ([]order.Order, error) {
+// ListUncheckedOrders implements Order.
+func (o *orderimpl) ListUncheckedOrders(customerID order.CustomerID) ([]order.Order, error) {
 	orders := []order.Order{}
 	for order, err := range o.order.Latest(
 		order.FilterCustomerID(customerID), order.IgnoreCheckedOut(),
