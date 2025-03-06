@@ -17,6 +17,8 @@ type cashoutRepository struct {
 	fs *filesystem
 }
 
+const cashoutFilenamePrefix = "8_cashout_"
+
 // Latest implements ordersummary.Repository.
 func (o *cashoutRepository) Latest(optionAppliers ...options.Applier[cashout.ListerOption]) iter.Seq2[cashout.Cashout, error] {
 	option := options.Create(optionAppliers...)
@@ -35,7 +37,7 @@ func (o *cashoutRepository) Latest(optionAppliers ...options.Applier[cashout.Lis
 			}
 
 			filename := d.Name()
-			if strings.Contains(filename, "6_orders_summarized_") && strings.HasSuffix(filename, ".toml") {
+			if strings.Contains(filename, cashoutFilenamePrefix) && strings.HasSuffix(filename, ".toml") {
 				file, err := o.fs.read.Open(filename)
 				if err != nil {
 					if !yield(cashout.Cashout{}, err) {
@@ -68,6 +70,6 @@ func (o *cashoutRepository) Latest(optionAppliers ...options.Applier[cashout.Lis
 
 // Save implements ordersummary.Repository.
 func (o *cashoutRepository) Save(s cashout.Cashout) error {
-	filename := fmt.Sprintf("6_orders_summarized_%d.toml", s.Timestamp.Unix())
+	filename := fmt.Sprintf(cashoutFilenamePrefix+"%d.toml", s.Timestamp.Unix())
 	return o.fs.saveFile(filename, map[string]interface{}{"ordersummary": s})
 }

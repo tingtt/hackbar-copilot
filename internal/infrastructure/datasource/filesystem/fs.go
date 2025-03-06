@@ -34,9 +34,14 @@ type Filesystem interface {
 //
 //	```
 //	/path/to/data-dir
-//	├── 1_recipe_groups.toml
-//	├── 2_recipe_types.toml
-//	└── 3_glass_types.toml
+//	├── 1_recipe_groups.toml				// inmemory loaded
+//	├── 2_recipe_types.toml					// inmemory loaded
+//	├── 3_glass_types.toml					// inmemory loaded
+//	├── 4_menu_groups.toml					// inmemory loaded
+//	├── 5_stocks.toml								// inmemory loaded
+//	├── 6_orders.toml								// inmemory loaded
+//	├── 7_checkouts.toml						// inmemory loaded
+//	└── 8_cashout_<timestamp>.toml
 //	```
 func NewRepository(baseDir string) (Filesystem, error) {
 	fsR := newFSR(baseDir)

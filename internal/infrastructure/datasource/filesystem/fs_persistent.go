@@ -58,7 +58,8 @@ func (f *filesystem) SavePersistently() error {
 	err4 := f.saveFile("4_menu_groups.toml", map[string]interface{}{"menu_group": f.data.menuGroups})
 	err5 := f.saveFile("5_stocks.toml", map[string]interface{}{"stock": f.data.stocks})
 	err6 := f.saveFile("6_orders.toml", map[string]interface{}{"order": f.data.orders})
-	return errors.Join(err1, err2, err3, err4, err5, err6)
+	err7 := f.saveFile("7_checkouts.toml", map[string]interface{}{"checkoust": f.data.checkouts})
+	return errors.Join(err1, err2, err3, err4, err5, err6, err7)
 }
 
 func (f *filesystem) saveFile(filename string, data any) error {
