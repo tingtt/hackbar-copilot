@@ -43,7 +43,7 @@ type Dependencies struct {
 	authAdapter authadapter.JWTAdapter
 }
 
-func (d *Dependencies) validate() {
+func (d Dependencies) validate() {
 	for i := range reflect.ValueOf(d).NumField() {
 		if reflect.ValueOf(d).Field(i).IsNil() {
 			t := reflect.TypeOf(d).Field(i).Type
