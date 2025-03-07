@@ -97,7 +97,7 @@ func registerData(fs filesystem.Filesystem) error {
 		}
 	}
 
-	for menuGroup := range menutest.ExampleGroupsIter {
+	for menuGroup := range menutest.ExampleItemsIter {
 		err := fs.Menu().Save(menuGroup)
 		if err != nil {
 			return err

@@ -6,8 +6,8 @@ import (
 )
 
 // ApplyAsMenu implements RecipeAdapterIn.
-func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *copilot.SaveAsMenuGroupArg, err error) {
-	asMenuArg = &copilot.SaveAsMenuGroupArg{}
+func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *copilot.SaveAsMenuItemArg, err error) {
+	asMenuArg = &copilot.SaveAsMenuItemArg{}
 	if input.AsMenu != nil {
 		asMenuArg.Flavor = input.AsMenu.Flavor
 	}
@@ -20,6 +20,6 @@ func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *cop
 			}
 		}
 	}
-	asMenuArg.Items = items
+	asMenuArg.Options = items
 	return asMenuArg, nil
 }

@@ -1,13 +1,13 @@
 package menu
 
-type Group struct {
+type Item struct {
 	Name     string
 	ImageURL *string
 	Flavor   *string
-	Items    []Item
+	Options  []ItemOption
 }
 
-type Item struct {
+type ItemOption struct {
 	Name       string
 	ImageURL   *string
 	Materials  []string

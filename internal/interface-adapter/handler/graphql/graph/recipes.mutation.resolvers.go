@@ -64,7 +64,7 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 		return nil, err
 	}
 	if asMenuArg != nil {
-		_, err := r.Copilot.SaveAsMenuGroup(newRecipeGroup.Name, *asMenuArg)
+		_, err := r.Copilot.SaveAsMenuItem(newRecipeGroup.Name, *asMenuArg)
 		if err != nil {
 			return nil, err
 		}

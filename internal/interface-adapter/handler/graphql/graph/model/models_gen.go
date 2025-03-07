@@ -115,15 +115,15 @@ type Material struct {
 	InStock bool   `json:"inStock"`
 }
 
-type MenuGroup struct {
-	Name        string      `json:"name"`
-	ImageURL    *string     `json:"imageURL,omitempty"`
-	Flavor      *string     `json:"flavor,omitempty"`
-	Items       []*MenuItem `json:"items,omitempty"`
-	MinPriceYen float64     `json:"minPriceYen"`
+type MenuItem struct {
+	Name        string            `json:"name"`
+	ImageURL    *string           `json:"imageURL,omitempty"`
+	Flavor      *string           `json:"flavor,omitempty"`
+	Options     []*MenuItemOption `json:"options,omitempty"`
+	MinPriceYen float64           `json:"minPriceYen"`
 }
 
-type MenuItem struct {
+type MenuItemOption struct {
 	Name       string   `json:"name"`
 	ImageURL   *string  `json:"imageURL,omitempty"`
 	Materials  []string `json:"materials,omitempty"`

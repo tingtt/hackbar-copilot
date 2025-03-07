@@ -13,15 +13,15 @@ import (
 )
 
 // Menu is the resolver for the menu field.
-func (r *queryResolver) Menu(ctx context.Context) ([]*model.MenuGroup, error) {
+func (r *queryResolver) Menu(ctx context.Context) ([]*model.MenuItem, error) {
 	menuGroups, err := r.Copilot.ListMenu(copilot.SortMenuGroupByName())
 	if err != nil {
 		return nil, err
 	}
 
 	containsRecipe := false
-	for _, field := range graphql.CollectFieldsCtx(ctx, []string{"items"}) {
-		if field.Name == "items" {
+	for _, field := range graphql.CollectFieldsCtx(ctx, []string{"options"}) {
+		if field.Name == "options" {
 			for _, field := range graphql.CollectFields(graphql.GetOperationContext(ctx), field.Selections, nil) {
 				if field.Name == "recipe" {
 					containsRecipe = true
@@ -43,7 +43,7 @@ func (r *queryResolver) Menu(ctx context.Context) ([]*model.MenuGroup, error) {
 			return nil, err
 		}
 		recipeGroupModels := r.recipeAdapter.RecipeGroups(recipeGroups, recipeTypes, glassTypes)
-		return r.menuAdapter.MenuGroups(menuGroups, recipeGroupModels), nil
+		return r.menuAdapter.MenuItems(menuGroups, recipeGroupModels), nil
 	}
-	return r.menuAdapter.MenuGroups(menuGroups, nil), nil
+	return r.menuAdapter.MenuItems(menuGroups, nil), nil
 }

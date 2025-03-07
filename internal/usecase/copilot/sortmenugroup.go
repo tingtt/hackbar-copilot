@@ -5,8 +5,8 @@ import (
 	"hackbar-copilot/internal/usecase/sort"
 )
 
-func SortMenuGroupByName(fallbacks ...sort.YieldMaker[menu.Group]) sort.Yield[menu.Group] {
-	return func(new, curr menu.Group) (isLeft bool) {
+func SortMenuGroupByName(fallbacks ...sort.YieldMaker[menu.Item]) sort.Yield[menu.Item] {
+	return func(new, curr menu.Item) (isLeft bool) {
 		if new.Name == "" {
 			return curr.Name == ""
 		}

@@ -17,17 +17,17 @@ type FindLister interface {
 }
 
 type saver interface {
-	Save(g Group) error
+	Save(g Item) error
 }
 
 var ErrNotFound = errors.New("menu not found")
 
 type Finder interface {
-	Find(groupName, itemName string) (Item, error)
+	Find(itemName, optionName string) (ItemOption, error)
 }
 
 type Lister interface {
-	All() iter.Seq2[Group, error]
+	All() iter.Seq2[Item, error]
 }
 
 type Repository SaveFindLister

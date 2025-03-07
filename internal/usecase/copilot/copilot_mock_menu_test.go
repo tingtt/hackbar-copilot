@@ -14,19 +14,19 @@ type MockMenu struct {
 }
 
 // Find implements menu.SaveFindLister.
-func (m *MockMenu) Find(groupName string, itemName string) (menu.Item, error) {
-	args := m.Called(groupName, itemName)
-	return args.Get(0).(menu.Item), args.Error(1)
+func (m *MockMenu) Find(itemName string, optionName string) (menu.ItemOption, error) {
+	args := m.Called(itemName, optionName)
+	return args.Get(0).(menu.ItemOption), args.Error(1)
 }
 
 // All implements menu.SaveLister.
-func (m *MockMenu) All() iter.Seq2[menu.Group, error] {
+func (m *MockMenu) All() iter.Seq2[menu.Item, error] {
 	args := m.Called()
-	return args.Get(0).(iter.Seq2[menu.Group, error])
+	return args.Get(0).(iter.Seq2[menu.Item, error])
 }
 
 // Save implements menu.SaveLister.
-func (m *MockMenu) Save(g menu.Group) error {
+func (m *MockMenu) Save(g menu.Item) error {
 	args := m.Called(g)
 	return args.Error(0)
 }

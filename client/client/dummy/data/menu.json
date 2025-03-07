@@ -1,12 +1,12 @@
 [
   {
-    "__typename": "MenuGroup",
+    "__typename": "MenuItem",
     "name": "Blue Devil",
     "imageURL": "https://example.com/path/to/image/blue-devil",
     "flavor": "Medium sweet and dry",
-    "items": [
+    "options": [
       {
-        "__typename": "MenuItem",
+        "__typename": "MenuItemOption",
         "name": "Cocktail",
         "imageURL": "https://example.com/path/to/image/blue-devil",
         "materials": [
@@ -86,13 +86,13 @@
     "minPriceYen": 700
   },
   {
-    "__typename": "MenuGroup",
+    "__typename": "MenuItem",
     "name": "Passoamoni",
     "imageURL": "https://example.com/path/to/image/passoamoni",
     "flavor": "Fruity",
-    "items": [
+    "options": [
       {
-        "__typename": "MenuItem",
+        "__typename": "MenuItemOption",
         "name": "Cocktail",
         "imageURL": "https://example.com/path/to/image/passoamoni",
         "materials": [
@@ -148,13 +148,13 @@
     "minPriceYen": 700
   },
   {
-    "__typename": "MenuGroup",
+    "__typename": "MenuItem",
     "name": "Phuket Sling",
     "imageURL": "https://example.com/path/to/image/phuket-sling",
     "flavor": "Sweet",
-    "items": [
+    "options": [
       {
-        "__typename": "MenuItem",
+        "__typename": "MenuItemOption",
         "name": "Cocktail",
         "imageURL": "https://example.com/path/to/image/phuket-sling/cocktail",
         "materials": [
@@ -214,7 +214,7 @@
         }
       },
       {
-        "__typename": "MenuItem",
+        "__typename": "MenuItemOption",
         "name": "Mocktail",
         "imageURL": "https://example.com/path/to/image/phuket-sling/mocktail",
         "materials": [

@@ -46,7 +46,7 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
-				menuGroups:   nil,
+				menuItems:    nil,
 				stocks:       nil,
 				orders:       nil,
 			},
@@ -65,7 +65,7 @@ func Test_loadData(t *testing.T) {
 				recipeGroups: nil,
 				recipeTypes:  nil,
 				glassTypes:   nil,
-				menuGroups:   nil,
+				menuItems:    nil,
 				stocks:       nil,
 				orders:       nil,
 			},
@@ -204,12 +204,12 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							Description: nil,
 						},
 					},
-					menuGroups: []menu.Group{
+					menuItems: []menu.Item{
 						{
 							Name:     "Phuket Sling",
 							ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 							Flavor:   ptr("Sweet"),
-							Items: []menu.Item{
+							Options: []menu.ItemOption{
 								{
 									Name:       "Cocktail",
 									ImageURL:   ptr("https://example.com/path/to/image/cocktail"),
@@ -263,7 +263,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 				m.On("Create", "1_recipe_groups.toml").Return(ioWriters.recipeGroups, nil)
 				m.On("Create", "2_recipe_types.toml").Return(ioWriters.recipeTypes, nil)
 				m.On("Create", "3_glass_types.toml").Return(ioWriters.glassTypes, nil)
-				m.On("Create", "4_menu_groups.toml").Return(ioWriters.menuGroups, nil)
+				m.On("Create", "4_menu_items.toml").Return(ioWriters.menuGroups, nil)
 				m.On("Create", "5_stocks.toml").Return(ioWriters.stocks, nil)
 				m.On("Create", "6_orders.toml").Return(ioWriters.orders, nil)
 				f := &filesystem{
@@ -283,14 +283,14 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						recipeGroups map[string][]recipe.RecipeGroup
 						recipeTypes  map[string]map[string]recipe.RecipeType
 						glassTypes   map[string]map[string]recipe.GlassType
-						menuGroups   map[string][]menu.Group
+						menuGroups   map[string][]menu.Item
 						stocks       map[string]map[string]bool
 						orders       map[string][]order.Order
 					}{
 						recipeGroups: map[string][]recipe.RecipeGroup{},
 						recipeTypes:  map[string]map[string]recipe.RecipeType{},
 						glassTypes:   map[string]map[string]recipe.GlassType{},
-						menuGroups:   map[string][]menu.Group{},
+						menuGroups:   map[string][]menu.Item{},
 						stocks:       map[string]map[string]bool{},
 						orders:       map[string][]order.Order{},
 					}
@@ -303,7 +303,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					assert.Equal(t, tt.data.recipeGroups, data.recipeGroups["recipe_group"])
 					assert.Equal(t, tt.data.recipeTypes, data.recipeTypes["recipe_type"])
 					assert.Equal(t, tt.data.glassTypes, data.glassTypes["glass_type"])
-					assert.Equal(t, tt.data.menuGroups, data.menuGroups["menu_group"])
+					assert.Equal(t, tt.data.menuItems, data.menuGroups["menu_items"])
 					assert.Equal(t, tt.data.stocks, data.stocks["stock"])
 					assert.Equal(t, tt.data.orders, data.orders["order"])
 				}
@@ -517,52 +517,52 @@ var loadTests = []loadTest{
 	},
 	{
 		name: "may load menu groups",
-		key:  "menu_group",
+		key:  "menu_items",
 		raw: dedent.Dedent(`
-			[[menu_group]]
+			[[menu_items]]
 			Name = "Phuket Sling"
 			ImageURL = "https://example.com/path/to/image/phuket-sling"
 			Flavor = "Sweet"
 
-			[[menu_group.Items]]
+			[[menu_items.Options]]
 			Name = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/phuket-sling/cocktail"
 			Materials = ["Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
 			Price = 700
 
-			[[menu_group.Items]]
+			[[menu_items.Options]]
 			Name = "Mocktail"
 			ImageURL = "https://example.com/path/to/image/phuket-sling/mocktail"
 			Materials = ["Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
 			Price = 500
 
-			[[menu_group]]
+			[[menu_items]]
 			Name = "Passoamoni"
 			ImageURL = "https://example.com/path/to/image/passoamoni"
 			Flavor = "Fruity"
 
-			[[menu_group.Items]]
+			[[menu_items.Options]]
 			Name = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/passoamoni"
 			Materials = ["Passoa", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
 			Price = 700
 
-			[[menu_group]]
+			[[menu_items]]
 			Name = "Blue Devil"
 			ImageURL = "https://example.com/path/to/image/blue-devil"
 			Flavor = "Medium sweet and dry"
 
-			[[menu_group.Items]]
+			[[menu_items.Options]]
 			Name = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/blue-devil"
 			Materials = ["Gin", "Blue curacao", "Lemon juice"]
 			OutOfStock = false
 			Price = 700
 		`),
-		want: menutest.ExampleGroups,
+		want: menutest.ExampleItems,
 	},
 	{
 		name: "may load stocks",
@@ -609,8 +609,8 @@ func Test_loadFromToml(t *testing.T) {
 					typedGot := map[string]recipe.GlassType{}
 					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
 					got = typedGot
-				case "menu_group":
-					typedGot := []menu.Group{}
+				case "menu_items":
+					typedGot := []menu.Item{}
 					err = loadFromToml(m, "data.toml", tt.key, &typedGot)
 					got = typedGot
 				case "stock":

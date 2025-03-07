@@ -23,16 +23,16 @@ func (c *copilot) UpdateStock(inStockMaterials, outOfStockMaterials []string) er
 			return err
 		}
 		update := false
-		for i, item := range menuGroup.Items {
+		for i, item := range menuGroup.Options {
 			currentStockStatus := item.OutOfStock
-			menuGroup.Items[i].OutOfStock = false
+			menuGroup.Options[i].OutOfStock = false
 			for _, materialName := range item.Materials {
 				if _, inStock := inStockMaterialNames[materialName]; !inStock {
-					menuGroup.Items[i].OutOfStock = true
+					menuGroup.Options[i].OutOfStock = true
 					break
 				}
 			}
-			if menuGroup.Items[i].OutOfStock != currentStockStatus && !update {
+			if menuGroup.Options[i].OutOfStock != currentStockStatus && !update {
 				update = true
 			}
 		}

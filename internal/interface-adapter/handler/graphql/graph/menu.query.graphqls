@@ -1,16 +1,16 @@
 extend type Query {
-  menu: [MenuGroup!]!
-}
-
-type MenuGroup {
-  name: String!
-  imageURL: String
-  flavor: String
-  items: [MenuItem!]
-  minPriceYen: Float!
+  menu: [MenuItem!]!
 }
 
 type MenuItem {
+  name: String!
+  imageURL: String
+  flavor: String
+  options: [MenuItemOption!]
+  minPriceYen: Float!
+}
+
+type MenuItemOption {
   name: String!
   imageURL: String
   materials: [String!]

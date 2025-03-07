@@ -19,7 +19,7 @@ func loadData(fs fsR) (d data, err error) {
 	if err != nil {
 		return data{}, err
 	}
-	err = loadFromToml(fs, "4_menu_groups.toml", "menu_group", &d.menuGroups)
+	err = loadFromToml(fs, "4_menu_items.toml", "menu_items", &d.menuItems)
 	if err != nil {
 		return data{}, err
 	}
@@ -55,7 +55,7 @@ func (f *filesystem) SavePersistently() error {
 	err1 := f.saveFile("1_recipe_groups.toml", map[string]interface{}{"recipe_group": f.data.recipeGroups})
 	err2 := f.saveFile("2_recipe_types.toml", map[string]interface{}{"recipe_type": f.data.recipeTypes})
 	err3 := f.saveFile("3_glass_types.toml", map[string]interface{}{"glass_type": f.data.glassTypes})
-	err4 := f.saveFile("4_menu_groups.toml", map[string]interface{}{"menu_group": f.data.menuGroups})
+	err4 := f.saveFile("4_menu_items.toml", map[string]interface{}{"menu_items": f.data.menuItems})
 	err5 := f.saveFile("5_stocks.toml", map[string]interface{}{"stock": f.data.stocks})
 	err6 := f.saveFile("6_orders.toml", map[string]interface{}{"order": f.data.orders})
 	err7 := f.saveFile("7_checkouts.toml", map[string]interface{}{"checkoust": f.data.checkouts})

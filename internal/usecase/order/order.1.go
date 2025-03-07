@@ -9,7 +9,7 @@ import (
 
 // Order implements Order.
 func (o *orderimpl) Order(customerID order.CustomerID, menuItemID order.MenuItemID) (order.Order, error) {
-	menuItem, err := o.menu.Find(menuItemID.GroupName, menuItemID.ItemName)
+	menuItem, err := o.menu.Find(menuItemID.ItemName, menuItemID.OptionName)
 	if err != nil {
 		return order.Order{}, err
 	}

@@ -37,7 +37,7 @@ type Filesystem interface {
 //	├── 1_recipe_groups.toml				// inmemory loaded
 //	├── 2_recipe_types.toml					// inmemory loaded
 //	├── 3_glass_types.toml					// inmemory loaded
-//	├── 4_menu_groups.toml					// inmemory loaded
+//	├── 4_menu_items.toml					  // inmemory loaded
 //	├── 5_stocks.toml								// inmemory loaded
 //	├── 6_orders.toml								// inmemory loaded
 //	├── 7_checkouts.toml						// inmemory loaded
@@ -74,7 +74,7 @@ type data struct {
 	recipeGroups []recipe.RecipeGroup
 	recipeTypes  map[string]recipe.RecipeType
 	glassTypes   map[string]recipe.GlassType
-	menuGroups   []menu.Group
+	menuItems    []menu.Item
 	stocks       map[string]bool
 
 	// orders
@@ -91,7 +91,7 @@ type data struct {
 func (data data) isEmpty() bool {
 	return len(data.recipeGroups) == 0 &&
 		len(data.recipeTypes) == 0 && len(data.glassTypes) == 0 &&
-		len(data.menuGroups) == 0 && len(data.orders) == 0
+		len(data.menuItems) == 0 && len(data.orders) == 0
 }
 
 // Recipe implements Filesystem.

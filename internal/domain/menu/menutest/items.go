@@ -8,12 +8,12 @@ func ptr[T any](v T) *T {
 	return &v
 }
 
-var ExampleGroups = []menu.Group{
+var ExampleItems = []menu.Item{
 	{
 		Name:     "Phuket Sling",
 		ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 		Flavor:   ptr("Sweet"),
-		Items: []menu.Item{
+		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
@@ -34,7 +34,7 @@ var ExampleGroups = []menu.Group{
 		Name:     "Passoamoni",
 		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
 		Flavor:   ptr("Fruity"),
-		Items: []menu.Item{
+		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
@@ -48,7 +48,7 @@ var ExampleGroups = []menu.Group{
 		Name:     "Blue Devil",
 		ImageURL: ptr("https://example.com/path/to/image/blue-devil"),
 		Flavor:   ptr("Medium sweet and dry"),
-		Items: []menu.Item{
+		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
@@ -60,4 +60,4 @@ var ExampleGroups = []menu.Group{
 	},
 }
 
-var ExampleGroupsIter = IterWithNilError(ExampleGroups)
+var ExampleItemsIter = IterWithNilError(ExampleItems)

@@ -15,16 +15,16 @@ func (c *copilot) SaveRecipe(rg recipe.RecipeGroup) error {
 	if err != nil {
 		return err
 	}
-	for _, mg := range menu {
-		if mg.Name == rg.Name {
-			arg := SaveAsMenuGroupArg{Flavor: mg.Flavor, Items: map[string]MenuFromRecipeGroupArg{}}
-			for _, item := range mg.Items {
-				arg.Items[item.Name] = MenuFromRecipeGroupArg{
-					ImageURL: item.ImageURL,
-					Price:    item.Price,
+	for _, mi := range menu {
+		if mi.Name == rg.Name {
+			arg := SaveAsMenuItemArg{Flavor: mi.Flavor, Options: map[string]MenuFromRecipeGroupArg{}}
+			for _, option := range mi.Options {
+				arg.Options[option.Name] = MenuFromRecipeGroupArg{
+					ImageURL: option.ImageURL,
+					Price:    option.Price,
 				}
 			}
-			_, err := c.SaveAsMenuGroup(rg.Name, arg)
+			_, err := c.SaveAsMenuItem(rg.Name, arg)
 			if err != nil {
 				return err
 			}

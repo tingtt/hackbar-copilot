@@ -75,15 +75,15 @@ type ComplexityRoot struct {
 		Name    func(childComplexity int) int
 	}
 
-	MenuGroup struct {
+	MenuItem struct {
 		Flavor      func(childComplexity int) int
 		ImageURL    func(childComplexity int) int
-		Items       func(childComplexity int) int
 		MinPriceYen func(childComplexity int) int
 		Name        func(childComplexity int) int
+		Options     func(childComplexity int) int
 	}
 
-	MenuItem struct {
+	MenuItemOption struct {
 		ImageURL   func(childComplexity int) int
 		Materials  func(childComplexity int) int
 		Name       func(childComplexity int) int
@@ -165,7 +165,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	Cashouts(ctx context.Context, input model.InputCashoutQuery) ([]*model.Cashout, error)
 	Checkouts(ctx context.Context) ([]*model.Checkout, error)
-	Menu(ctx context.Context) ([]*model.MenuGroup, error)
+	Menu(ctx context.Context) ([]*model.MenuItem, error)
 	Orders(ctx context.Context) ([]*model.Order, error)
 	Recipes(ctx context.Context) ([]*model.RecipeGroup, error)
 	Materials(ctx context.Context) ([]*model.Material, error)
@@ -302,40 +302,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Material.Name(childComplexity), true
 
-	case "MenuGroup.flavor":
-		if e.complexity.MenuGroup.Flavor == nil {
+	case "MenuItem.flavor":
+		if e.complexity.MenuItem.Flavor == nil {
 			break
 		}
 
-		return e.complexity.MenuGroup.Flavor(childComplexity), true
-
-	case "MenuGroup.imageURL":
-		if e.complexity.MenuGroup.ImageURL == nil {
-			break
-		}
-
-		return e.complexity.MenuGroup.ImageURL(childComplexity), true
-
-	case "MenuGroup.items":
-		if e.complexity.MenuGroup.Items == nil {
-			break
-		}
-
-		return e.complexity.MenuGroup.Items(childComplexity), true
-
-	case "MenuGroup.minPriceYen":
-		if e.complexity.MenuGroup.MinPriceYen == nil {
-			break
-		}
-
-		return e.complexity.MenuGroup.MinPriceYen(childComplexity), true
-
-	case "MenuGroup.name":
-		if e.complexity.MenuGroup.Name == nil {
-			break
-		}
-
-		return e.complexity.MenuGroup.Name(childComplexity), true
+		return e.complexity.MenuItem.Flavor(childComplexity), true
 
 	case "MenuItem.imageURL":
 		if e.complexity.MenuItem.ImageURL == nil {
@@ -344,12 +316,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MenuItem.ImageURL(childComplexity), true
 
-	case "MenuItem.materials":
-		if e.complexity.MenuItem.Materials == nil {
+	case "MenuItem.minPriceYen":
+		if e.complexity.MenuItem.MinPriceYen == nil {
 			break
 		}
 
-		return e.complexity.MenuItem.Materials(childComplexity), true
+		return e.complexity.MenuItem.MinPriceYen(childComplexity), true
 
 	case "MenuItem.name":
 		if e.complexity.MenuItem.Name == nil {
@@ -358,26 +330,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MenuItem.Name(childComplexity), true
 
-	case "MenuItem.outOfStock":
-		if e.complexity.MenuItem.OutOfStock == nil {
+	case "MenuItem.options":
+		if e.complexity.MenuItem.Options == nil {
 			break
 		}
 
-		return e.complexity.MenuItem.OutOfStock(childComplexity), true
+		return e.complexity.MenuItem.Options(childComplexity), true
 
-	case "MenuItem.priceYen":
-		if e.complexity.MenuItem.PriceYen == nil {
+	case "MenuItemOption.imageURL":
+		if e.complexity.MenuItemOption.ImageURL == nil {
 			break
 		}
 
-		return e.complexity.MenuItem.PriceYen(childComplexity), true
+		return e.complexity.MenuItemOption.ImageURL(childComplexity), true
 
-	case "MenuItem.recipe":
-		if e.complexity.MenuItem.Recipe == nil {
+	case "MenuItemOption.materials":
+		if e.complexity.MenuItemOption.Materials == nil {
 			break
 		}
 
-		return e.complexity.MenuItem.Recipe(childComplexity), true
+		return e.complexity.MenuItemOption.Materials(childComplexity), true
+
+	case "MenuItemOption.name":
+		if e.complexity.MenuItemOption.Name == nil {
+			break
+		}
+
+		return e.complexity.MenuItemOption.Name(childComplexity), true
+
+	case "MenuItemOption.outOfStock":
+		if e.complexity.MenuItemOption.OutOfStock == nil {
+			break
+		}
+
+		return e.complexity.MenuItemOption.OutOfStock(childComplexity), true
+
+	case "MenuItemOption.priceYen":
+		if e.complexity.MenuItemOption.PriceYen == nil {
+			break
+		}
+
+		return e.complexity.MenuItemOption.PriceYen(childComplexity), true
+
+	case "MenuItemOption.recipe":
+		if e.complexity.MenuItemOption.Recipe == nil {
+			break
+		}
+
+		return e.complexity.MenuItemOption.Recipe(childComplexity), true
 
 	case "Mutation.cashout":
 		if e.complexity.Mutation.Cashout == nil {
@@ -1805,231 +1805,6 @@ func (ec *executionContext) fieldContext_Material_inStock(_ context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _MenuGroup_name(ctx context.Context, field graphql.CollectedField, obj *model.MenuGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuGroup_name(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MenuGroup_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MenuGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MenuGroup_imageURL(ctx context.Context, field graphql.CollectedField, obj *model.MenuGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuGroup_imageURL(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ImageURL, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MenuGroup_imageURL(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MenuGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MenuGroup_flavor(ctx context.Context, field graphql.CollectedField, obj *model.MenuGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuGroup_flavor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Flavor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MenuGroup_flavor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MenuGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MenuGroup_items(ctx context.Context, field graphql.CollectedField, obj *model.MenuGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuGroup_items(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Items, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.MenuItem)
-	fc.Result = res
-	return ec.marshalOMenuItem2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MenuGroup_items(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MenuGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "name":
-				return ec.fieldContext_MenuItem_name(ctx, field)
-			case "imageURL":
-				return ec.fieldContext_MenuItem_imageURL(ctx, field)
-			case "materials":
-				return ec.fieldContext_MenuItem_materials(ctx, field)
-			case "outOfStock":
-				return ec.fieldContext_MenuItem_outOfStock(ctx, field)
-			case "priceYen":
-				return ec.fieldContext_MenuItem_priceYen(ctx, field)
-			case "recipe":
-				return ec.fieldContext_MenuItem_recipe(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MenuItem", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MenuGroup_minPriceYen(ctx context.Context, field graphql.CollectedField, obj *model.MenuGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuGroup_minPriceYen(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MinPriceYen, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MenuGroup_minPriceYen(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MenuGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _MenuItem_name(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MenuItem_name(ctx, field)
 	if err != nil {
@@ -2115,8 +1890,233 @@ func (ec *executionContext) fieldContext_MenuItem_imageURL(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _MenuItem_materials(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuItem_materials(ctx, field)
+func (ec *executionContext) _MenuItem_flavor(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItem_flavor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Flavor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItem_flavor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItem",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItem_options(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItem_options(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Options, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.MenuItemOption)
+	fc.Result = res
+	return ec.marshalOMenuItemOption2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemOptionᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItem_options(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItem",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_MenuItemOption_name(ctx, field)
+			case "imageURL":
+				return ec.fieldContext_MenuItemOption_imageURL(ctx, field)
+			case "materials":
+				return ec.fieldContext_MenuItemOption_materials(ctx, field)
+			case "outOfStock":
+				return ec.fieldContext_MenuItemOption_outOfStock(ctx, field)
+			case "priceYen":
+				return ec.fieldContext_MenuItemOption_priceYen(ctx, field)
+			case "recipe":
+				return ec.fieldContext_MenuItemOption_recipe(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MenuItemOption", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItem_minPriceYen(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItem_minPriceYen(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MinPriceYen, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItem_minPriceYen(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItem",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItemOption_name(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItemOption_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItemOption",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItemOption_imageURL(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_imageURL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ImageURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItemOption_imageURL(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItemOption",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItemOption_materials(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_materials(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2143,9 +2143,9 @@ func (ec *executionContext) _MenuItem_materials(ctx context.Context, field graph
 	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_MenuItem_materials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_MenuItemOption_materials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "MenuItem",
+		Object:     "MenuItemOption",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2156,8 +2156,8 @@ func (ec *executionContext) fieldContext_MenuItem_materials(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _MenuItem_outOfStock(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuItem_outOfStock(ctx, field)
+func (ec *executionContext) _MenuItemOption_outOfStock(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_outOfStock(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2187,9 +2187,9 @@ func (ec *executionContext) _MenuItem_outOfStock(ctx context.Context, field grap
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_MenuItem_outOfStock(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_MenuItemOption_outOfStock(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "MenuItem",
+		Object:     "MenuItemOption",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2200,8 +2200,8 @@ func (ec *executionContext) fieldContext_MenuItem_outOfStock(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _MenuItem_priceYen(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuItem_priceYen(ctx, field)
+func (ec *executionContext) _MenuItemOption_priceYen(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_priceYen(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2231,9 +2231,9 @@ func (ec *executionContext) _MenuItem_priceYen(ctx context.Context, field graphq
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_MenuItem_priceYen(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_MenuItemOption_priceYen(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "MenuItem",
+		Object:     "MenuItemOption",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2244,8 +2244,8 @@ func (ec *executionContext) fieldContext_MenuItem_priceYen(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _MenuItem_recipe(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MenuItem_recipe(ctx, field)
+func (ec *executionContext) _MenuItemOption_recipe(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_recipe(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2272,9 +2272,9 @@ func (ec *executionContext) _MenuItem_recipe(ctx context.Context, field graphql.
 	return ec.marshalORecipe2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐRecipe(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_MenuItem_recipe(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_MenuItemOption_recipe(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "MenuItem",
+		Object:     "MenuItemOption",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3287,9 +3287,9 @@ func (ec *executionContext) _Query_menu(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.MenuGroup)
+	res := resTmp.([]*model.MenuItem)
 	fc.Result = res
-	return ec.marshalNMenuGroup2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuGroupᚄ(ctx, field.Selections, res)
+	return ec.marshalNMenuItem2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_menu(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3301,17 +3301,17 @@ func (ec *executionContext) fieldContext_Query_menu(_ context.Context, field gra
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "name":
-				return ec.fieldContext_MenuGroup_name(ctx, field)
+				return ec.fieldContext_MenuItem_name(ctx, field)
 			case "imageURL":
-				return ec.fieldContext_MenuGroup_imageURL(ctx, field)
+				return ec.fieldContext_MenuItem_imageURL(ctx, field)
 			case "flavor":
-				return ec.fieldContext_MenuGroup_flavor(ctx, field)
-			case "items":
-				return ec.fieldContext_MenuGroup_items(ctx, field)
+				return ec.fieldContext_MenuItem_flavor(ctx, field)
+			case "options":
+				return ec.fieldContext_MenuItem_options(ctx, field)
 			case "minPriceYen":
-				return ec.fieldContext_MenuGroup_minPriceYen(ctx, field)
+				return ec.fieldContext_MenuItem_minPriceYen(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type MenuGroup", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type MenuItem", field.Name)
 		},
 	}
 	return fc, nil
@@ -6849,30 +6849,30 @@ func (ec *executionContext) _Material(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var menuGroupImplementors = []string{"MenuGroup"}
+var menuItemImplementors = []string{"MenuItem"}
 
-func (ec *executionContext) _MenuGroup(ctx context.Context, sel ast.SelectionSet, obj *model.MenuGroup) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, menuGroupImplementors)
+func (ec *executionContext) _MenuItem(ctx context.Context, sel ast.SelectionSet, obj *model.MenuItem) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, menuItemImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("MenuGroup")
+			out.Values[i] = graphql.MarshalString("MenuItem")
 		case "name":
-			out.Values[i] = ec._MenuGroup_name(ctx, field, obj)
+			out.Values[i] = ec._MenuItem_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "imageURL":
-			out.Values[i] = ec._MenuGroup_imageURL(ctx, field, obj)
+			out.Values[i] = ec._MenuItem_imageURL(ctx, field, obj)
 		case "flavor":
-			out.Values[i] = ec._MenuGroup_flavor(ctx, field, obj)
-		case "items":
-			out.Values[i] = ec._MenuGroup_items(ctx, field, obj)
+			out.Values[i] = ec._MenuItem_flavor(ctx, field, obj)
+		case "options":
+			out.Values[i] = ec._MenuItem_options(ctx, field, obj)
 		case "minPriceYen":
-			out.Values[i] = ec._MenuGroup_minPriceYen(ctx, field, obj)
+			out.Values[i] = ec._MenuItem_minPriceYen(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6899,38 +6899,38 @@ func (ec *executionContext) _MenuGroup(ctx context.Context, sel ast.SelectionSet
 	return out
 }
 
-var menuItemImplementors = []string{"MenuItem"}
+var menuItemOptionImplementors = []string{"MenuItemOption"}
 
-func (ec *executionContext) _MenuItem(ctx context.Context, sel ast.SelectionSet, obj *model.MenuItem) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, menuItemImplementors)
+func (ec *executionContext) _MenuItemOption(ctx context.Context, sel ast.SelectionSet, obj *model.MenuItemOption) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, menuItemOptionImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("MenuItem")
+			out.Values[i] = graphql.MarshalString("MenuItemOption")
 		case "name":
-			out.Values[i] = ec._MenuItem_name(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "imageURL":
-			out.Values[i] = ec._MenuItem_imageURL(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_imageURL(ctx, field, obj)
 		case "materials":
-			out.Values[i] = ec._MenuItem_materials(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_materials(ctx, field, obj)
 		case "outOfStock":
-			out.Values[i] = ec._MenuItem_outOfStock(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_outOfStock(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "priceYen":
-			out.Values[i] = ec._MenuItem_priceYen(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_priceYen(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "recipe":
-			out.Values[i] = ec._MenuItem_recipe(ctx, field, obj)
+			out.Values[i] = ec._MenuItemOption_recipe(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8165,7 +8165,7 @@ func (ec *executionContext) marshalNMaterial2ᚖhackbarᚑcopilotᚋinternalᚋi
 	return ec._Material(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMenuGroup2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuGroupᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuGroup) graphql.Marshaler {
+func (ec *executionContext) marshalNMenuItem2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuItem) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -8189,7 +8189,7 @@ func (ec *executionContext) marshalNMenuGroup2ᚕᚖhackbarᚑcopilotᚋinternal
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMenuGroup2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuGroup(ctx, sel, v[i])
+			ret[i] = ec.marshalNMenuItem2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItem(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8209,16 +8209,6 @@ func (ec *executionContext) marshalNMenuGroup2ᚕᚖhackbarᚑcopilotᚋinternal
 	return ret
 }
 
-func (ec *executionContext) marshalNMenuGroup2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuGroup(ctx context.Context, sel ast.SelectionSet, v *model.MenuGroup) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._MenuGroup(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNMenuItem2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItem(ctx context.Context, sel ast.SelectionSet, v *model.MenuItem) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -8227,6 +8217,16 @@ func (ec *executionContext) marshalNMenuItem2ᚖhackbarᚑcopilotᚋinternalᚋi
 		return graphql.Null
 	}
 	return ec._MenuItem(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMenuItemOption2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemOption(ctx context.Context, sel ast.SelectionSet, v *model.MenuItemOption) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MenuItemOption(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNOrder2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v model.Order) graphql.Marshaler {
@@ -8888,7 +8888,7 @@ func (ec *executionContext) unmarshalOInputStep2ᚕᚖhackbarᚑcopilotᚋintern
 	return res, nil
 }
 
-func (ec *executionContext) marshalOMenuItem2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuItem) graphql.Marshaler {
+func (ec *executionContext) marshalOMenuItemOption2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemOptionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuItemOption) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8915,7 +8915,7 @@ func (ec *executionContext) marshalOMenuItem2ᚕᚖhackbarᚑcopilotᚋinternal�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMenuItem2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItem(ctx, sel, v[i])
+			ret[i] = ec.marshalNMenuItemOption2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemOption(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)

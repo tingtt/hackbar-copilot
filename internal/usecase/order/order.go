@@ -8,7 +8,7 @@ import (
 )
 
 type Order interface {
-	ListMenu(sortFunc sort.Yield[menu.Group]) ([]menu.Group, error)
+	ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error)
 	Order(customerID order.CustomerID, menuItemID order.MenuItemID) (order.Order, error)
 	ListUncheckedOrders(customerID order.CustomerID) ([]order.Order, error)
 }

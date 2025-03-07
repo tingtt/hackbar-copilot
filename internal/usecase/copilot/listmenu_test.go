@@ -14,8 +14,8 @@ func Test_copilot_ListMenu(t *testing.T) {
 	t.Run("will return sorted menu groups", func(t *testing.T) {
 		t.Parallel()
 
-		menuGroups := menutest.ExampleGroupsIter
-		want := menutest.ExampleGroups
+		menuGroups := menutest.ExampleItemsIter
+		want := menutest.ExampleItems
 		sort.Slice(want, func(i, j int) bool {
 			return want[i].Name < want[j].Name
 		})

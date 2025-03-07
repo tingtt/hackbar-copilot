@@ -14,10 +14,10 @@ func ptr[T any](v T) *T {
 	return &v
 }
 
-func Test_menuAdapterOut_MenuGroups(t *testing.T) {
+func Test_menuAdapterOut_MenuItems(t *testing.T) {
 	t.Parallel()
 
-	t.Run("will return adapted menu groups", func(t *testing.T) {
+	t.Run("will return adapted menu items", func(t *testing.T) {
 		t.Parallel()
 
 		argRecipeGroups := recipeadapter.NewOutputAdapter().RecipeGroups(
@@ -25,13 +25,13 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 			recipetest.ExampleRecipeTypesMap,
 			recipetest.ExampleGlassTypesMap,
 		)
-		argMenuGroups := menutest.ExampleGroups
-		var want []*model.MenuGroup = []*model.MenuGroup{
+		argMenuItems := menutest.ExampleItems
+		var want []*model.MenuItem = []*model.MenuItem{
 			{
 				Name:     "Phuket Sling",
 				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 				Flavor:   ptr("Sweet"),
-				Items: []*model.MenuItem{
+				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
@@ -87,7 +87,7 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 				Name:     "Passoamoni",
 				ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
 				Flavor:   ptr("Fruity"),
-				Items: []*model.MenuItem{
+				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
@@ -131,7 +131,7 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 				Name:     "Blue Devil",
 				ImageURL: ptr("https://example.com/path/to/image/blue-devil"),
 				Flavor:   ptr("Medium sweet and dry"),
-				Items: []*model.MenuItem{
+				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
@@ -186,7 +186,7 @@ func Test_menuAdapterOut_MenuGroups(t *testing.T) {
 		}
 
 		adapter := &outputAdapter{}
-		got := adapter.MenuGroups(argMenuGroups, argRecipeGroups)
+		got := adapter.MenuItems(argMenuItems, argRecipeGroups)
 		assert.Equal(t, want, got)
 	})
 }

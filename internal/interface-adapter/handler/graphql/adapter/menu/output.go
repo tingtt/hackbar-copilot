@@ -6,7 +6,7 @@ import (
 )
 
 type OutputAdapter interface {
-	MenuGroups(menuGroups []menu.Group, recipeGroups []*model.RecipeGroup) []*model.MenuGroup
+	MenuItems(items []menu.Item, recipeGroups []*model.RecipeGroup) []*model.MenuItem
 }
 
 func NewOutputAdapter() OutputAdapter {

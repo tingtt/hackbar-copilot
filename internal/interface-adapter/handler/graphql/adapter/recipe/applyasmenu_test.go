@@ -11,7 +11,7 @@ import (
 type applyAsMenuTest struct {
 	name string
 	arg  model.InputRecipeGroup
-	want *copilot.SaveAsMenuGroupArg
+	want *copilot.SaveAsMenuItemArg
 }
 
 var applyAsMenuTests = []applyAsMenuTest{
@@ -22,9 +22,9 @@ var applyAsMenuTests = []applyAsMenuTest{
 				Flavor: ptr("Sweet"),
 			},
 		},
-		want: &copilot.SaveAsMenuGroupArg{
-			Flavor: ptr("Sweet"),
-			Items:  map[string]copilot.MenuFromRecipeGroupArg{},
+		want: &copilot.SaveAsMenuItemArg{
+			Flavor:  ptr("Sweet"),
+			Options: map[string]copilot.MenuFromRecipeGroupArg{},
 		},
 	},
 	{
@@ -47,9 +47,9 @@ var applyAsMenuTests = []applyAsMenuTest{
 				},
 			},
 		},
-		want: &copilot.SaveAsMenuGroupArg{
+		want: &copilot.SaveAsMenuItemArg{
 			Flavor: nil,
-			Items: map[string]copilot.MenuFromRecipeGroupArg{
+			Options: map[string]copilot.MenuFromRecipeGroupArg{
 				"Single": {
 					ImageURL: ptr("https://example.com/path/to/image/whisky-single"),
 					Price:    1000,
