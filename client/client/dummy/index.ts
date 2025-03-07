@@ -1,7 +1,7 @@
 import type { QueryClient } from "../gen/interface.client"
 import type { MutationClient } from "../gen/interface.mutation"
 import type {
-  MenuGroup,
+  MenuItem,
   Order,
   RecipeGroup,
   Material,
@@ -22,8 +22,8 @@ import dummyRecipesData from "./data/recipes.json"
 import dummyMaterialsData from "./data/materials.json"
 
 export class DummyHackbarClient implements QueryClient, MutationClient {
-  async getMenu(): Promise<MenuGroup[]> {
-    return dummyMenuData as MenuGroup[]
+  async getMenu(): Promise<MenuItem[]> {
+    return dummyMenuData as MenuItem[]
   }
   async getOrders(): Promise<Order[]> {
     return dummyOrdersData as Order[]

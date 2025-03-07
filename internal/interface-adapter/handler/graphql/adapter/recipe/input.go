@@ -16,7 +16,7 @@ type InputAdapter interface {
 	) ([]recipe.GlassType, error)
 	ApplyAsMenu(
 		input model.InputRecipeGroup,
-	) (asMenuArg *copilot.SaveAsMenuGroupArg, err error)
+	) (asMenuArg *copilot.SaveAsMenuItemArg, err error)
 }
 
 func NewInputAdapter() InputAdapter {

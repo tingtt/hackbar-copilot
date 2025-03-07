@@ -10,8 +10,8 @@ var ExampleOrders = []order.Order{
 		ID:         "1",
 		CustomerID: "user@example.test",
 		MenuItemID: order.MenuItemID{
-			GroupName: "Phuket Sling",
-			ItemName:  "Cocktail",
+			ItemName:   "Phuket Sling",
+			OptionName: "Cocktail",
 		},
 		Timestamps: []order.StatusUpdateTimestamp{
 			{
@@ -38,8 +38,8 @@ var ExampleOrders = []order.Order{
 		ID:         "2",
 		CustomerID: "user@example.test",
 		MenuItemID: order.MenuItemID{
-			GroupName: "Passoamoni",
-			ItemName:  "Cocktail",
+			ItemName:   "Passoamoni",
+			OptionName: "Cocktail",
 		},
 		Timestamps: []order.StatusUpdateTimestamp{
 			{
@@ -66,8 +66,8 @@ var ExampleOrders = []order.Order{
 		ID:         "3",
 		CustomerID: "user@example.test",
 		MenuItemID: order.MenuItemID{
-			GroupName: "Phuket Sling",
-			ItemName:  "Cocktail",
+			ItemName:   "Phuket Sling",
+			OptionName: "Cocktail",
 		},
 		Timestamps: []order.StatusUpdateTimestamp{
 			{
@@ -90,8 +90,8 @@ var ExampleOrders = []order.Order{
 		ID:         "4",
 		CustomerID: "user@example.test",
 		MenuItemID: order.MenuItemID{
-			GroupName: "Passoamoni",
-			ItemName:  "Cocktail",
+			ItemName:   "Passoamoni",
+			OptionName: "Cocktail",
 		},
 		Timestamps: []order.StatusUpdateTimestamp{
 			{
@@ -114,8 +114,8 @@ var ExampleOrders = []order.Order{
 		ID:         "5",
 		CustomerID: "user@example.test",
 		MenuItemID: order.MenuItemID{
-			GroupName: "Blue Devil",
-			ItemName:  "Cocktail",
+			ItemName:   "Blue Devil",
+			OptionName: "Cocktail",
 		},
 		Timestamps: []order.StatusUpdateTimestamp{
 			{

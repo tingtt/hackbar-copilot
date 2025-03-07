@@ -25,12 +25,12 @@ type ID UUID
 type CustomerID UUID
 
 type MenuItemID struct {
-	GroupName string
-	ItemName  string
+	ItemName   string
+	OptionName string
 }
 
 func (m MenuItemID) String() string {
-	return m.GroupName + "-" + m.ItemName
+	return m.ItemName + "-" + m.OptionName
 }
 
 type Status string

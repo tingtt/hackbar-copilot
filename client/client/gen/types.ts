@@ -145,17 +145,17 @@ export type Material = {
   name: Scalars["String"]["output"]
 }
 
-export type MenuGroup = {
-  __typename?: "MenuGroup"
-  flavor?: Maybe<Scalars["String"]["output"]>
-  imageURL?: Maybe<Scalars["String"]["output"]>
-  items?: Maybe<Array<MenuItem>>
-  minPriceYen: Scalars["Float"]["output"]
-  name: Scalars["String"]["output"]
-}
-
 export type MenuItem = {
   __typename?: "MenuItem"
+  flavor?: Maybe<Scalars["String"]["output"]>
+  imageURL?: Maybe<Scalars["String"]["output"]>
+  minPriceYen: Scalars["Float"]["output"]
+  name: Scalars["String"]["output"]
+  options?: Maybe<Array<MenuItemOption>>
+}
+
+export type MenuItemOption = {
+  __typename?: "MenuItemOption"
   imageURL?: Maybe<Scalars["String"]["output"]>
   materials?: Maybe<Array<Scalars["String"]["output"]>>
   name: Scalars["String"]["output"]
@@ -234,7 +234,7 @@ export type Query = {
   cashouts: Array<Cashout>
   checkouts: Array<Checkout>
   materials: Array<Material>
-  menu: Array<MenuGroup>
+  menu: Array<MenuItem>
   orders: Array<Order>
   recipes: Array<RecipeGroup>
 }

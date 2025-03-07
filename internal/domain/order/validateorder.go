@@ -9,11 +9,11 @@ func (o Order) Validate() error {
 	if o.CustomerID == "" {
 		return fmt.Errorf("CustomerID cannot be empty")
 	}
-	if o.MenuItemID.GroupName == "" {
-		return fmt.Errorf("MenuItemID.GroupName cannot be empty")
-	}
 	if o.MenuItemID.ItemName == "" {
 		return fmt.Errorf("MenuItemID.ItemName cannot be empty")
+	}
+	if o.MenuItemID.OptionName == "" {
+		return fmt.Errorf("MenuItemID.OptionName cannot be empty")
 	}
 	for _, timestamp := range o.Timestamps {
 		if err := validateStatus(timestamp.Status); err != nil {

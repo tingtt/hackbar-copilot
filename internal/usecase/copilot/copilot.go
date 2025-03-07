@@ -20,8 +20,8 @@ type Copilot interface {
 	FindRecipeType() (map[string]recipe.RecipeType, error)
 	FindGlassType() (map[string]recipe.GlassType, error)
 
-	SaveAsMenuGroup(recipeGroupName string, arg SaveAsMenuGroupArg) (menu.Group, error)
-	ListMenu(sortFunc sort.Yield[menu.Group]) ([]menu.Group, error)
+	SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) (menu.Item, error)
+	ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error)
 
 	Materials(sortFunc sort.Yield[stock.Material], optionAppliers ...QueryOptionApplier) ([]stock.Material, error)
 	UpdateStock(inStockMaterials, outOfStockMaterials []string) error
@@ -31,9 +31,9 @@ type Copilot interface {
 	UpdateOrderStatus(id order.ID, status order.Status, timestamp time.Time) (order.Order, error)
 }
 
-type SaveAsMenuGroupArg struct {
-	Flavor *string
-	Items  map[string]MenuFromRecipeGroupArg
+type SaveAsMenuItemArg struct {
+	Flavor  *string
+	Options map[string]MenuFromRecipeGroupArg
 }
 
 type MenuFromRecipeGroupArg struct {

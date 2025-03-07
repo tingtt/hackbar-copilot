@@ -26,8 +26,8 @@ export class HackbarClient implements QueryClient, MutationClient {
     this.client = new ApolloClient({ link, cache: new InMemoryCache() })
   }
 
-  async getMenu(): Promise<types.MenuGroup[]> {
-    const res = await this.client.query<{ menu: types.MenuGroup[] }>(
+  async getMenu(): Promise<types.MenuItem[]> {
+    const res = await this.client.query<{ menu: types.MenuItem[] }>(
       query.getMenu(),
     )
     return res.data.menu

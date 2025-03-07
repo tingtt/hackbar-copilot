@@ -57,7 +57,7 @@ export const getMenu = () => ({
         name
         imageURL
         flavor
-        items {
+        options {
           name
           imageURL
           materials

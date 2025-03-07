@@ -19,13 +19,13 @@ type UpdateStockTest struct {
 	OutOfStockMaterials []string
 
 	// current
-	Menu []menu.Group
+	Menu []menu.Item
 
 	// behavior
 	UpdatedMaterials []stock.Material
 
 	// expect
-	SaveMenuExpectCalls []menu.Group
+	SaveMenuExpectCalls []menu.Item
 }
 
 var updateStockTests = []UpdateStockTest{
@@ -33,10 +33,10 @@ var updateStockTests = []UpdateStockTest{
 		Name:                "change to out of stock",
 		InStockMaterials:    []string{},
 		OutOfStockMaterials: []string{"Peach liqueur"},
-		Menu: []menu.Group{
+		Menu: []menu.Item{
 			{
 				Name: "Phuket Sling",
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
@@ -52,10 +52,10 @@ var updateStockTests = []UpdateStockTest{
 			{Name: "Grapefruit juice", InStock: true},
 			{Name: "Tonic water", InStock: true},
 		},
-		SaveMenuExpectCalls: []menu.Group{
+		SaveMenuExpectCalls: []menu.Item{
 			{
 				Name: "Phuket Sling",
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
@@ -70,10 +70,10 @@ var updateStockTests = []UpdateStockTest{
 		Name:                "change to in stock",
 		InStockMaterials:    []string{"Peach liqueur"},
 		OutOfStockMaterials: []string{},
-		Menu: []menu.Group{
+		Menu: []menu.Item{
 			{
 				Name: "Phuket Sling",
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
@@ -89,10 +89,10 @@ var updateStockTests = []UpdateStockTest{
 			{Name: "Grapefruit juice", InStock: true},
 			{Name: "Tonic water", InStock: true},
 		},
-		SaveMenuExpectCalls: []menu.Group{
+		SaveMenuExpectCalls: []menu.Item{
 			{
 				Name: "Phuket Sling",
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},

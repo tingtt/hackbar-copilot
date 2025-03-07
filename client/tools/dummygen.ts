@@ -31,7 +31,7 @@ const client = new HackbarClient(args.uri, args.token)
 console.log(`Writing generated dummy data to '${args.dest}'.`)
 
 client
-  .menu()
+  .getMenu()
   .then((menu) => {
     const data = JSON.stringify(menu, null, 2)
     console.log(`- menu.json`)
@@ -43,7 +43,7 @@ client
     fs.writeFileSync(`${args.dest}/menu.json`, "[]")
   })
 client
-  .orders()
+  .getOrders()
   .then((orders) => {
     const maskedOrders = orders.map(
       (order): Order => ({
@@ -61,7 +61,7 @@ client
     fs.writeFileSync(`${args.dest}/orders.json`, "[]")
   })
 client
-  .recipes()
+  .getRecipes()
   .then((recipes) => {
     const data = JSON.stringify(recipes, null, 2)
     console.log(`- recipes.json`)
@@ -73,7 +73,7 @@ client
     fs.writeFileSync(`${args.dest}/recipes.json`, "[]")
   })
 client
-  .materials()
+  .getMaterials()
   .then((materials) => {
     const data = JSON.stringify(materials, null, 2)
     console.log(`- materials.json`)

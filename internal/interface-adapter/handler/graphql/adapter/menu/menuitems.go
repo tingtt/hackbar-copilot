@@ -5,9 +5,9 @@ import (
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
-// MenuGroups implements MenuAdapterOut.
-func (m *outputAdapter) MenuGroups(menuGroups []menu.Group, recipeGroups []*model.RecipeGroup) []*model.MenuGroup {
-	var groups []*model.MenuGroup
+// MenuItems implements MenuAdapterOut.
+func (m *outputAdapter) MenuItems(menuGroups []menu.Item, recipeGroups []*model.RecipeGroup) []*model.MenuItem {
+	var groups []*model.MenuItem
 	for _, menuGroup := range menuGroups {
 		recipes := make(map[string]model.Recipe)
 		for _, recipeGroup := range recipeGroups {
@@ -17,23 +17,23 @@ func (m *outputAdapter) MenuGroups(menuGroups []menu.Group, recipeGroups []*mode
 				}
 			}
 		}
-		groups = append(groups, m.menuGroup(menuGroup, recipes))
+		groups = append(groups, m.menuItem(menuGroup, recipes))
 	}
 	return groups
 }
 
-func (m *outputAdapter) menuGroup(menuGroup menu.Group, recipes map[string]model.Recipe) *model.MenuGroup {
-	minPrice, items := m.menuItems(menuGroup.Items, recipes)
-	return &model.MenuGroup{
+func (m *outputAdapter) menuItem(menuGroup menu.Item, recipes map[string]model.Recipe) *model.MenuItem {
+	minPrice, options := m.menuItemOptions(menuGroup.Options, recipes)
+	return &model.MenuItem{
 		Name:        menuGroup.Name,
 		ImageURL:    menuGroup.ImageURL,
 		Flavor:      menuGroup.Flavor,
-		Items:       items,
+		Options:     options,
 		MinPriceYen: float64(minPrice),
 	}
 }
 
-func (m *outputAdapter) menuItems(menuItems []menu.Item, recipes map[string]model.Recipe) (minPrice float64, items []*model.MenuItem) {
+func (m *outputAdapter) menuItemOptions(menuItems []menu.ItemOption, recipes map[string]model.Recipe) (minPrice float64, options []*model.MenuItemOption) {
 	for _, menuItem := range menuItems {
 		if minPrice == 0 {
 			minPrice = float64(menuItem.Price)
@@ -43,16 +43,16 @@ func (m *outputAdapter) menuItems(menuItems []menu.Item, recipes map[string]mode
 		}
 		recipe, ok := recipes[menuItem.Name]
 		if ok {
-			items = append(items, m.menuItem(menuItem, &recipe))
+			options = append(options, m.menuItemOption(menuItem, &recipe))
 		} else {
-			items = append(items, m.menuItem(menuItem, nil))
+			options = append(options, m.menuItemOption(menuItem, nil))
 		}
 	}
-	return minPrice, items
+	return minPrice, options
 }
 
-func (m *outputAdapter) menuItem(menuItem menu.Item, recipe *model.Recipe) *model.MenuItem {
-	return &model.MenuItem{
+func (m *outputAdapter) menuItemOption(menuItem menu.ItemOption, recipe *model.Recipe) *model.MenuItemOption {
+	return &model.MenuItemOption{
 		Name:       menuItem.Name,
 		ImageURL:   menuItem.ImageURL,
 		Materials:  menuItem.Materials,

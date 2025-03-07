@@ -20,7 +20,7 @@ type SaveRecipeTest struct {
 	RecipeGroup recipe.RecipeGroup
 
 	// current
-	Menu      []menu.Group
+	Menu      []menu.Item
 	Materials []stock.Material
 
 	// expect
@@ -28,7 +28,7 @@ type SaveRecipeTest struct {
 }
 
 type SaveRecipeTestExpectCall struct {
-	SaveMenuGroup    menu.Group
+	SaveMenuGroup    menu.Item
 	SaveNewMaterials []string
 }
 
@@ -67,7 +67,7 @@ var saveRecipeTests = []SaveRecipeTest{
 				},
 			},
 		},
-		Menu:      []menu.Group{},
+		Menu:      []menu.Item{},
 		Materials: []stock.Material{},
 	},
 	{
@@ -104,12 +104,12 @@ var saveRecipeTests = []SaveRecipeTest{
 				},
 			},
 		},
-		Menu: []menu.Group{
+		Menu: []menu.Item{
 			{
 				Name:     "Phuket Sling",
 				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 				Flavor:   ptr("Sweet"),
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
@@ -127,11 +127,11 @@ var saveRecipeTests = []SaveRecipeTest{
 			{Name: "Tonic water", InStock: true},
 		},
 		SaveAsMenuGroupExpectCall: &SaveRecipeTestExpectCall{
-			SaveMenuGroup: menu.Group{
+			SaveMenuGroup: menu.Item{
 				Name:     "Phuket Sling",
 				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 				Flavor:   ptr("Sweet"),
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
@@ -178,12 +178,12 @@ var saveRecipeTests = []SaveRecipeTest{
 				},
 			},
 		},
-		Menu: []menu.Group{
+		Menu: []menu.Item{
 			{
 				Name:     "Phuket Sling",
 				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 				Flavor:   ptr("Sweet"),
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
@@ -200,11 +200,11 @@ var saveRecipeTests = []SaveRecipeTest{
 			{Name: "Grapefruit juice", InStock: true},
 		},
 		SaveAsMenuGroupExpectCall: &SaveRecipeTestExpectCall{
-			SaveMenuGroup: menu.Group{
+			SaveMenuGroup: menu.Item{
 				Name:     "Phuket Sling",
 				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 				Flavor:   ptr("Sweet"),
-				Items: []menu.Item{
+				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),

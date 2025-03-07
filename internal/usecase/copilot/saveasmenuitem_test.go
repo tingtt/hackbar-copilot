@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func Test_copilot_SaveAsMenuGroup(t *testing.T) {
+func Test_copilot_SaveAsMenuItem(t *testing.T) {
 	t.Parallel()
 
 	t.Run("will call copilot.FindRecipeGroup with recipeGroupName", func(t *testing.T) {
@@ -33,7 +33,7 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 			stockSaveLister.On("Save", mock.Anything, mock.Anything).Return(nil)
 
 			c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
-			got, err := c.SaveAsMenuGroup("Phuket Sling", SaveAsMenuGroupArg{})
+			got, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{})
 			assert.NoError(t, err)
 			assert.Equal(t, "Phuket Sling", got.Name)
 		})
@@ -45,7 +45,7 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
 			c := &copilot{recipe: recipeSaveLister}
-			_, err := c.SaveAsMenuGroup("-", SaveAsMenuGroupArg{})
+			_, err := c.SaveAsMenuItem("-", SaveAsMenuItemArg{})
 			assert.ErrorIs(t, err, usecaseutils.ErrNotFound)
 		})
 	})
@@ -63,20 +63,20 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 		stockSaveLister.On("All").Return(stocktest.ExampleMaterialsIter, nil)
 
 		c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
-		got, err := c.SaveAsMenuGroup("Phuket Sling", SaveAsMenuGroupArg{
+		got, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{
 			Flavor: ptr("Sweet"),
-			Items: map[string]MenuFromRecipeGroupArg{
+			Options: map[string]MenuFromRecipeGroupArg{
 				"Cocktail": {
 					ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 					Price:    700,
 				},
 			},
 		})
-		want := menu.Group{
+		want := menu.Item{
 			Name:     "Phuket Sling",
 			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 			Flavor:   ptr("Sweet"),
-			Items: []menu.Item{
+			Options: []menu.ItemOption{
 				{
 					Name:       "Cocktail",
 					ImageURL:   ptr("https://example.com/path/to/image/phuket-sling"),
@@ -132,20 +132,20 @@ func Test_copilot_SaveAsMenuGroup(t *testing.T) {
 		stockSaveLister.On("Save", mock.Anything, mock.Anything).Return(nil)
 
 		c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
-		got, err := c.SaveAsMenuGroup("New Recipe", SaveAsMenuGroupArg{
+		got, err := c.SaveAsMenuItem("New Recipe", SaveAsMenuItemArg{
 			Flavor: ptr("Fruity"),
-			Items: map[string]MenuFromRecipeGroupArg{
+			Options: map[string]MenuFromRecipeGroupArg{
 				"New Recipe": {
 					ImageURL: ptr("https://example.com/path/to/image/new-recipe"),
 					Price:    700,
 				},
 			},
 		})
-		want := menu.Group{
+		want := menu.Item{
 			Name:     "New Recipe",
 			ImageURL: ptr("https://example.com/path/to/image/new"),
 			Flavor:   ptr("Fruity"),
-			Items: []menu.Item{
+			Options: []menu.ItemOption{
 				{
 					Name:       "New Recipe",
 					ImageURL:   ptr("https://example.com/path/to/image/new-recipe"),

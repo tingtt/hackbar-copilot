@@ -12,24 +12,24 @@ type menuRepository struct {
 }
 
 // Find implements menu.Repository.
-func (m *menuRepository) Find(groupName string, itemName string) (menu.Item, error) {
-	for _, mg := range m.fs.data.menuGroups {
-		if mg.Name == groupName {
-			for _, mi := range mg.Items {
-				if mi.Name == itemName {
-					return mi, nil
+func (m *menuRepository) Find(itemName string, optionName string) (menu.ItemOption, error) {
+	for _, mi := range m.fs.data.menuItems {
+		if mi.Name == itemName {
+			for _, mo := range mi.Options {
+				if mo.Name == optionName {
+					return mo, nil
 				}
 			}
 		}
 	}
-	return menu.Item{}, menu.ErrNotFound
+	return menu.ItemOption{}, menu.ErrNotFound
 }
 
 // All implements menu.Repository.
-func (m *menuRepository) All() iter.Seq2[menu.Group, error] {
-	return func(yield func(menu.Group, error) bool) {
-		for _, mg := range m.fs.data.menuGroups {
-			if !yield(mg, nil) {
+func (m *menuRepository) All() iter.Seq2[menu.Item, error] {
+	return func(yield func(menu.Item, error) bool) {
+		for _, mi := range m.fs.data.menuItems {
+			if !yield(mi, nil) {
 				return
 			}
 		}
@@ -37,13 +37,13 @@ func (m *menuRepository) All() iter.Seq2[menu.Group, error] {
 }
 
 // Save implements menu.Repository.
-func (m *menuRepository) Save(g menu.Group) error {
-	for i, savedMenuGroup := range m.fs.data.menuGroups {
+func (m *menuRepository) Save(g menu.Item) error {
+	for i, savedMenuGroup := range m.fs.data.menuItems {
 		if savedMenuGroup.Name == g.Name {
-			m.fs.data.menuGroups[i] = g
+			m.fs.data.menuItems[i] = g
 			return nil
 		}
 	}
-	m.fs.data.menuGroups = append(m.fs.data.menuGroups, g)
+	m.fs.data.menuItems = append(m.fs.data.menuItems, g)
 	return nil
 }

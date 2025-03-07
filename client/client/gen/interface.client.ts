@@ -5,7 +5,7 @@ import * as types from "./types"
 export interface QueryClient {
   getCashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]>
   getCheckouts(): Promise<types.Checkout[]>
-  getMenu(): Promise<types.MenuGroup[]>
+  getMenu(): Promise<types.MenuItem[]>
   getOrders(): Promise<types.Order[]>
   getRecipes(): Promise<types.RecipeGroup[]>
   getMaterials(): Promise<types.Material[]>
