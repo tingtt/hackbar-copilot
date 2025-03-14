@@ -8,7 +8,7 @@ RUN apk update
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-EXPOSE ${PORT}
+EXPOSE 80
 
 
 FROM golang:1.24.0-alpine as builder
@@ -22,7 +22,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o $ROOT/binary $GO_ENTRYPOINT
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/hackbar-copilot ${GO_ENTRYPOINT}
 
 FROM alpine:latest as certs
 RUN apk update && apk add ca-certificates
@@ -32,7 +32,7 @@ FROM busybox as prod
 ENV ROOT=/go/src/app
 WORKDIR ${ROOT}
 COPY --from=certs /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder ${ROOT}/binary .
+COPY --from=builder /bin/hackbar-copilot /bin/hackbar-copilot
 
-EXPOSE ${PORT}
-ENTRYPOINT ["/go/src/app/binary"]
+EXPOSE 80
+ENTRYPOINT ["/bin/hackbar-copilot", "--host", "0.0.0.0", "--port", "80"]
