@@ -1,0 +1,31 @@
+name: Publish Client Library
+
+on:
+  push:
+    tags:
+      - 'client/v*'
+
+jobs:
+  publish_to_npm:
+    name: Publish client library to npmjs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: actions/cache@v3
+        id: node_modules_cache_id
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: 'client/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('client/bun.lockb') }}
+
+      - run: bun install --frozen-lockfile
+        working-directory: client
+      - run: npm publish
+        working-directory: client
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
