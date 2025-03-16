@@ -1,5 +1,7 @@
 # hackbar-copilot
 
+This is client library for [tingtt/hackbar-copilot](https://github.com/tingtt/hackbar-copilot).
+
 ## Usage (Next.js App Router)
 
 ```ts
@@ -75,5 +77,5 @@ bun generate
 # Run hackbar-copilot (backend)
 
 # Update client/dummy/data/*.json
-bun dummygen -- --uri "http://localhost:8080/recipes.v1graphql.Registry/" --token "<JWT token>"
+bun dummygen -- --uri "http://localhost:8080/" --token "<JWT token>"
 ```
