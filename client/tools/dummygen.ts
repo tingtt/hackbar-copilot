@@ -10,7 +10,7 @@ import type { Order } from "../client/gen/types"
 const args = await yargs(process.argv.slice(2)).options({
   uri: {
     type: "string",
-    default: "http://localhost:8080/recipes.v1graphql.Registry/",
+    default: "http://localhost:8080/",
     description: "URI for the GraphQL server.",
   },
   token: {

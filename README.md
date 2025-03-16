@@ -9,7 +9,7 @@ mkdir .data
 go run cmd/registry/main.go -d ./.data/
 ```
 
-[http://localhost:8080/recipes.v1graphql.Registry/playground](http://localhost:8080/recipes.v1graphql.Registry/playground)
+[http://localhost:8080/playground](http://localhost:8080/playground)
 
 ```graphql
 query {
