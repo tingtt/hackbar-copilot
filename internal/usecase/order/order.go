@@ -3,14 +3,16 @@ package order
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/order"
+	"hackbar-copilot/internal/domain/user"
 	"hackbar-copilot/internal/usecase/sort"
 	"reflect"
 )
 
 type Order interface {
+	GetUserInfo(customerEmail order.CustomerEmail) (user.User, error)
 	ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error)
-	Order(customerID order.CustomerID, menuItemID order.MenuItemID) (order.Order, error)
-	ListUncheckedOrders(customerID order.CustomerID) ([]order.Order, error)
+	Order(customerEmail order.CustomerEmail, customerName *string, menuItemID order.MenuItemID) (order.Order, error)
+	ListUncheckedOrders(customerEmail order.CustomerEmail) ([]order.Order, error)
 }
 
 func New(deps Dependencies) Order {
@@ -18,12 +20,14 @@ func New(deps Dependencies) Order {
 	return &orderimpl{
 		menu:  menu.NewFindLister(deps.Menu),
 		order: order.NewSaveListListener(deps.Order),
+		user:  user.NewSaveListGetter(deps.User),
 	}
 }
 
 type Dependencies struct {
 	Menu  menu.Repository
 	Order order.Repository
+	User  user.Repository
 }
 
 func (d Dependencies) validate() {
@@ -38,4 +42,5 @@ func (d Dependencies) validate() {
 type orderimpl struct {
 	menu  menu.FindLister
 	order order.SaveFindListListener
+	user  user.SaveListGetter
 }

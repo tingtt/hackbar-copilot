@@ -24,7 +24,7 @@ func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*
 		return nil, err
 	}
 
-	savedOrder, err := r.OrderService.Order(order.CustomerID(email), menuItemID)
+	savedOrder, err := r.OrderService.Order(order.CustomerEmail(email), input.CustomerName, menuItemID)
 	if err != nil {
 		return nil, err
 	}

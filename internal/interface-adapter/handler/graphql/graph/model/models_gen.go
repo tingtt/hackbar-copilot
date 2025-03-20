@@ -21,13 +21,13 @@ type CashoutInput struct {
 }
 
 type Checkout struct {
-	ID          string         `json:"id"`
-	CustomerID  string         `json:"customerID"`
-	OrderIDs    []string       `json:"orderIDs"`
-	Diffs       []*PaymentDiff `json:"diffs"`
-	TotalPrice  float64        `json:"totalPrice"`
-	PaymentType CheckoutType   `json:"paymentType"`
-	Timestamp   string         `json:"timestamp"`
+	ID            string         `json:"id"`
+	CustomerEmail string         `json:"customerEmail"`
+	OrderIDs      []string       `json:"orderIDs"`
+	Diffs         []*PaymentDiff `json:"diffs"`
+	TotalPrice    float64        `json:"totalPrice"`
+	PaymentType   CheckoutType   `json:"paymentType"`
+	Timestamp     string         `json:"timestamp"`
 }
 
 type GlassType struct {
@@ -51,10 +51,10 @@ type InputCashoutQuery struct {
 }
 
 type InputCheckout struct {
-	CustomerID  string            `json:"customerID"`
-	OrderIDs    []string          `json:"orderIDs"`
-	Diffs       []*InputPriceDiff `json:"diffs"`
-	PaymentType CheckoutType      `json:"paymentType"`
+	CustomerEmail string            `json:"customerEmail"`
+	OrderIDs      []string          `json:"orderIDs"`
+	Diffs         []*InputPriceDiff `json:"diffs"`
+	PaymentType   CheckoutType      `json:"paymentType"`
 }
 
 type InputGlassType struct {
@@ -65,7 +65,8 @@ type InputGlassType struct {
 }
 
 type InputOrder struct {
-	MenuItemID string `json:"menuItemID"`
+	MenuItemID   string  `json:"menuItemID"`
+	CustomerName *string `json:"customerName,omitempty"`
 }
 
 type InputOrderStatusUpdate struct {
@@ -136,12 +137,13 @@ type Mutation struct {
 }
 
 type Order struct {
-	ID         string                        `json:"id"`
-	CustomerID string                        `json:"customerID"`
-	MenuItemID string                        `json:"menuItemID"`
-	Timestamps []*OrderStatusUpdateTimestamp `json:"timestamps"`
-	Status     OrderStatus                   `json:"status"`
-	Price      float64                       `json:"price"`
+	ID            string                        `json:"id"`
+	CustomerEmail string                        `json:"customerEmail"`
+	CustomerName  string                        `json:"customerName"`
+	MenuItemID    string                        `json:"menuItemID"`
+	Timestamps    []*OrderStatusUpdateTimestamp `json:"timestamps"`
+	Status        OrderStatus                   `json:"status"`
+	Price         float64                       `json:"price"`
 }
 
 type OrderStatusUpdateTimestamp struct {
@@ -179,6 +181,11 @@ type Step struct {
 	Material    *string `json:"material,omitempty"`
 	Amount      *string `json:"amount,omitempty"`
 	Description *string `json:"description,omitempty"`
+}
+
+type User struct {
+	Email string `json:"email"`
+	Name  string `json:"name"`
 }
 
 type CheckoutType string

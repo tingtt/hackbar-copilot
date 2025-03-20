@@ -10,7 +10,7 @@ export const getCashouts = (variables: { input: types.InputCashoutQuery }) => ({
         __typename
         checkouts {
           id
-          customerID
+          customerEmail
           orderIDs
           diffs {
             price
@@ -35,7 +35,7 @@ export const getCheckouts = () => ({
       checkouts {
         __typename
         id
-        customerID
+        customerEmail
         orderIDs
         diffs {
           price
@@ -93,7 +93,8 @@ export const getOrders = () => ({
       orders {
         __typename
         id
-        customerID
+        customerEmail
+        customerName
         menuItemID
         timestamps {
           status
@@ -142,6 +143,18 @@ export const getMaterials = () => ({
         __typename
         name
         inStock
+      }
+    }
+  `,
+})
+
+export const getUserInfo = () => ({
+  query: gql`
+    query getUserInfo {
+      userInfo {
+        __typename
+        email
+        name
       }
     }
   `,

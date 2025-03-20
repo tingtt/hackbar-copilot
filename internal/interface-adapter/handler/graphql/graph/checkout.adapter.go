@@ -9,7 +9,7 @@ import (
 
 type inputCheckout model.InputCheckout
 
-func (i inputCheckout) apply() (order.CustomerID, []order.ID, []checkout.Diff, checkout.PaymentType) {
+func (i inputCheckout) apply() (order.CustomerEmail, []order.ID, []checkout.Diff, checkout.PaymentType) {
 	orderIDs := make([]order.ID, 0, len(i.OrderIDs))
 	for _, orderID := range i.OrderIDs {
 		orderIDs = append(orderIDs, order.ID(orderID))
@@ -23,18 +23,18 @@ func (i inputCheckout) apply() (order.CustomerID, []order.ID, []checkout.Diff, c
 		})
 	}
 
-	return order.CustomerID(i.CustomerID), orderIDs, diffs, checkout.PaymentType(i.PaymentType)
+	return order.CustomerEmail(i.CustomerEmail), orderIDs, diffs, checkout.PaymentType(i.PaymentType)
 }
 
 type checkout_ checkout.Checkout
 
 func (c checkout_) apply() *model.Checkout {
 	m := model.Checkout{
-		ID:          string(c.ID),
-		CustomerID:  string(c.CustomerID),
-		TotalPrice:  float64(c.TotalPrice),
-		PaymentType: model.CheckoutType(c.PaymentType),
-		Timestamp:   c.Timestamp.UTC().Format(time.RFC3339),
+		ID:            string(c.ID),
+		CustomerEmail: string(c.CustomerEmail),
+		TotalPrice:    float64(c.TotalPrice),
+		PaymentType:   model.CheckoutType(c.PaymentType),
+		Timestamp:     c.Timestamp.UTC().Format(time.RFC3339),
 	}
 	for _, orderID := range c.OrderIDs {
 		m.OrderIDs = append(m.OrderIDs, string(orderID))

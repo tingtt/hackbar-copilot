@@ -2,7 +2,8 @@
   {
     "__typename": "Order",
     "id": "5",
-    "customerID": "user@example.test",
+    "customerEmail": "user@example.test",
+    "customerName": "john.doe@example.test",
     "menuItemID": "Blue Devil-Cocktail",
     "timestamps": [
       {
@@ -17,7 +18,8 @@
   {
     "__typename": "Order",
     "id": "4",
-    "customerID": "user@example.test",
+    "customerEmail": "user@example.test",
+    "customerName": "john.doe@example.test",
     "menuItemID": "Passoamoni-Cocktail",
     "timestamps": [
       {
@@ -42,7 +44,8 @@
   {
     "__typename": "Order",
     "id": "3",
-    "customerID": "user@example.test",
+    "customerEmail": "user@example.test",
+    "customerName": "john.doe@example.test",
     "menuItemID": "Phuket Sling-Cocktail",
     "timestamps": [
       {
@@ -67,7 +70,8 @@
   {
     "__typename": "Order",
     "id": "2",
-    "customerID": "user@example.test",
+    "customerEmail": "user@example.test",
+    "customerName": "john.doe@example.test",
     "menuItemID": "Passoamoni-Cocktail",
     "timestamps": [
       {
@@ -97,7 +101,8 @@
   {
     "__typename": "Order",
     "id": "1",
-    "customerID": "user@example.test",
+    "customerEmail": "user@example.test",
+    "customerName": "john.doe@example.test",
     "menuItemID": "Phuket Sling-Cocktail",
     "timestamps": [
       {

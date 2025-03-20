@@ -6,8 +6,8 @@ func (o Order) Validate() error {
 	if o.ID == "" {
 		return fmt.Errorf("ID cannot be empty")
 	}
-	if o.CustomerID == "" {
-		return fmt.Errorf("CustomerID cannot be empty")
+	if o.CustomerEmail == "" {
+		return fmt.Errorf("CustomerEmail cannot be empty")
 	}
 	if o.MenuItemID.ItemName == "" {
 		return fmt.Errorf("MenuItemID.ItemName cannot be empty")

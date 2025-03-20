@@ -62,6 +62,12 @@ export class HackbarClient implements QueryClient, MutationClient {
     )
     return res.data.cashouts
   }
+  async getUserInfo(): Promise<types.User> {
+    const res = await this.client.query<{ user: types.User }>(
+      query.getUserInfo(),
+    )
+    return res.data.user
+  }
 
   async order(input: types.InputOrder): Promise<types.Order> {
     const res = await this.client.mutate<{ order: types.Order }>(

@@ -7,6 +7,7 @@ import (
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/stock"
+	"hackbar-copilot/internal/domain/user"
 )
 
 type Filesystem interface {
@@ -16,6 +17,7 @@ type Filesystem interface {
 	Order() (r order.Repository, close func())
 	Cashout() cashout.Repository
 	Checkout() checkout.Repository
+	User() user.Repository
 	SavePersistently() error
 }
 
@@ -34,6 +36,7 @@ type Filesystem interface {
 //
 //	```
 //	/path/to/data-dir
+//	├── 0_user.toml									// inmemory loaded
 //	├── 1_recipe_groups.toml				// inmemory loaded
 //	├── 2_recipe_types.toml					// inmemory loaded
 //	├── 3_glass_types.toml					// inmemory loaded
@@ -71,6 +74,7 @@ type filesystem struct {
 }
 
 type data struct {
+	users        []user.User
 	recipeGroups []recipe.RecipeGroup
 	recipeTypes  map[string]recipe.RecipeType
 	glassTypes   map[string]recipe.GlassType
@@ -127,4 +131,9 @@ func (f *filesystem) Cashout() cashout.Repository {
 // Checkout implements Filesystem.
 func (f *filesystem) Checkout() checkout.Repository {
 	return &checkoutRepository{f}
+}
+
+// User implements Filesystem.
+func (f *filesystem) User() user.Repository {
+	return newUserRepository(f)
 }

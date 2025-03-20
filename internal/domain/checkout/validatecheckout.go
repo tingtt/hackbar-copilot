@@ -9,8 +9,8 @@ func (c *Checkout) Validate() error {
 	if c.ID == "" {
 		return errors.New("ID cannot be empty")
 	}
-	if c.CustomerID == "" {
-		return errors.New("CustomerID cannot be empty")
+	if c.CustomerEmail == "" {
+		return errors.New("CustomerEmail cannot be empty")
 	}
 	if c.TotalPrice <= 0 {
 		return errors.New("total price cannot be less than or equal to zero")

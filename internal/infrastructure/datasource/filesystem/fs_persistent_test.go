@@ -228,12 +228,12 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					},
 					orders: []order.Order{
 						{
-							ID:         "",
-							CustomerID: "",
-							MenuItemID: order.MenuItemID{},
-							Timestamps: []order.StatusUpdateTimestamp{},
-							Status:     "",
-							Price:      0,
+							ID:            "",
+							CustomerEmail: "",
+							MenuItemID:    order.MenuItemID{},
+							Timestamps:    []order.StatusUpdateTimestamp{},
+							Status:        "",
+							Price:         0,
 						},
 					},
 				},

@@ -22,7 +22,7 @@ func (c *checkoutRepository) Latest(optionAppliers ...options.Applier[checkout.L
 			if option.Since != nil && checkout.Timestamp.Before(*option.Since) {
 				break
 			}
-			if option.CustomerID != nil && checkout.CustomerID != *option.CustomerID {
+			if option.CustomerEmail != nil && checkout.CustomerEmail != *option.CustomerEmail {
 				continue
 			}
 			if !yield(checkout, nil) {

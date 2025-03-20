@@ -21,7 +21,7 @@ type saver interface {
 
 type ListerOption struct {
 	Since            *time.Time
-	CustomerID       *CustomerID
+	CustomerEmail    *CustomerEmail
 	IgnoreCheckedOut bool
 }
 
@@ -31,9 +31,9 @@ func Since(t time.Time) options.Applier[ListerOption] {
 	}
 }
 
-func FilterCustomerID(id CustomerID) options.Applier[ListerOption] {
+func FilterCustomerEmail(id CustomerEmail) options.Applier[ListerOption] {
 	return func(lo *ListerOption) {
-		lo.CustomerID = &id
+		lo.CustomerEmail = &id
 	}
 }
 

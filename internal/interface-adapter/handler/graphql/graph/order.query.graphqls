@@ -4,7 +4,8 @@ extend type Query {
 
 type Order {
   id: String!
-  customerID: String!
+  customerEmail: String!
+  customerName: String!
   menuItemID: String!
   timestamps: [OrderStatusUpdateTimestamp!]!
   status: OrderStatus!

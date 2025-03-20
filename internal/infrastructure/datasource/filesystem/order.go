@@ -33,7 +33,7 @@ func (o *orderRepository) Latest(optionAppliers ...options.Applier[order.ListerO
 			if option.Since != nil && o.CreatedAt().Before(*option.Since) {
 				break
 			}
-			if option.CustomerID != nil && o.CustomerID != *option.CustomerID {
+			if option.CustomerEmail != nil && o.CustomerEmail != *option.CustomerEmail {
 				continue
 			}
 			if option.IgnoreCheckedOut && o.Status == order.StatusCheckedOut {

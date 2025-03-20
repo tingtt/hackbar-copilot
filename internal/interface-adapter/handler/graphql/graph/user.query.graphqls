@@ -1,0 +1,8 @@
+extend type Query {
+  userInfo: User!
+}
+
+type User {
+  email: String!
+  name: String!
+}

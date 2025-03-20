@@ -3,7 +3,7 @@ extend type Mutation {
 }
 
 input InputCheckout {
-  customerID: String!
+  customerEmail: String!
   orderIDs: [String!]!
   diffs: [InputPriceDiff!]!
   paymentType: CheckoutType!

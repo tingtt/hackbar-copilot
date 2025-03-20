@@ -48,7 +48,7 @@ client
     const maskedOrders = orders.map(
       (order): Order => ({
         ...order,
-        customerID: "user@example.test",
+        customerName: "john.doe@example.test",
       }),
     )
     const data = JSON.stringify(maskedOrders, null, 2)

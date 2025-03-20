@@ -5,6 +5,7 @@ extend type Mutation {
 
 input InputOrder {
   menuItemID: String!
+  customerName: String
 }
 
 input InputOrderStatusUpdate {

@@ -7,6 +7,10 @@ import (
 )
 
 func loadData(fs fsR) (d data, err error) {
+	err = loadFromToml(fs, "0_user.toml", "user", &d.users)
+	if err != nil {
+		return data{}, err
+	}
 	err = loadFromToml(fs, "1_recipe_groups.toml", "recipe_group", &d.recipeGroups)
 	if err != nil {
 		return data{}, err
@@ -52,14 +56,15 @@ func loadFromToml[T any](fs fsR, filename, key string, p *T) error {
 }
 
 func (f *filesystem) SavePersistently() error {
-	err1 := f.saveFile("1_recipe_groups.toml", map[string]interface{}{"recipe_group": f.data.recipeGroups})
-	err2 := f.saveFile("2_recipe_types.toml", map[string]interface{}{"recipe_type": f.data.recipeTypes})
-	err3 := f.saveFile("3_glass_types.toml", map[string]interface{}{"glass_type": f.data.glassTypes})
-	err4 := f.saveFile("4_menu_items.toml", map[string]interface{}{"menu_items": f.data.menuItems})
-	err5 := f.saveFile("5_stocks.toml", map[string]interface{}{"stock": f.data.stocks})
-	err6 := f.saveFile("6_orders.toml", map[string]interface{}{"order": f.data.orders})
-	err7 := f.saveFile("7_checkouts.toml", map[string]interface{}{"checkoust": f.data.checkouts})
-	return errors.Join(err1, err2, err3, err4, err5, err6, err7)
+	err1 := f.saveFile("0_user.toml", map[string]interface{}{"user": f.data.users})
+	err2 := f.saveFile("1_recipe_groups.toml", map[string]interface{}{"recipe_group": f.data.recipeGroups})
+	err3 := f.saveFile("2_recipe_types.toml", map[string]interface{}{"recipe_type": f.data.recipeTypes})
+	err4 := f.saveFile("3_glass_types.toml", map[string]interface{}{"glass_type": f.data.glassTypes})
+	err5 := f.saveFile("4_menu_items.toml", map[string]interface{}{"menu_items": f.data.menuItems})
+	err6 := f.saveFile("5_stocks.toml", map[string]interface{}{"stock": f.data.stocks})
+	err7 := f.saveFile("6_orders.toml", map[string]interface{}{"order": f.data.orders})
+	err8 := f.saveFile("7_checkouts.toml", map[string]interface{}{"checkout": f.data.checkouts})
+	return errors.Join(err1, err2, err3, err4, err5, err6, err7, err8)
 }
 
 func (f *filesystem) saveFile(filename string, data any) error {

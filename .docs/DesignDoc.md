@@ -42,6 +42,7 @@ Provides support for bartender operations copilot.
 │   │   ├── order/
 │   │   └── cashout/
 │   └── domain/             # Scopes: enterprise bussiness rules
+│       ├── user/
 │       ├── menu/
 │       ├── order/
 │       ├── ordersummary/

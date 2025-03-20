@@ -134,6 +134,7 @@ func loadDependencies(dataDirPath string) (dependencies, func() /* close func */
 				OrderService: order.New(order.Dependencies{
 					Menu:  fs.Menu(),
 					Order: orderRepo,
+					User:  fs.User(),
 				}),
 				Cashier: cashier.New(cashier.Dependencies{
 					Order:    orderRepo,

@@ -6,13 +6,13 @@ import (
 )
 
 type Checkout struct {
-	ID          ID
-	CustomerID  order.CustomerID
-	OrderIDs    []order.ID
-	Diffs       []Diff
-	TotalPrice  float32
-	PaymentType PaymentType
-	Timestamp   time.Time
+	ID            ID
+	CustomerEmail order.CustomerEmail
+	OrderIDs      []order.ID
+	Diffs         []Diff
+	TotalPrice    float32
+	PaymentType   PaymentType
+	Timestamp     time.Time
 }
 
 type UUID string

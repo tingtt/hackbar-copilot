@@ -11,16 +11,16 @@ import (
 
 // Checkout implements Cashier.
 func (c *cashier) Checkout(
-	customerID order.CustomerID, orderIDs []order.ID, diffs []checkout.Diff, paymentType checkout.PaymentType,
+	customerEmail order.CustomerEmail, orderIDs []order.ID, diffs []checkout.Diff, paymentType checkout.PaymentType,
 ) (checkout.Checkout, error) {
 	newCheckout := checkout.Checkout{
-		ID:          checkout.ID(uuid.NewString()),
-		CustomerID:  customerID,
-		OrderIDs:    orderIDs,
-		Diffs:       diffs,
-		TotalPrice:  0,
-		PaymentType: paymentType,
-		Timestamp:   time.Now(),
+		ID:            checkout.ID(uuid.NewString()),
+		CustomerEmail: customerEmail,
+		OrderIDs:      orderIDs,
+		Diffs:         diffs,
+		TotalPrice:    0,
+		PaymentType:   paymentType,
+		Timestamp:     time.Now(),
 	}
 
 	orderIDsMap := make(map[order.ID]bool, len(orderIDs))

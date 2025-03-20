@@ -10,7 +10,7 @@ import (
 
 type Cashier interface {
 	Checkout(
-		customerID order.CustomerID, orderIDs []order.ID, diffs []checkout.Diff, paymentType checkout.PaymentType,
+		customerEmail order.CustomerEmail, orderIDs []order.ID, diffs []checkout.Diff, paymentType checkout.PaymentType,
 	) (checkout.Checkout, error)
 	LatestUnCachedOutCheckouts() ([]checkout.Checkout, error)
 

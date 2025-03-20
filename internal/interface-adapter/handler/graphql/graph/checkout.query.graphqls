@@ -4,7 +4,7 @@ extend type Query {
 
 type Checkout {
   id: String!
-  customerID: String!
+  customerEmail: String!
   orderIDs: [String!]!
   diffs: [PaymentDiff!]!
   totalPrice: Float!

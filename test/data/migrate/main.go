@@ -6,6 +6,7 @@ import (
 	"hackbar-copilot/internal/domain/order/ordertest"
 	"hackbar-copilot/internal/domain/recipe/recipetest"
 	"hackbar-copilot/internal/domain/stock/stocktest"
+	"hackbar-copilot/internal/domain/user/usertest"
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
 	"log/slog"
 	"os"
@@ -78,6 +79,12 @@ func migrate(dataDir string) error {
 }
 
 func registerData(fs filesystem.Filesystem) error {
+	for user := range usertest.ExampleUsersIter {
+		err := fs.User().Save(user)
+		if err != nil {
+			return err
+		}
+	}
 	for recipeGroup := range recipetest.ExampleRecipeGroupsIter {
 		err := fs.Recipe().Save(recipeGroup)
 		if err != nil {

@@ -54,7 +54,7 @@ extend type Mutation {
 }
 
 input InputCheckout {
-  customerID: String!
+  customerEmail: String!
   orderIDs: [String!]!
   diffs: [InputPriceDiff!]!
   paymentType: CheckoutType!
@@ -75,7 +75,7 @@ extend type Query {
 
 type Checkout {
   id: String!
-  customerID: String!
+  customerEmail: String!
   orderIDs: [String!]!
   diffs: [PaymentDiff!]!
   totalPrice: Float!
@@ -130,6 +130,7 @@ extend type Mutation {
 
 input InputOrder {
   menuItemID: String!
+  customerName: String
 }
 
 input InputOrderStatusUpdate {
@@ -147,7 +148,8 @@ extend type Query {
 
 type Order {
   id: String!
-  customerID: String!
+  customerEmail: String!
+  customerName: String!
   menuItemID: String!
   timestamps: [OrderStatusUpdateTimestamp!]!
   status: OrderStatus!
@@ -295,5 +297,18 @@ extend type Query {
 type Material {
   name: String!
   inStock: Boolean!
+}
+
+#*
+#* src: user.query.graphqls
+#*
+
+extend type Query {
+  userInfo: User!
+}
+
+type User {
+  email: String!
+  name: String!
 }
 

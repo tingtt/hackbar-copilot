@@ -24,7 +24,7 @@ func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
 		if /* unauthorized */ err2 != nil {
 			return nil, err2
 		}
-		orders, err = r.OrderService.ListUncheckedOrders(order.CustomerID(email))
+		orders, err = r.OrderService.ListUncheckedOrders(order.CustomerEmail(email))
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to list orders: %w", err)

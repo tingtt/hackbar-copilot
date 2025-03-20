@@ -9,4 +9,5 @@ export interface QueryClient {
   getOrders(): Promise<types.Order[]>
   getRecipes(): Promise<types.RecipeGroup[]>
   getMaterials(): Promise<types.Material[]>
+  getUserInfo(): Promise<types.User>
 }

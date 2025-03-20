@@ -14,6 +14,7 @@ import type {
   CashoutInput,
   InputCheckout,
   InputCashoutQuery,
+  User,
 } from "../gen/types"
 
 import dummyMenuData from "./data/menu.json"
@@ -40,6 +41,9 @@ export class DummyHackbarClient implements QueryClient, MutationClient {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getCashouts(input: InputCashoutQuery): Promise<Cashout[]> {
     throw new Error("Method not implemented.")
+  }
+  async getUserInfo(): Promise<User> {
+    return { email: "john.doe@example.test", name: "John Doe" }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

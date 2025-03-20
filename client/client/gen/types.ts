@@ -43,7 +43,7 @@ export type CashoutInput = {
 
 export type Checkout = {
   __typename?: "Checkout"
-  customerID: Scalars["String"]["output"]
+  customerEmail: Scalars["String"]["output"]
   diffs: Array<PaymentDiff>
   id: Scalars["String"]["output"]
   orderIDs: Array<Scalars["String"]["output"]>
@@ -80,7 +80,7 @@ export type InputCashoutQuery = {
 }
 
 export type InputCheckout = {
-  customerID: Scalars["String"]["input"]
+  customerEmail: Scalars["String"]["input"]
   diffs: Array<InputPriceDiff>
   orderIDs: Array<Scalars["String"]["input"]>
   paymentType: CheckoutType
@@ -94,6 +94,7 @@ export type InputGlassType = {
 }
 
 export type InputOrder = {
+  customerName?: InputMaybe<Scalars["String"]["input"]>
   menuItemID: Scalars["String"]["input"]
 }
 
@@ -200,7 +201,8 @@ export type MutationUpdateStockArgs = {
 
 export type Order = {
   __typename?: "Order"
-  customerID: Scalars["String"]["output"]
+  customerEmail: Scalars["String"]["output"]
+  customerName: Scalars["String"]["output"]
   id: Scalars["String"]["output"]
   menuItemID: Scalars["String"]["output"]
   price: Scalars["Float"]["output"]
@@ -237,6 +239,7 @@ export type Query = {
   menu: Array<MenuItem>
   orders: Array<Order>
   recipes: Array<RecipeGroup>
+  userInfo: User
 }
 
 export type QueryCashoutsArgs = {
@@ -269,4 +272,10 @@ export type Step = {
   amount?: Maybe<Scalars["String"]["output"]>
   description?: Maybe<Scalars["String"]["output"]>
   material?: Maybe<Scalars["String"]["output"]>
+}
+
+export type User = {
+  __typename?: "User"
+  email: Scalars["String"]["output"]
+  name: Scalars["String"]["output"]
 }

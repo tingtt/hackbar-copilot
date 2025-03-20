@@ -7,8 +7,9 @@ import (
 
 var ExampleOrders = []order.Order{
 	{
-		ID:         "1",
-		CustomerID: "user@example.test",
+		ID:            "1",
+		CustomerEmail: "john.doe@example.test",
+		CustomerName:  "John Doe",
 		MenuItemID: order.MenuItemID{
 			ItemName:   "Phuket Sling",
 			OptionName: "Cocktail",
@@ -35,8 +36,9 @@ var ExampleOrders = []order.Order{
 		Price:  700,
 	},
 	{
-		ID:         "2",
-		CustomerID: "user@example.test",
+		ID:            "2",
+		CustomerEmail: "john.doe@example.test",
+		CustomerName:  "John Doe",
 		MenuItemID: order.MenuItemID{
 			ItemName:   "Passoamoni",
 			OptionName: "Cocktail",
@@ -63,8 +65,9 @@ var ExampleOrders = []order.Order{
 		Price:  700,
 	},
 	{
-		ID:         "3",
-		CustomerID: "user@example.test",
+		ID:            "3",
+		CustomerEmail: "john.doe@example.test",
+		CustomerName:  "John Doe",
 		MenuItemID: order.MenuItemID{
 			ItemName:   "Phuket Sling",
 			OptionName: "Cocktail",
@@ -87,8 +90,9 @@ var ExampleOrders = []order.Order{
 		Price:  700,
 	},
 	{
-		ID:         "4",
-		CustomerID: "user@example.test",
+		ID:            "4",
+		CustomerEmail: "john.doe@example.test",
+		CustomerName:  "John Doe",
 		MenuItemID: order.MenuItemID{
 			ItemName:   "Passoamoni",
 			OptionName: "Cocktail",
@@ -111,8 +115,9 @@ var ExampleOrders = []order.Order{
 		Price:  700,
 	},
 	{
-		ID:         "5",
-		CustomerID: "user@example.test",
+		ID:            "5",
+		CustomerEmail: "john.doe@example.test",
+		CustomerName:  "John Doe",
 		MenuItemID: order.MenuItemID{
 			ItemName:   "Blue Devil",
 			OptionName: "Cocktail",

@@ -1,16 +1,18 @@
 package order
 
 import (
+	"hackbar-copilot/internal/domain/user"
 	"time"
 )
 
 type Order struct {
-	ID         ID
-	CustomerID CustomerID
-	MenuItemID MenuItemID
-	Timestamps []StatusUpdateTimestamp
-	Status     Status
-	Price      float32
+	ID            ID
+	CustomerEmail CustomerEmail
+	CustomerName  string
+	MenuItemID    MenuItemID
+	Timestamps    []StatusUpdateTimestamp
+	Status        Status
+	Price         float32
 }
 
 type SavedOrder struct {
@@ -22,7 +24,7 @@ type UUID string
 
 type ID UUID
 
-type CustomerID UUID
+type CustomerEmail user.Email
 
 type MenuItemID struct {
 	ItemName   string
