@@ -8,7 +8,7 @@ require (
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/stretchr/testify v1.10.0
-	github.com/tingtt/oauth2rbac v0.8.6
+	github.com/tingtt/oauth2rbac v1.0.1
 	github.com/tingtt/options v1.0.0
 )
 
