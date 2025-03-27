@@ -36,7 +36,7 @@ const { queries, mutations } = analizeQueries(schemaRaw, IMPORT_TYPE_AS)
 console.log(`Writing generated query to '${args.dest}'.`)
 
 {
-  const importsRaw = `import { gql } from "@apollo/client/core"\nimport * as ${IMPORT_TYPE_AS} from "./types"\n`
+  const importsRaw = `import * as ${IMPORT_TYPE_AS} from "./types"\n`
 
   const queryTSRaw = queries.reduce((acc, query) => {
     const queryName = "get" + query.name[0].toUpperCase() + query.name.slice(1)
@@ -51,8 +51,14 @@ console.log(`Writing generated query to '${args.dest}'.`)
       acc += `}`
     }
     acc += `) => ({\n`
-    acc += `  query: gql\`\n`
-    acc += query.query + `\`,\n`
+    acc += `  query: \`\n`
+    query.query
+      .replaceAll("    ", "  ")
+      .split("\n")
+      .forEach((line) => {
+        acc += "    " + line.trimEnd() + `\n`
+      })
+    acc += `  \`,\n`
     if (query.variables.length !== 0) {
       acc += `  variables,\n`
     }
@@ -77,8 +83,14 @@ console.log(`Writing generated query to '${args.dest}'.`)
       acc += `}`
     }
     acc += `) => ({\n`
-    acc += `  mutation : gql\`\n`
-    acc += query.query + `\`,\n`
+    acc += `  query: \`\n`
+    query.query
+      .replaceAll("    ", "  ")
+      .split("\n")
+      .forEach((line) => {
+        acc += "    " + line.trimEnd() + `\n`
+      })
+    acc += `  \`,\n`
     if (query.variables.length !== 0) {
       acc += `  variables,\n`
     }

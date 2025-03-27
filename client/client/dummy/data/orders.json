@@ -1,132 +1,120 @@
-[
-  {
-    "__typename": "Order",
-    "id": "5",
-    "customerEmail": "user@example.test",
-    "customerName": "john.doe@example.test",
-    "menuItemID": "Blue Devil-Cocktail",
-    "timestamps": [
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "ORDERED",
-        "timestamp": "2025-02-25T22:30:00Z"
-      }
-    ],
-    "status": "ORDERED",
-    "price": 700
-  },
-  {
-    "__typename": "Order",
-    "id": "4",
-    "customerEmail": "user@example.test",
-    "customerName": "john.doe@example.test",
-    "menuItemID": "Passoamoni-Cocktail",
-    "timestamps": [
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "ORDERED",
-        "timestamp": "2025-02-25T22:00:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "PREPARED",
-        "timestamp": "2025-02-25T22:02:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "DELIVERED",
-        "timestamp": "2025-02-25T22:02:30Z"
-      }
-    ],
-    "status": "DELIVERED",
-    "price": 700
-  },
-  {
-    "__typename": "Order",
-    "id": "3",
-    "customerEmail": "user@example.test",
-    "customerName": "john.doe@example.test",
-    "menuItemID": "Phuket Sling-Cocktail",
-    "timestamps": [
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "ORDERED",
-        "timestamp": "2025-02-25T21:30:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "PREPARED",
-        "timestamp": "2025-02-25T21:32:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "DELIVERED",
-        "timestamp": "2025-02-25T21:32:30Z"
-      }
-    ],
-    "status": "DELIVERED",
-    "price": 700
-  },
-  {
-    "__typename": "Order",
-    "id": "2",
-    "customerEmail": "user@example.test",
-    "customerName": "john.doe@example.test",
-    "menuItemID": "Passoamoni-Cocktail",
-    "timestamps": [
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "ORDERED",
-        "timestamp": "2025-02-24T22:00:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "PREPARED",
-        "timestamp": "2025-02-24T22:02:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "DELIVERED",
-        "timestamp": "2025-02-24T22:02:30Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "CHECKEDOUT",
-        "timestamp": "2025-02-24T23:00:00Z"
-      }
-    ],
-    "status": "CHECKEDOUT",
-    "price": 700
-  },
-  {
-    "__typename": "Order",
-    "id": "1",
-    "customerEmail": "user@example.test",
-    "customerName": "john.doe@example.test",
-    "menuItemID": "Phuket Sling-Cocktail",
-    "timestamps": [
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "ORDERED",
-        "timestamp": "2025-02-24T21:30:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "PREPARED",
-        "timestamp": "2025-02-24T21:32:00Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "DELIVERED",
-        "timestamp": "2025-02-24T21:32:30Z"
-      },
-      {
-        "__typename": "OrderStatusUpdateTimestamp",
-        "status": "CHECKEDOUT",
-        "timestamp": "2025-02-24T23:00:00Z"
-      }
-    ],
-    "status": "CHECKEDOUT",
-    "price": 700
-  }
-]
+{
+  "data": [
+    {
+      "__typename": "Order",
+      "id": "5",
+      "customerEmail": "user@example.test",
+      "customerName": "john.doe@example.test",
+      "menuItemID": "Blue Devil-Cocktail",
+      "timestamps": [
+        {
+          "status": "ORDERED",
+          "timestamp": "2025-02-25T22:30:00Z"
+        }
+      ],
+      "status": "ORDERED",
+      "price": 700
+    },
+    {
+      "__typename": "Order",
+      "id": "4",
+      "customerEmail": "user@example.test",
+      "customerName": "john.doe@example.test",
+      "menuItemID": "Passoamoni-Cocktail",
+      "timestamps": [
+        {
+          "status": "ORDERED",
+          "timestamp": "2025-02-25T22:00:00Z"
+        },
+        {
+          "status": "PREPARED",
+          "timestamp": "2025-02-25T22:02:00Z"
+        },
+        {
+          "status": "DELIVERED",
+          "timestamp": "2025-02-25T22:02:30Z"
+        }
+      ],
+      "status": "DELIVERED",
+      "price": 700
+    },
+    {
+      "__typename": "Order",
+      "id": "3",
+      "customerEmail": "user@example.test",
+      "customerName": "john.doe@example.test",
+      "menuItemID": "Phuket Sling-Cocktail",
+      "timestamps": [
+        {
+          "status": "ORDERED",
+          "timestamp": "2025-02-25T21:30:00Z"
+        },
+        {
+          "status": "PREPARED",
+          "timestamp": "2025-02-25T21:32:00Z"
+        },
+        {
+          "status": "DELIVERED",
+          "timestamp": "2025-02-25T21:32:30Z"
+        }
+      ],
+      "status": "DELIVERED",
+      "price": 700
+    },
+    {
+      "__typename": "Order",
+      "id": "2",
+      "customerEmail": "user@example.test",
+      "customerName": "john.doe@example.test",
+      "menuItemID": "Passoamoni-Cocktail",
+      "timestamps": [
+        {
+          "status": "ORDERED",
+          "timestamp": "2025-02-24T22:00:00Z"
+        },
+        {
+          "status": "PREPARED",
+          "timestamp": "2025-02-24T22:02:00Z"
+        },
+        {
+          "status": "DELIVERED",
+          "timestamp": "2025-02-24T22:02:30Z"
+        },
+        {
+          "status": "CHECKEDOUT",
+          "timestamp": "2025-02-24T23:00:00Z"
+        }
+      ],
+      "status": "CHECKEDOUT",
+      "price": 700
+    },
+    {
+      "__typename": "Order",
+      "id": "1",
+      "customerEmail": "user@example.test",
+      "customerName": "john.doe@example.test",
+      "menuItemID": "Phuket Sling-Cocktail",
+      "timestamps": [
+        {
+          "status": "ORDERED",
+          "timestamp": "2025-02-24T21:30:00Z"
+        },
+        {
+          "status": "PREPARED",
+          "timestamp": "2025-02-24T21:32:00Z"
+        },
+        {
+          "status": "DELIVERED",
+          "timestamp": "2025-02-24T21:32:30Z"
+        },
+        {
+          "status": "CHECKEDOUT",
+          "timestamp": "2025-02-24T23:00:00Z"
+        }
+      ],
+      "status": "CHECKEDOUT",
+      "price": 700
+    }
+  ],
+  "error": null
+}

@@ -3,11 +3,27 @@
 import * as types from "./types"
 
 export interface QueryClient {
-  getCashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]>
-  getCheckouts(): Promise<types.Checkout[]>
-  getMenu(): Promise<types.MenuItem[]>
-  getOrders(): Promise<types.Order[]>
-  getRecipes(): Promise<types.RecipeGroup[]>
-  getMaterials(): Promise<types.Material[]>
-  getUserInfo(): Promise<types.User>
+  getCashouts(
+    input: types.InputCashoutQuery,
+  ): Promise<
+    { data: null; error: string } | { data: types.Cashout[]; error: null }
+  >
+  getCheckouts(): Promise<
+    { data: null; error: string } | { data: types.Checkout[]; error: null }
+  >
+  getMenu(): Promise<
+    { data: null; error: string } | { data: types.MenuItem[]; error: null }
+  >
+  getOrders(): Promise<
+    { data: null; error: string } | { data: types.Order[]; error: null }
+  >
+  getRecipes(): Promise<
+    { data: null; error: string } | { data: types.RecipeGroup[]; error: null }
+  >
+  getMaterials(): Promise<
+    { data: null; error: string } | { data: types.Material[]; error: null }
+  >
+  getUserInfo(): Promise<
+    { data: null; error: string } | { data: types.User; error: null }
+  >
 }

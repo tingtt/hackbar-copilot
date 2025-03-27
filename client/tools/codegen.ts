@@ -3,7 +3,6 @@ import type { CodegenConfig } from "@graphql-codegen/cli"
 const config: CodegenConfig = {
   overwrite: true,
   schema: "hackbar-copilot.graphqls",
-  documents: "client/gen/*.ts",
   generates: {
     "client/gen/types.ts": {
       plugins: ["typescript"],

@@ -3,10 +3,30 @@
 import * as types from "./types"
 
 export interface MutationClient {
-  cashout(input: types.CashoutInput): Promise<types.Cashout>
-  checkout(input: types.InputCheckout): Promise<types.Checkout>
-  order(input: types.InputOrder): Promise<types.Order>
-  updateOrderStatus(input: types.InputOrderStatusUpdate): Promise<types.Order>
-  saveRecipe(input: types.InputRecipeGroup): Promise<types.RecipeGroup>
-  updateStock(input: types.InputStockUpdate): Promise<types.Material[]>
+  cashout(
+    input: types.CashoutInput,
+  ): Promise<
+    { data: null; error: string } | { data: types.Cashout; error: null }
+  >
+  checkout(
+    input: types.InputCheckout,
+  ): Promise<
+    { data: null; error: string } | { data: types.Checkout; error: null }
+  >
+  order(
+    input: types.InputOrder,
+  ): Promise<{ data: null; error: string } | { data: types.Order; error: null }>
+  updateOrderStatus(
+    input: types.InputOrderStatusUpdate,
+  ): Promise<{ data: null; error: string } | { data: types.Order; error: null }>
+  saveRecipe(
+    input: types.InputRecipeGroup,
+  ): Promise<
+    { data: null; error: string } | { data: types.RecipeGroup; error: null }
+  >
+  updateStock(
+    input: types.InputStockUpdate,
+  ): Promise<
+    { data: null; error: string } | { data: types.Material[]; error: null }
+  >
 }

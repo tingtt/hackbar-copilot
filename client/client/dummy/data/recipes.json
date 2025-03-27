@@ -1,176 +1,212 @@
-[
-  {
-    "__typename": "RecipeGroup",
-    "name": "Blue Devil",
-    "imageURL": "https://example.com/path/to/image/passoamoni",
-    "recipes": [
-      {
-        "__typename": "Recipe",
-        "name": "Cocktail",
-        "type": {
-          "__typename": "RecipeType",
-          "name": "shake",
-          "description": "shake description"
+{
+  "data": [
+    {
+      "__typename": "RecipeGroup",
+      "name": "Blue Devil",
+      "imageURL": "https://example.com/path/to/image/passoamoni",
+      "recipes": [
+        {
+          "name": "Cocktail",
+          "type": {
+            "name": "shake",
+            "description": "shake description"
+          },
+          "glass": {
+            "name": "cocktail",
+            "imageURL": "https://example.com/path/to/image/cocktail",
+            "description": "cocktail glass description"
+          },
+          "steps": [
+            {
+              "material": null,
+              "amount": null,
+              "description": "Chill shaker and glass."
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Put ingredients in a shaker."
+            },
+            {
+              "material": "Gin",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "material": "Blue curacao",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "material": "Lemon juice",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Put ice in a shaker."
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Shake."
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Pour into a glass."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "__typename": "RecipeGroup",
+      "name": "Passoamoni",
+      "imageURL": "https://example.com/path/to/image/passoamoni",
+      "recipes": [
+        {
+          "name": "Cocktail",
+          "type": {
+            "name": "build",
+            "description": "build description"
+          },
+          "glass": {
+            "name": "collins",
+            "imageURL": "https://example.com/path/to/image/collins",
+            "description": "collins glass description"
+          },
+          "steps": [
+            {
+              "material": "Passoa",
+              "amount": "45ml",
+              "description": null
+            },
+            {
+              "material": "Grapefruit juice",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Stir"
+            },
+            {
+              "material": "Tonic water",
+              "amount": "Full up",
+              "description": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "__typename": "RecipeGroup",
+      "name": "Phuket Sling",
+      "imageURL": "https://example.com/path/to/image/phuket-sling",
+      "recipes": [
+        {
+          "name": "Mocktail",
+          "type": {
+            "name": "build",
+            "description": "build description"
+          },
+          "glass": {
+            "name": "collins",
+            "imageURL": "https://example.com/path/to/image/collins",
+            "description": "collins glass description"
+          },
+          "steps": [
+            {
+              "material": "Peach syrup",
+              "amount": "20ml",
+              "description": null
+            },
+            {
+              "material": "Blue curacao syrup",
+              "amount": "10ml",
+              "description": null
+            },
+            {
+              "material": "Grapefruit juice",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "material": "Tonic water",
+              "amount": "Half up",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Stir"
+            },
+            {
+              "material": "Tonic water",
+              "amount": "Full up",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Stir (Lightly so as not to lose gas of soda.)"
+            }
+          ]
         },
-        "glass": {
-          "__typename": "GlassType",
-          "name": "cocktail",
-          "imageURL": "https://example.com/path/to/image/cocktail",
-          "description": "cocktail glass description"
-        },
-        "steps": [
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Chill shaker and glass."
+        {
+          "name": "Cocktail",
+          "type": {
+            "name": "build",
+            "description": "build description"
           },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Put ingredients in a shaker."
+          "glass": {
+            "name": "collins",
+            "imageURL": "https://example.com/path/to/image/collins",
+            "description": "collins glass description"
           },
-          {
-            "__typename": "Step",
-            "material": "Gin",
-            "amount": "30ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": "Blue curacao",
-            "amount": "15ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": "Lemon juice",
-            "amount": "15ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Put ice in a shaker."
-          },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Shake."
-          },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Pour into a glass."
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "__typename": "RecipeGroup",
-    "name": "Passoamoni",
-    "imageURL": "https://example.com/path/to/image/passoamoni",
-    "recipes": [
-      {
-        "__typename": "Recipe",
-        "name": "Cocktail",
-        "type": {
-          "__typename": "RecipeType",
-          "name": "build",
-          "description": "build description"
-        },
-        "glass": {
-          "__typename": "GlassType",
-          "name": "collins",
-          "imageURL": "https://example.com/path/to/image/collins",
-          "description": "collins glass description"
-        },
-        "steps": [
-          {
-            "__typename": "Step",
-            "material": "Passoa",
-            "amount": "45ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": "Grapefruit juice",
-            "amount": "30ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Stir"
-          },
-          {
-            "__typename": "Step",
-            "material": "Tonic water",
-            "amount": "Full up",
-            "description": null
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "__typename": "RecipeGroup",
-    "name": "Phuket Sling",
-    "imageURL": "https://example.com/path/to/image/phuket-sling",
-    "recipes": [
-      {
-        "__typename": "Recipe",
-        "name": "Cocktail",
-        "type": {
-          "__typename": "RecipeType",
-          "name": "build",
-          "description": "build description"
-        },
-        "glass": {
-          "__typename": "GlassType",
-          "name": "collins",
-          "imageURL": "https://example.com/path/to/image/collins",
-          "description": "collins glass description"
-        },
-        "steps": [
-          {
-            "__typename": "Step",
-            "material": "Peach liqueur",
-            "amount": "30ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": "Blue curacao",
-            "amount": "15ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": "Grapefruit juice",
-            "amount": "30ml",
-            "description": null
-          },
-          {
-            "__typename": "Step",
-            "material": null,
-            "amount": null,
-            "description": "Stir"
-          },
-          {
-            "__typename": "Step",
-            "material": "Tonic water",
-            "amount": "Full up",
-            "description": null
-          }
-        ]
-      }
-    ]
-  }
-]
+          "steps": [
+            {
+              "material": "Peach liqueur",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "material": "Blue curacao",
+              "amount": "15ml",
+              "description": null
+            },
+            {
+              "material": "Grapefruit juice",
+              "amount": "30ml",
+              "description": null
+            },
+            {
+              "material": "Tonic water",
+              "amount": "Half up",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Stir"
+            },
+            {
+              "material": "Tonic water",
+              "amount": "Full up",
+              "description": null
+            },
+            {
+              "material": null,
+              "amount": null,
+              "description": "Stir (Lightly so as not to lose gas of soda.)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "error": null
+}

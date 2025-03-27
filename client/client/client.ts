@@ -1,10 +1,3 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  type NormalizedCacheObject,
-} from "@apollo/client/core"
-import { setContext } from "@apollo/client/link/context"
 import type * as types from "./gen/types"
 import * as query from "./gen/query"
 import * as mutation from "./gen/mutation"
@@ -12,99 +5,162 @@ import type { QueryClient } from "./gen/interface.client"
 import type { MutationClient } from "./gen/interface.mutation"
 
 export class HackbarClient implements QueryClient, MutationClient {
-  private client: ApolloClient<NormalizedCacheObject>
+  constructor(
+    private uri: string,
+    private jwt?: string,
+  ) {}
 
-  constructor(uri: string, jwt?: string) {
-    const link = setContext((_, { headers }) => {
-      return {
-        headers: {
-          ...headers,
-          Authorization: jwt ? `Bearer ${jwt}` : "",
-        },
+  async fetch<T>(
+    payload: {
+      query: string
+      variables?: { [key in string]: unknown }
+    },
+    init?: RequestInit,
+  ): Promise<{ data: T; error: null } | { data: null; error: string }> {
+    const res = await fetch(this.uri, {
+      method: "POST",
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.jwt}`,
+        ...init?.headers,
+      },
+      body: JSON.stringify(payload),
+    })
+    try {
+      const json: {
+        data: T | null
+        errors: { message: string; path: string[] }[]
+      } = await res.json()
+      if (json.data === null) {
+        throw new Error(
+          json.errors.reduce((acc, err) => {
+            return (
+              acc + `failed to query (${err.path.join(",")}): ${err.message}\n`
+            )
+          }, ""),
+        )
       }
-    }).concat(createHttpLink({ uri }))
-    this.client = new ApolloClient({ link, cache: new InMemoryCache() })
+      return { data: json.data, error: null }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return { data: null, error: err.message }
+      } else {
+        return { data: null, error: `unknown error: ${err}` }
+      }
+    }
   }
 
-  async getMenu(): Promise<types.MenuItem[]> {
-    const res = await this.client.query<{ menu: types.MenuItem[] }>(
-      query.getMenu(),
-    )
-    return res.data.menu
+  async getMenu() {
+    const res = await this.fetch<{ menu: types.MenuItem[] }>(query.getMenu())
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.menu, error: null }
   }
-  async getOrders(): Promise<types.Order[]> {
-    const res = await this.client.query<{ orders: types.Order[] }>(
-      query.getOrders(),
-    )
-    return res.data.orders
+  async getOrders() {
+    const res = await this.fetch<{ orders: types.Order[] }>(query.getOrders())
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.orders, error: null }
   }
-  async getRecipes(): Promise<types.RecipeGroup[]> {
-    const res = await this.client.query<{ recipes: types.RecipeGroup[] }>(
+  async getRecipes() {
+    const res = await this.fetch<{ recipes: types.RecipeGroup[] }>(
       query.getRecipes(),
     )
-    return res.data.recipes
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.recipes, error: null }
   }
-  async getMaterials(): Promise<types.Material[]> {
-    const res = await this.client.query<{ materials: types.Material[] }>(
+  async getMaterials() {
+    const res = await this.fetch<{ materials: types.Material[] }>(
       query.getMaterials(),
     )
-    return res.data.materials
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.materials, error: null }
   }
-  async getCheckouts(): Promise<types.Checkout[]> {
-    const res = await this.client.query<{ checkouts: types.Checkout[] }>(
+  async getCheckouts() {
+    const res = await this.fetch<{ checkouts: types.Checkout[] }>(
       query.getCheckouts(),
     )
-    return res.data.checkouts
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.checkouts, error: null }
   }
-  async getCashouts(input: types.InputCashoutQuery): Promise<types.Cashout[]> {
-    const res = await this.client.query<{ cashouts: types.Cashout[] }>(
+  async getCashouts(input: types.InputCashoutQuery) {
+    const res = await this.fetch<{ cashouts: types.Cashout[] }>(
       query.getCashouts({ input }),
     )
-    return res.data.cashouts
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.cashouts, error: null }
   }
-  async getUserInfo(): Promise<types.User> {
-    const res = await this.client.query<{ user: types.User }>(
-      query.getUserInfo(),
-    )
-    return res.data.user
+  async getUserInfo() {
+    const res = await this.fetch<{ userInfo: types.User }>(query.getUserInfo())
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.userInfo, error: null }
   }
 
-  async order(input: types.InputOrder): Promise<types.Order> {
-    const res = await this.client.mutate<{ order: types.Order }>(
+  async order(input: types.InputOrder) {
+    const res = await this.fetch<{ order: types.Order }>(
       mutation.order({ input }),
     )
-    return res.data!.order
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.order, error: null }
   }
-  async updateOrderStatus(
-    input: types.InputOrderStatusUpdate,
-  ): Promise<types.Order> {
-    const res = await this.client.mutate<{ order: types.Order }>(
+  async updateOrderStatus(input: types.InputOrderStatusUpdate) {
+    const res = await this.fetch<{ order: types.Order }>(
       mutation.updateOrderStatus({ input }),
     )
-    return res.data!.order
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.order, error: null }
   }
-  async saveRecipe(input: types.InputRecipeGroup): Promise<types.RecipeGroup> {
-    const res = await this.client.mutate<{ recipe: types.RecipeGroup }>(
+  async saveRecipe(input: types.InputRecipeGroup) {
+    const res = await this.fetch<{ saveRecipe: types.RecipeGroup }>(
       mutation.saveRecipe({ input }),
     )
-    return res.data!.recipe
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.saveRecipe, error: null }
   }
-  async updateStock(input: types.InputStockUpdate): Promise<types.Material[]> {
-    const res = await this.client.mutate<{ materials: types.Material[] }>(
+  async updateStock(input: types.InputStockUpdate) {
+    const res = await this.fetch<{ updateStock: types.Material[] }>(
       mutation.updateStock({ input }),
     )
-    return res.data!.materials
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.updateStock, error: null }
   }
-  async checkout(input: types.InputCheckout): Promise<types.Checkout> {
-    const res = await this.client.mutate<{ checkout: types.Checkout }>(
+  async checkout(input: types.InputCheckout) {
+    const res = await this.fetch<{ checkout: types.Checkout }>(
       mutation.checkout({ input }),
     )
-    return res.data!.checkout
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.checkout, error: null }
   }
-  async cashout(input: types.CashoutInput): Promise<types.Cashout> {
-    const res = await this.client.mutate<{ cashout: types.Cashout }>(
+  async cashout(input: types.CashoutInput) {
+    const res = await this.fetch<{ cashout: types.Cashout }>(
       mutation.cashout({ input }),
     )
-    return res.data!.cashout
+    if (res.error !== null) {
+      return { data: null, error: res.error }
+    }
+    return { data: res.data.cashout, error: null }
   }
 }

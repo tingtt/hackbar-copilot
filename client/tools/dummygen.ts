@@ -32,8 +32,8 @@ console.log(`Writing generated dummy data to '${args.dest}'.`)
 
 client
   .getMenu()
-  .then((menu) => {
-    const data = JSON.stringify(menu, null, 2)
+  .then((res) => {
+    const data = JSON.stringify(res, null, 2)
     console.log(`- menu.json`)
     fs.writeFileSync(`${args.dest}/menu.json`, data)
   })
@@ -44,14 +44,17 @@ client
   })
 client
   .getOrders()
-  .then((orders) => {
-    const maskedOrders = orders.map(
+  .then((res) => {
+    if (res.error !== null) {
+      throw new Error(res.error)
+    }
+    res.data = res.data.map(
       (order): Order => ({
         ...order,
         customerName: "john.doe@example.test",
       }),
     )
-    const data = JSON.stringify(maskedOrders, null, 2)
+    const data = JSON.stringify(res, null, 2)
     console.log(`- orders.json`)
     fs.writeFileSync(`${args.dest}/orders.json`, data)
   })
@@ -62,8 +65,8 @@ client
   })
 client
   .getRecipes()
-  .then((recipes) => {
-    const data = JSON.stringify(recipes, null, 2)
+  .then((res) => {
+    const data = JSON.stringify(res, null, 2)
     console.log(`- recipes.json`)
     fs.writeFileSync(`${args.dest}/recipes.json`, data)
   })
@@ -74,8 +77,8 @@ client
   })
 client
   .getMaterials()
-  .then((materials) => {
-    const data = JSON.stringify(materials, null, 2)
+  .then((res) => {
+    const data = JSON.stringify(res, null, 2)
     console.log(`- materials.json`)
     fs.writeFileSync(`${args.dest}/materials.json`, data)
   })

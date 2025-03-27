@@ -14,7 +14,10 @@ export const convertFunction = (
     return [splitted[splitted.length - 1], splitted.slice(0, -1).join(": ")]
   })()
   const returnType = returnTypeRaw
-    ? `Promise<${convertType(returnTypeRaw, scalars, "output", typeDefImportAs)}>`
+    ? `Promise<
+        | { data: null; error: string; }
+        | { data: ${convertType(returnTypeRaw, scalars, "output", typeDefImportAs)}; error: null;}
+      >`
     : "Promise<void>"
 
   const [functionName, argsRaw] = (() => {

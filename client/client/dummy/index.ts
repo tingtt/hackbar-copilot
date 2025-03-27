@@ -23,53 +23,74 @@ import dummyRecipesData from "./data/recipes.json"
 import dummyMaterialsData from "./data/materials.json"
 
 export class DummyHackbarClient implements QueryClient, MutationClient {
-  async getMenu(): Promise<MenuItem[]> {
-    return dummyMenuData as MenuItem[]
+  async getMenu() {
+    return dummyMenuData as { data: MenuItem[]; error: null }
   }
-  async getOrders(): Promise<Order[]> {
-    return dummyOrdersData as Order[]
+  async getOrders() {
+    return dummyOrdersData as { data: Order[]; error: null }
   }
-  async getRecipes(): Promise<RecipeGroup[]> {
-    return dummyRecipesData as RecipeGroup[]
+  async getRecipes() {
+    return dummyRecipesData as { data: RecipeGroup[]; error: null }
   }
-  async getMaterials(): Promise<Material[]> {
-    return dummyMaterialsData as Material[]
+  async getMaterials() {
+    return dummyMaterialsData as { data: Material[]; error: null }
   }
-  async getCheckouts(): Promise<Checkout[]> {
+  async getCheckouts(): Promise<
+    { data: null; error: string } | { data: Checkout[]; error: null }
+  > {
     throw new Error("Method not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getCashouts(input: InputCashoutQuery): Promise<Cashout[]> {
+  async getCashouts(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: InputCashoutQuery,
+  ): Promise<{ data: null; error: string } | { data: Cashout[]; error: null }> {
     throw new Error("Method not implemented.")
   }
-  async getUserInfo(): Promise<User> {
-    return { email: "john.doe@example.test", name: "John Doe" }
+  async getUserInfo() {
+    return {
+      data: { email: "john.doe@example.test", name: "John Doe" } as User,
+      error: null,
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async order(input: InputOrder): Promise<Order> {
+  async order(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: InputOrder,
+  ): Promise<{ data: null; error: string } | { data: Order; error: null }> {
     throw new Error("order() not implemented.")
   }
   async updateOrderStatus(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: InputOrderStatusUpdate,
-  ): Promise<Order> {
+  ): Promise<{ data: null; error: string } | { data: Order; error: null }> {
     throw new Error("updateOrderStatus() not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async saveRecipe(input: InputRecipeGroup): Promise<RecipeGroup> {
+  async saveRecipe(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: InputRecipeGroup,
+  ): Promise<
+    { data: null; error: string } | { data: RecipeGroup; error: null }
+  > {
     throw new Error("saveRecipe() not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async updateStock(input: InputStockUpdate): Promise<Material[]> {
+  async updateStock(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: InputStockUpdate,
+  ): Promise<
+    { data: null; error: string } | { data: Material[]; error: null }
+  > {
     throw new Error("updateStock() not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async checkout(input: InputCheckout): Promise<Checkout> {
+  async checkout(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: InputCheckout,
+  ): Promise<{ data: null; error: string } | { data: Checkout; error: null }> {
     throw new Error("Method not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async cashout(input: CashoutInput): Promise<Cashout> {
+  async cashout(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    input: CashoutInput,
+  ): Promise<{ data: null; error: string } | { data: Cashout; error: null }> {
     throw new Error("Method not implemented.")
   }
 }

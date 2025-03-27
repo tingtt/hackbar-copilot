@@ -1,37 +1,50 @@
-[
-  {
-    "__typename": "Material",
-    "name": "Blue curacao",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Gin",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Grapefruit juice",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Lemon juice",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Passoa",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Peach liqueur",
-    "inStock": true
-  },
-  {
-    "__typename": "Material",
-    "name": "Tonic water",
-    "inStock": true
-  }
-]
+{
+  "data": [
+    {
+      "__typename": "Material",
+      "name": "Blue curacao",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Blue curacao syrup",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Gin",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Grapefruit juice",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Lemon juice",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Passoa",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Peach liqueur",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Peach syrup",
+      "inStock": true
+    },
+    {
+      "__typename": "Material",
+      "name": "Tonic water",
+      "inStock": true
+    }
+  ],
+  "error": null
+}
