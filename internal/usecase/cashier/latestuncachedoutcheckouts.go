@@ -2,27 +2,25 @@ package cashier
 
 import (
 	"hackbar-copilot/internal/domain/checkout"
-	"time"
+
+	"github.com/tingtt/options"
 )
 
 // LatestUnCachedOutCheckouts implements Cashier.
 func (c *cashier) LatestUnCachedOutCheckouts() ([]checkout.Checkout, error) {
-	var latestCashoutTimestamp *time.Time
+	chechoutOptions := []options.Applier[checkout.ListerOption]{}
 	for cashout, err := range c.cashout.Latest() {
 		if err != nil {
 			return nil, err
 		}
-		latestCashoutTimestamp = &cashout.Timestamp
+		chechoutOptions = append(chechoutOptions, checkout.Since(cashout.Timestamp))
 		break
 	}
 
 	checkouts := []checkout.Checkout{}
-	for checkout, err := range c.checkout.Latest(checkout.Since(*latestCashoutTimestamp)) {
+	for checkout, err := range c.checkout.Latest(chechoutOptions...) {
 		if err != nil {
 			return nil, err
-		}
-		if latestCashoutTimestamp != nil && checkout.Timestamp.Before(*latestCashoutTimestamp) {
-			break
 		}
 		checkouts = append(checkouts, checkout)
 	}
