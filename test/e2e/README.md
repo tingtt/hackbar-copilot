@@ -20,6 +20,33 @@ OAUTH2_GITHUB="<your-client-id>;<your-client-secret>"
 OAUTH2_GOOGLE="<your-client-id>;<your-client-secret>"
 ```
 
+## Create config.yml
+
+1. Copy example config
+
+  ```sh
+  cp test/e2e/config.yml.example test/e2e/config.yml
+  ```
+
+2. Edit for your environment
+
+  ```diff
+    proxies:
+      - external_url: "http://localhost:8080/"
+        target: "http://hackbar-copilot:80"
+
+    acl:
+      "http://localhost:8080":
+        paths:
+          "/":
+            - methods: ["*"]
+  -           emails: ["<your email>"]
+  +           emails: ["ting.taku@gmail.com"]
+        roles:
+  -       "bartender": ["<your email>"]
+  +       "bartender": ["ting.taku@gmail.com"]
+  ```
+
 ## Run
 
 ### Develop stage
@@ -29,4 +56,3 @@ make e2e-up
 ```
 
 http://localhost:8080
-http://127.0.0.1:8080

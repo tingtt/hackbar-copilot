@@ -1,0 +1,12 @@
+proxies:
+  - external_url: "http://localhost:8080/"
+    target: "http://hackbar-copilot:80"
+
+acl:
+  "http://localhost:8080":
+    paths:
+      "/":
+        - methods: ["*"]
+          emails: ["<your email>"]
+    roles:
+      "bartender": ["<your email>"]

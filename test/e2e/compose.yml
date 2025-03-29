@@ -1,6 +1,6 @@
 services:
   oauth2rbac:
-    image: tingtt/oauth2rbac:v0.8.4
+    image: tingtt/oauth2rbac:v1.0.2
     volumes:
       - type: bind
         source: config.yml
