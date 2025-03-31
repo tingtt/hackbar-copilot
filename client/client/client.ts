@@ -22,7 +22,7 @@ export class HackbarClient implements QueryClient, MutationClient {
       ...init,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.jwt}`,
+        Authorization: this.jwt ? `Bearer ${this.jwt}` : "",
         ...init?.headers,
       },
       body: JSON.stringify(payload),
