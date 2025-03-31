@@ -6,8 +6,11 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"hackbar-copilot/internal/domain/order"
+	"hackbar-copilot/internal/domain/user"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
+	"log/slog"
 )
 
 // UserInfo is the resolver for the user field.
@@ -22,7 +25,21 @@ func (r *queryResolver) UserInfo(ctx context.Context) (*model.User, error) {
 		if !errors.Is(err, user.ErrNotFound) {
 			return nil, err
 		}
-		return userAdapter(user.User{Email: user.Email(email), Name: ""}).apply(), nil
+
+		// User not provided, create a new user.
+		name, err := r.authAdapter.GetNameFromOAuth2Provider(ctx)
+		if err != nil {
+			slog.Warn(
+				"providing user skipped, because failed to get user name from OAuth2 provider",
+				slog.String("error", err.Error()),
+			)
+		} else {
+			u, err := r.OrderService.SetUserInfo(order.CustomerEmail(email), name)
+			if err != nil {
+				slog.Error("failed to set user info", slog.String("error", err.Error()))
+			}
+			return userAdapter(u).apply(), nil
+		}
 	}
 
 	return userAdapter(u).apply(), nil
