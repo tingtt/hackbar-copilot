@@ -1,7 +1,6 @@
 package filesystem
 
 import (
-	"fmt"
 	"hackbar-copilot/internal/domain/user"
 	"iter"
 )
@@ -36,7 +35,7 @@ func (u *userRepository) All() iter.Seq2[user.User, error] {
 func (u *userRepository) Get(email user.Email) (user.User, error) {
 	i, ok := u.index[email]
 	if !ok {
-		return user.User{}, fmt.Errorf("user not found")
+		return user.User{}, user.ErrNotFound
 	}
 	return u.fs.data.users[i], nil
 }

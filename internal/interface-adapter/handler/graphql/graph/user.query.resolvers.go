@@ -17,12 +17,13 @@ func (r *queryResolver) UserInfo(ctx context.Context) (*model.User, error) {
 		return nil, err
 	}
 
-	// TODO: Get user info from JWT claims. (e.g. github id)
-
-	user, err := r.OrderService.GetUserInfo(order.CustomerEmail(email))
+	u, err := r.OrderService.GetUserInfo(order.CustomerEmail(email))
 	if err != nil {
-		return nil, err
+		if !errors.Is(err, user.ErrNotFound) {
+			return nil, err
+		}
+		return userAdapter(user.User{Email: user.Email(email), Name: ""}).apply(), nil
 	}
 
-	return userAdapter(user).apply(), nil
+	return userAdapter(u).apply(), nil
 }
