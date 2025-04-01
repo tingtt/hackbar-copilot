@@ -42,6 +42,10 @@ func (u *userRepository) Get(email user.Email) (user.User, error) {
 
 // Save implements user.Repository.
 func (u *userRepository) Save(d user.User) error {
+	if index, ok := u.index[d.Email]; ok {
+		u.fs.data.users[index] = d
+		return nil
+	}
 	u.fs.data.users = append(u.fs.data.users, d)
 	u.index[d.Email] = len(u.fs.data.users) - 1
 	return nil
