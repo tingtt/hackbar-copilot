@@ -30,6 +30,7 @@ func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) 
 	for _, r := range rg.Recipes {
 		menuItem := menu.ItemOption{
 			Name:       r.Name,
+			Category:   r.Category,
 			ImageURL:   nil,
 			Materials:  []string{},
 			OutOfStock: false,

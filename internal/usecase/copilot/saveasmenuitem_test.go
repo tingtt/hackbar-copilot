@@ -79,6 +79,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 			Options: []menu.ItemOption{
 				{
 					Name:       "Cocktail",
+					Category:   "Cocktail",
 					ImageURL:   ptr("https://example.com/path/to/image/phuket-sling"),
 					Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 					OutOfStock: false,
