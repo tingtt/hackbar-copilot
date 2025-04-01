@@ -17,6 +17,7 @@ export default nextConfig;
 
 ```tsx
 //* `src/app/layout.tsx` or `app/layout.tsx
+'use client';
 import { HackbarCopilotAPIProvider, HackbarClient, useClient } from "@tingtt/hackbar-copilot/client"
 
 export default function RootLayout({
