@@ -7,10 +7,11 @@ type RecipeGroup struct {
 }
 
 type Recipe struct {
-	Name  string
-	Type  string // build, stir, shake etc.
-	Glass string // collins, shot, rock, beer etc.
-	Steps []Step
+	Name     string
+	Category string
+	Type     string // build, stir, shake etc.
+	Glass    string // collins, shot, rock, beer etc.
+	Steps    []Step
 }
 
 type Step struct {

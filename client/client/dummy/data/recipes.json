@@ -7,6 +7,7 @@
       "recipes": [
         {
           "name": "Cocktail",
+          "category": "Cocktail",
           "type": {
             "name": "shake",
             "description": "shake description"
@@ -68,6 +69,7 @@
       "recipes": [
         {
           "name": "Cocktail",
+          "category": "Cocktail",
           "type": {
             "name": "build",
             "description": "build description"
@@ -108,56 +110,8 @@
       "imageURL": "https://example.com/path/to/image/phuket-sling",
       "recipes": [
         {
-          "name": "Mocktail",
-          "type": {
-            "name": "build",
-            "description": "build description"
-          },
-          "glass": {
-            "name": "collins",
-            "imageURL": "https://example.com/path/to/image/collins",
-            "description": "collins glass description"
-          },
-          "steps": [
-            {
-              "material": "Peach syrup",
-              "amount": "20ml",
-              "description": null
-            },
-            {
-              "material": "Blue curacao syrup",
-              "amount": "10ml",
-              "description": null
-            },
-            {
-              "material": "Grapefruit juice",
-              "amount": "30ml",
-              "description": null
-            },
-            {
-              "material": "Tonic water",
-              "amount": "Half up",
-              "description": null
-            },
-            {
-              "material": null,
-              "amount": null,
-              "description": "Stir"
-            },
-            {
-              "material": "Tonic water",
-              "amount": "Full up",
-              "description": null
-            },
-            {
-              "material": null,
-              "amount": null,
-              "description": "Stir (Lightly so as not to lose gas of soda.)"
-            }
-          ]
-        },
-        {
           "name": "Cocktail",
+          "category": "Cocktail",
           "type": {
             "name": "build",
             "description": "build description"
@@ -184,11 +138,6 @@
               "description": null
             },
             {
-              "material": "Tonic water",
-              "amount": "Half up",
-              "description": null
-            },
-            {
               "material": null,
               "amount": null,
               "description": "Stir"
@@ -197,11 +146,6 @@
               "material": "Tonic water",
               "amount": "Full up",
               "description": null
-            },
-            {
-              "material": null,
-              "amount": null,
-              "description": "Stir (Lightly so as not to lose gas of soda.)"
             }
           ]
         }

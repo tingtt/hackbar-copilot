@@ -245,27 +245,33 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 				t.Parallel()
 
 				ioWriters := struct {
+					users        *MockFile
 					recipeGroups *MockFile
 					recipeTypes  *MockFile
 					glassTypes   *MockFile
 					menuGroups   *MockFile
 					stocks       *MockFile
 					orders       *MockFile
+					checkouts    *MockFile
 				}{
+					users:        &MockFile{&bytes.Buffer{}},
 					recipeGroups: &MockFile{&bytes.Buffer{}},
 					recipeTypes:  &MockFile{&bytes.Buffer{}},
 					glassTypes:   &MockFile{&bytes.Buffer{}},
 					menuGroups:   &MockFile{&bytes.Buffer{}},
 					stocks:       &MockFile{&bytes.Buffer{}},
 					orders:       &MockFile{&bytes.Buffer{}},
+					checkouts:    &MockFile{&bytes.Buffer{}},
 				}
 				m := new(MockFSW)
+				m.On("Create", "0_user.toml").Return(ioWriters.users, nil)
 				m.On("Create", "1_recipe_groups.toml").Return(ioWriters.recipeGroups, nil)
 				m.On("Create", "2_recipe_types.toml").Return(ioWriters.recipeTypes, nil)
 				m.On("Create", "3_glass_types.toml").Return(ioWriters.glassTypes, nil)
 				m.On("Create", "4_menu_items.toml").Return(ioWriters.menuGroups, nil)
 				m.On("Create", "5_stocks.toml").Return(ioWriters.stocks, nil)
 				m.On("Create", "6_orders.toml").Return(ioWriters.orders, nil)
+				m.On("Create", "7_checkouts.toml").Return(ioWriters.checkouts, nil)
 				f := &filesystem{
 					write: m,
 					data:  tt.data,
@@ -383,6 +389,7 @@ var loadTests = []loadTest{
 
 			[[recipe_group.Recipes]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			Type = "build"
 			Glass = "collins"
 
@@ -411,6 +418,7 @@ var loadTests = []loadTest{
 
 			[[recipe_group.Recipes]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			Type = "build"
 			Glass = "collins"
 
@@ -435,6 +443,7 @@ var loadTests = []loadTest{
 
 			[[recipe_group.Recipes]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			Type = "shake"
 			Glass = "cocktail"
 
@@ -526,6 +535,7 @@ var loadTests = []loadTest{
 
 			[[menu_items.Options]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/phuket-sling/cocktail"
 			Materials = ["Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
@@ -533,6 +543,7 @@ var loadTests = []loadTest{
 
 			[[menu_items.Options]]
 			Name = "Mocktail"
+			Category = "Mocktail"
 			ImageURL = "https://example.com/path/to/image/phuket-sling/mocktail"
 			Materials = ["Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
@@ -545,6 +556,7 @@ var loadTests = []loadTest{
 
 			[[menu_items.Options]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/passoamoni"
 			Materials = ["Passoa", "Grapefruit juice", "Tonic water"]
 			OutOfStock = false
@@ -557,6 +569,7 @@ var loadTests = []loadTest{
 
 			[[menu_items.Options]]
 			Name = "Cocktail"
+			Category = "Cocktail"
 			ImageURL = "https://example.com/path/to/image/blue-devil"
 			Materials = ["Gin", "Blue curacao", "Lemon juice"]
 			OutOfStock = false

@@ -81,6 +81,7 @@ type InputPriceDiff struct {
 
 type InputRecipe struct {
 	Name       string               `json:"name"`
+	Category   string               `json:"category"`
 	RecipeType *InputRecipeType     `json:"recipeType,omitempty"`
 	GlassType  *InputGlassType      `json:"glassType,omitempty"`
 	Steps      []*InputStep         `json:"steps,omitempty"`
@@ -126,6 +127,7 @@ type MenuItem struct {
 
 type MenuItemOption struct {
 	Name       string   `json:"name"`
+	Category   string   `json:"category"`
 	ImageURL   *string  `json:"imageURL,omitempty"`
 	Materials  []string `json:"materials,omitempty"`
 	OutOfStock bool     `json:"outOfStock"`
@@ -160,10 +162,11 @@ type Query struct {
 }
 
 type Recipe struct {
-	Name  string      `json:"name"`
-	Type  *RecipeType `json:"type,omitempty"`
-	Glass *GlassType  `json:"glass,omitempty"`
-	Steps []*Step     `json:"steps,omitempty"`
+	Name     string      `json:"name"`
+	Category string      `json:"category"`
+	Type     *RecipeType `json:"type,omitempty"`
+	Glass    *GlassType  `json:"glass,omitempty"`
+	Steps    []*Step     `json:"steps,omitempty"`
 }
 
 type RecipeGroup struct {

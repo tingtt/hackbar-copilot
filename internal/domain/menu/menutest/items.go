@@ -16,6 +16,7 @@ var ExampleItems = []menu.Item{
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
+				Category:   "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 				Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
@@ -23,6 +24,7 @@ var ExampleItems = []menu.Item{
 			},
 			{
 				Name:       "Mocktail",
+				Category:   "Mocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/mocktail"),
 				Materials:  []string{"Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
@@ -37,6 +39,7 @@ var ExampleItems = []menu.Item{
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
+				Category:   "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
 				Materials:  []string{"Passoa", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
@@ -51,6 +54,7 @@ var ExampleItems = []menu.Item{
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
+				Category:   "Cocktail",
 				ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
 				Materials:  []string{"Gin", "Blue curacao", "Lemon juice"},
 				OutOfStock: false,

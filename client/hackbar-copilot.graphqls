@@ -112,6 +112,7 @@ type MenuItem {
 
 type MenuItemOption {
   name: String!
+  category: String!
   imageURL: String
   materials: [String!]
   outOfStock: Boolean!
@@ -190,6 +191,7 @@ input InputRecipeGroup {
 
 input InputRecipe {
   name: String!
+  category: String!
   recipeType: InputRecipeType
   glassType: InputGlassType
   steps: [InputStep!]
@@ -241,6 +243,7 @@ type RecipeGroup {
 
 type Recipe {
   name: String!
+  category: String!
   type: RecipeType
   glass: GlassType
   steps: [Step!]

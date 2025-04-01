@@ -112,6 +112,7 @@ export const saveRecipe = (variables: { input: types.InputRecipeGroup }) => ({
         imageURL
         recipes {
           name
+          category
           type {
             name
             description

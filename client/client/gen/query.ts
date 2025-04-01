@@ -60,12 +60,14 @@ export const getMenu = () => ({
         flavor
         options {
           name
+          category
           imageURL
           materials
           outOfStock
           priceYen
           recipe {
             name
+            category
             type {
               name
               description
@@ -117,6 +119,7 @@ export const getRecipes = () => ({
         imageURL
         recipes {
           name
+          category
           type {
             name
             description

@@ -84,6 +84,7 @@ type ComplexityRoot struct {
 	}
 
 	MenuItemOption struct {
+		Category   func(childComplexity int) int
 		ImageURL   func(childComplexity int) int
 		Materials  func(childComplexity int) int
 		Name       func(childComplexity int) int
@@ -132,10 +133,11 @@ type ComplexityRoot struct {
 	}
 
 	Recipe struct {
-		Glass func(childComplexity int) int
-		Name  func(childComplexity int) int
-		Steps func(childComplexity int) int
-		Type  func(childComplexity int) int
+		Category func(childComplexity int) int
+		Glass    func(childComplexity int) int
+		Name     func(childComplexity int) int
+		Steps    func(childComplexity int) int
+		Type     func(childComplexity int) int
 	}
 
 	RecipeGroup struct {
@@ -344,6 +346,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MenuItem.Options(childComplexity), true
+
+	case "MenuItemOption.category":
+		if e.complexity.MenuItemOption.Category == nil {
+			break
+		}
+
+		return e.complexity.MenuItemOption.Category(childComplexity), true
 
 	case "MenuItemOption.imageURL":
 		if e.complexity.MenuItemOption.ImageURL == nil {
@@ -589,6 +598,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.UserInfo(childComplexity), true
+
+	case "Recipe.category":
+		if e.complexity.Recipe.Category == nil {
+			break
+		}
+
+		return e.complexity.Recipe.Category(childComplexity), true
 
 	case "Recipe.glass":
 		if e.complexity.Recipe.Glass == nil {
@@ -2006,6 +2022,8 @@ func (ec *executionContext) fieldContext_MenuItem_options(_ context.Context, fie
 			switch field.Name {
 			case "name":
 				return ec.fieldContext_MenuItemOption_name(ctx, field)
+			case "category":
+				return ec.fieldContext_MenuItemOption_category(ctx, field)
 			case "imageURL":
 				return ec.fieldContext_MenuItemOption_imageURL(ctx, field)
 			case "materials":
@@ -2099,6 +2117,50 @@ func (ec *executionContext) _MenuItemOption_name(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_MenuItemOption_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuItemOption",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuItemOption_category(ctx context.Context, field graphql.CollectedField, obj *model.MenuItemOption) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuItemOption_category(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Category, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuItemOption_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MenuItemOption",
 		Field:      field,
@@ -2319,6 +2381,8 @@ func (ec *executionContext) fieldContext_MenuItemOption_recipe(_ context.Context
 			switch field.Name {
 			case "name":
 				return ec.fieldContext_Recipe_name(ctx, field)
+			case "category":
+				return ec.fieldContext_Recipe_category(ctx, field)
 			case "type":
 				return ec.fieldContext_Recipe_type(ctx, field)
 			case "glass":
@@ -3789,6 +3853,50 @@ func (ec *executionContext) fieldContext_Recipe_name(_ context.Context, field gr
 	return fc, nil
 }
 
+func (ec *executionContext) _Recipe_category(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_category(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Category, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Recipe_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Recipe",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Recipe_type(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Recipe_type(ctx, field)
 	if err != nil {
@@ -4057,6 +4165,8 @@ func (ec *executionContext) fieldContext_RecipeGroup_recipes(_ context.Context, 
 			switch field.Name {
 			case "name":
 				return ec.fieldContext_Recipe_name(ctx, field)
+			case "category":
+				return ec.fieldContext_Recipe_category(ctx, field)
 			case "type":
 				return ec.fieldContext_Recipe_type(ctx, field)
 			case "glass":
@@ -6651,7 +6761,7 @@ func (ec *executionContext) unmarshalInputInputRecipe(ctx context.Context, obj a
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "recipeType", "glassType", "steps", "asMenu"}
+	fieldsInOrder := [...]string{"name", "category", "recipeType", "glassType", "steps", "asMenu"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -6665,6 +6775,13 @@ func (ec *executionContext) unmarshalInputInputRecipe(ctx context.Context, obj a
 				return it, err
 			}
 			it.Name = data
+		case "category":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Category = data
 		case "recipeType":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("recipeType"))
 			data, err := ec.unmarshalOInputRecipeType2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputRecipeType(ctx, v)
@@ -7144,6 +7261,11 @@ func (ec *executionContext) _MenuItemOption(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("MenuItemOption")
 		case "name":
 			out.Values[i] = ec._MenuItemOption_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "category":
+			out.Values[i] = ec._MenuItemOption_category(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -7641,6 +7763,11 @@ func (ec *executionContext) _Recipe(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = graphql.MarshalString("Recipe")
 		case "name":
 			out.Values[i] = ec._Recipe_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "category":
+			out.Values[i] = ec._Recipe_category(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

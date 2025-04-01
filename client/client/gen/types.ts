@@ -110,6 +110,7 @@ export type InputPriceDiff = {
 
 export type InputRecipe = {
   asMenu?: InputMaybe<InputAsMenuItemArgs>
+  category: Scalars["String"]["input"]
   glassType?: InputMaybe<InputGlassType>
   name: Scalars["String"]["input"]
   recipeType?: InputMaybe<InputRecipeType>
@@ -157,6 +158,7 @@ export type MenuItem = {
 
 export type MenuItemOption = {
   __typename?: "MenuItemOption"
+  category: Scalars["String"]["output"]
   imageURL?: Maybe<Scalars["String"]["output"]>
   materials?: Maybe<Array<Scalars["String"]["output"]>>
   name: Scalars["String"]["output"]
@@ -248,6 +250,7 @@ export type QueryCashoutsArgs = {
 
 export type Recipe = {
   __typename?: "Recipe"
+  category: Scalars["String"]["output"]
   glass?: Maybe<GlassType>
   name: Scalars["String"]["output"]
   steps?: Maybe<Array<Step>>

@@ -54,6 +54,7 @@ func (m *outputAdapter) menuItemOptions(menuItems []menu.ItemOption, recipes map
 func (m *outputAdapter) menuItemOption(menuItem menu.ItemOption, recipe *model.Recipe) *model.MenuItemOption {
 	return &model.MenuItemOption{
 		Name:       menuItem.Name,
+		Category:   menuItem.Category,
 		ImageURL:   menuItem.ImageURL,
 		Materials:  menuItem.Materials,
 		OutOfStock: menuItem.OutOfStock,

@@ -9,6 +9,7 @@ type Item struct {
 
 type ItemOption struct {
 	Name       string
+	Category   string
 	ImageURL   *string
 	Materials  []string
 	OutOfStock bool

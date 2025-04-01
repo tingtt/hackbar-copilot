@@ -7,11 +7,6 @@
     },
     {
       "__typename": "Material",
-      "name": "Blue curacao syrup",
-      "inStock": true
-    },
-    {
-      "__typename": "Material",
       "name": "Gin",
       "inStock": true
     },
@@ -33,11 +28,6 @@
     {
       "__typename": "Material",
       "name": "Peach liqueur",
-      "inStock": true
-    },
-    {
-      "__typename": "Material",
-      "name": "Peach syrup",
       "inStock": true
     },
     {

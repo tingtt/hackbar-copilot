@@ -12,6 +12,7 @@ type MenuItem {
 
 type MenuItemOption {
   name: String!
+  category: String!
   imageURL: String
   materials: [String!]
   outOfStock: Boolean!

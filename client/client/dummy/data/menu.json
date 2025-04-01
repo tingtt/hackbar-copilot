@@ -8,6 +8,7 @@
       "options": [
         {
           "name": "Cocktail",
+          "category": "Cocktail",
           "imageURL": "https://example.com/path/to/image/blue-devil",
           "materials": [
             "Gin",
@@ -18,6 +19,7 @@
           "priceYen": 700,
           "recipe": {
             "name": "Cocktail",
+            "category": "Cocktail",
             "type": {
               "name": "shake",
               "description": "shake description"
@@ -82,6 +84,7 @@
       "options": [
         {
           "name": "Cocktail",
+          "category": "Cocktail",
           "imageURL": "https://example.com/path/to/image/passoamoni",
           "materials": [
             "Passoa",
@@ -92,6 +95,7 @@
           "priceYen": 700,
           "recipe": {
             "name": "Cocktail",
+            "category": "Cocktail",
             "type": {
               "name": "build",
               "description": "build description"
@@ -135,79 +139,20 @@
       "flavor": "Sweet",
       "options": [
         {
-          "name": "Mocktail",
-          "imageURL": null,
-          "materials": [
-            "Blue curacao syrup",
-            "Grapefruit juice",
-            "Peach syrup",
-            "Tonic water"
-          ],
-          "outOfStock": false,
-          "priceYen": 700,
-          "recipe": {
-            "name": "Mocktail",
-            "type": {
-              "name": "build",
-              "description": "build description"
-            },
-            "glass": {
-              "name": "collins",
-              "imageURL": "https://example.com/path/to/image/collins",
-              "description": "collins glass description"
-            },
-            "steps": [
-              {
-                "material": "Peach syrup",
-                "amount": "20ml",
-                "description": null
-              },
-              {
-                "material": "Blue curacao syrup",
-                "amount": "10ml",
-                "description": null
-              },
-              {
-                "material": "Grapefruit juice",
-                "amount": "30ml",
-                "description": null
-              },
-              {
-                "material": "Tonic water",
-                "amount": "Half up",
-                "description": null
-              },
-              {
-                "material": null,
-                "amount": null,
-                "description": "Stir"
-              },
-              {
-                "material": "Tonic water",
-                "amount": "Full up",
-                "description": null
-              },
-              {
-                "material": null,
-                "amount": null,
-                "description": "Stir (Lightly so as not to lose gas of soda.)"
-              }
-            ]
-          }
-        },
-        {
           "name": "Cocktail",
-          "imageURL": null,
+          "category": "Cocktail",
+          "imageURL": "https://example.com/path/to/image/phuket-sling/cocktail",
           "materials": [
+            "Peach liqueur",
             "Blue curacao",
             "Grapefruit juice",
-            "Peach liqueur",
             "Tonic water"
           ],
           "outOfStock": false,
           "priceYen": 700,
           "recipe": {
             "name": "Cocktail",
+            "category": "Cocktail",
             "type": {
               "name": "build",
               "description": "build description"
@@ -234,11 +179,6 @@
                 "description": null
               },
               {
-                "material": "Tonic water",
-                "amount": "Half up",
-                "description": null
-              },
-              {
                 "material": null,
                 "amount": null,
                 "description": "Stir"
@@ -247,17 +187,26 @@
                 "material": "Tonic water",
                 "amount": "Full up",
                 "description": null
-              },
-              {
-                "material": null,
-                "amount": null,
-                "description": "Stir (Lightly so as not to lose gas of soda.)"
               }
             ]
           }
+        },
+        {
+          "name": "Mocktail",
+          "category": "Mocktail",
+          "imageURL": "https://example.com/path/to/image/phuket-sling/mocktail",
+          "materials": [
+            "Peach syrup",
+            "Blue curacao syrup",
+            "Grapefruit juice",
+            "Tonic water"
+          ],
+          "outOfStock": false,
+          "priceYen": 500,
+          "recipe": null
         }
       ],
-      "minPriceYen": 700
+      "minPriceYen": 500
     }
   ],
   "error": null

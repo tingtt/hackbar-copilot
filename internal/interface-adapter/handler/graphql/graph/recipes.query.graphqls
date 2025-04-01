@@ -11,6 +11,7 @@ type RecipeGroup {
 
 type Recipe {
   name: String!
+  category: String!
   type: RecipeType
   glass: GlassType
   steps: [Step!]

@@ -20,8 +20,9 @@ func (adapter *outputAdapter) RecipeGroup(recipeTypes map[string]recipe.RecipeTy
 func (adapter *outputAdapter) recipe(recipeTypes map[string]recipe.RecipeType, glassTypes map[string]recipe.GlassType) func(recipe recipe.Recipe) *model.Recipe {
 	return func(_r recipe.Recipe) *model.Recipe {
 		r := model.Recipe{
-			Name:  _r.Name,
-			Steps: sliceutil.Map(_r.Steps, adapter.step),
+			Name:     _r.Name,
+			Category: _r.Category,
+			Steps:    sliceutil.Map(_r.Steps, adapter.step),
 		}
 		recipeType, exists := recipeTypes[_r.Type]
 		if exists {

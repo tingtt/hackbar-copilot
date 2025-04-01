@@ -46,6 +46,7 @@ func DeepCopyItem(item menu.ItemOption) menu.ItemOption {
 
 	return menu.ItemOption{
 		Name:       item.Name,
+		Category:   item.Category,
 		ImageURL:   item.ImageURL,
 		Materials:  MaterialsCopy,
 		OutOfStock: item.OutOfStock,

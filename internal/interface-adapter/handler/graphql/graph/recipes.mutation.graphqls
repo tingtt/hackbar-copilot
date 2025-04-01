@@ -11,6 +11,7 @@ input InputRecipeGroup {
 
 input InputRecipe {
   name: String!
+  category: String!
   recipeType: InputRecipeType
   glassType: InputGlassType
   steps: [InputStep!]

@@ -34,12 +34,14 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						PriceYen:   700,
 						Recipe: &model.Recipe{
-							Name: "Cocktail",
+							Name:     "Cocktail",
+							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "build",
 								Description: ptr("build description"),
@@ -74,6 +76,7 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 					},
 					{
 						Name:       "Mocktail",
+						Category:   "Mocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/mocktail"),
 						Materials:  []string{"Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
@@ -90,12 +93,14 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
 						Materials:  []string{"Passoa", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						PriceYen:   700,
 						Recipe: &model.Recipe{
-							Name: "Cocktail",
+							Name:     "Cocktail",
+							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "build",
 								Description: ptr("build description"),
@@ -134,12 +139,14 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
 						Materials:  []string{"Gin", "Blue curacao", "Lemon juice"},
 						OutOfStock: false,
 						PriceYen:   700,
 						Recipe: &model.Recipe{
-							Name: "Cocktail",
+							Name:     "Cocktail",
+							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "shake",
 								Description: ptr("shake description"),

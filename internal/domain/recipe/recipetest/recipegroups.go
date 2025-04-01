@@ -10,9 +10,10 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 		ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 		Recipes: []recipe.Recipe{
 			{
-				Name:  "Cocktail",
-				Type:  "build",
-				Glass: "collins",
+				Name:     "Cocktail",
+				Category: "Cocktail",
+				Type:     "build",
+				Glass:    "collins",
 				Steps: []recipe.Step{
 					{
 						Material: ptr("Peach liqueur"),
@@ -42,9 +43,10 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
 		Recipes: []recipe.Recipe{
 			{
-				Name:  "Cocktail",
-				Type:  "build",
-				Glass: "collins",
+				Name:     "Cocktail",
+				Category: "Cocktail",
+				Type:     "build",
+				Glass:    "collins",
 				Steps: []recipe.Step{
 					{
 						Material: ptr("Passoa"),
@@ -70,9 +72,10 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
 		Recipes: []recipe.Recipe{
 			{
-				Name:  "Cocktail",
-				Type:  "shake",
-				Glass: "cocktail",
+				Name:     "Cocktail",
+				Category: "Cocktail",
+				Type:     "shake",
+				Glass:    "cocktail",
 				Steps: []recipe.Step{
 					{
 						Description: ptr("Chill shaker and glass."),
