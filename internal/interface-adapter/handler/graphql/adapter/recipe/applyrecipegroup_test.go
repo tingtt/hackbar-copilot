@@ -38,25 +38,26 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 		name: "will apply new recipe",
 		base: recipe.RecipeGroup{
 			Name:    "ExistsRecipeGroup",
-			Recipes: []recipe.Recipe{{Name: "exists recipe"}},
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
 		},
 		input: model.InputRecipeGroup{
-			Recipes: []*model.InputRecipe{{Name: "new recipe"}},
+			Recipes: []*model.InputRecipe{{Name: "new recipe", Category: "category 1"}},
 		},
 		want: recipe.RecipeGroup{
 			Name:    "ExistsRecipeGroup",
-			Recipes: []recipe.Recipe{{Name: "exists recipe"}, {Name: "new recipe"}},
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}, {Name: "new recipe", Category: "category 1"}},
 		},
 	},
 	{
 		name: "will apply changed recipe",
 		base: recipe.RecipeGroup{
 			Name:    "ExistsRecipeGroup",
-			Recipes: []recipe.Recipe{{Name: "exists recipe"}},
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
 		},
 		input: model.InputRecipeGroup{
 			Recipes: []*model.InputRecipe{{
 				Name:       "exists recipe",
+				Category:   "category 1",
 				RecipeType: &model.InputRecipeType{Name: "recipe type"},
 				GlassType:  &model.InputGlassType{Name: "glass type"},
 				Steps: []*model.InputStep{{
@@ -70,9 +71,10 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 			Name: "ExistsRecipeGroup",
 			Recipes: []recipe.Recipe{
 				{
-					Name:  "exists recipe",
-					Type:  "recipe type",
-					Glass: "glass type",
+					Name:     "exists recipe",
+					Category: "category 1",
+					Type:     "recipe type",
+					Glass:    "glass type",
 					Steps: []recipe.Step{{
 						Material:    ptr("whisky"),
 						Amount:      ptr("30ml"),

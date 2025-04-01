@@ -20,9 +20,10 @@ var validateRecipeGroupTests = []ValidateRecipeGroupTest{
 			ImageURL: ptr("https://example.com/path/to/image"),
 			Recipes: []Recipe{
 				{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
+					Name:     "Cocktail",
+					Category: "Cocktail",
+					Type:     "build",
+					Glass:    "collins",
 					Steps: []Step{
 						{
 							Material: ptr("Peach Liqueur"),
@@ -48,10 +49,11 @@ var validateRecipeGroupTests = []ValidateRecipeGroupTest{
 			Name: "Phuket Sling",
 			Recipes: []Recipe{
 				{
-					Name:  "",
-					Type:  "",
-					Glass: "",
-					Steps: []Step{},
+					Name:     "",
+					Category: "",
+					Type:     "",
+					Glass:    "",
+					Steps:    []Step{},
 				},
 			},
 		},

@@ -8,6 +8,9 @@ func (r *Recipe) Validate() error {
 	if r.Name == "" {
 		return fmt.Errorf("name cannot be empty")
 	}
+	if r.Category == "" {
+		return fmt.Errorf("category cannot be empty")
+	}
 	if r.Type == "" {
 		return fmt.Errorf("type cannot be empty")
 	}

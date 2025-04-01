@@ -10,9 +10,10 @@ type ValidateRecipeTest struct {
 var validateRecipeTests = []ValidateRecipeTest{
 	{
 		Recipe: Recipe{
-			Name:  "Cocktail",
-			Type:  "build",
-			Glass: "collins",
+			Name:     "Cocktail",
+			Category: "Cocktail",
+			Type:     "build",
+			Glass:    "collins",
 			Steps: []Step{
 				{
 					Material: ptr("Peach Liqueur"),

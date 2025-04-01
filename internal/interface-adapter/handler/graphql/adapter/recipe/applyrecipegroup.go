@@ -52,6 +52,7 @@ func (s *inputAdapter) iterInputRecipes(base []recipe.Recipe, input []model.Inpu
 
 func (s *inputAdapter) applyRecipe(baseRecipe recipe.Recipe, inputRecipe model.InputRecipe) recipe.Recipe {
 	baseRecipe.Name = inputRecipe.Name
+	baseRecipe.Category = inputRecipe.Category
 	if inputRecipe.RecipeType != nil {
 		baseRecipe.Type = inputRecipe.RecipeType.Name
 	}

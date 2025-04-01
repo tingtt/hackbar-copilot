@@ -30,9 +30,10 @@ func Test_saverLister_Save(t *testing.T) {
 			ImageURL: ptr("https://example.com/path/to/image"),
 			Recipes: []Recipe{
 				{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
+					Name:     "Cocktail",
+					Category: "Cocktail",
+					Type:     "build",
+					Glass:    "collins",
 					Steps: []Step{
 						{
 							Material: ptr("Peach Liqueur"),
