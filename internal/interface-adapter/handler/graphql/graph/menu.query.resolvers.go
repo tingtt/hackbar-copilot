@@ -19,17 +19,18 @@ func (r *queryResolver) Menu(ctx context.Context) ([]*model.MenuItem, error) {
 		return nil, err
 	}
 
-	containsRecipe := false
+	requestRecipe := false
 	for _, field := range graphql.CollectFieldsCtx(ctx, []string{"options"}) {
 		if field.Name == "options" {
 			for _, field := range graphql.CollectFields(graphql.GetOperationContext(ctx), field.Selections, nil) {
 				if field.Name == "recipe" {
-					containsRecipe = true
+					requestRecipe = true
 				}
 			}
 		}
 	}
-	if containsRecipe {
+
+	if requestRecipe && r.authAdapter.HasBartenderRole(ctx) {
 		recipeGroups, err := r.Copilot.ListRecipes(copilot.SortRecipeGroupByName())
 		if err != nil {
 			return nil, err
