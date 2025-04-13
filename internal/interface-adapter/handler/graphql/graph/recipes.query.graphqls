@@ -5,7 +5,7 @@ extend type Query {
 type RecipeGroup {
   name: String!
   imageURL: String
-  recipes: [Recipe!]
+  recipes: [Recipe!]!
   # asMenu: AsMenu
 }
 
@@ -14,7 +14,7 @@ type Recipe {
   category: String!
   type: RecipeType
   glass: GlassType
-  steps: [Step!]
+  steps: [Step!]!
   # asMenu: AsMenuItem
 }
 

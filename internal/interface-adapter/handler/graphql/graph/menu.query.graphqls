@@ -6,7 +6,7 @@ type MenuItem {
   name: String!
   imageURL: String
   flavor: String
-  options: [MenuItemOption!]
+  options: [MenuItemOption!]!
   minPriceYen: Float!
 }
 
@@ -14,7 +14,7 @@ type MenuItemOption {
   name: String!
   category: String!
   imageURL: String
-  materials: [String!]
+  materials: [String!]!
   outOfStock: Boolean!
   priceYen: Float!
   recipe: Recipe

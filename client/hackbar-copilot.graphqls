@@ -106,7 +106,7 @@ type MenuItem {
   name: String!
   imageURL: String
   flavor: String
-  options: [MenuItemOption!]
+  options: [MenuItemOption!]!
   minPriceYen: Float!
 }
 
@@ -114,7 +114,7 @@ type MenuItemOption {
   name: String!
   category: String!
   imageURL: String
-  materials: [String!]
+  materials: [String!]!
   outOfStock: Boolean!
   priceYen: Float!
   recipe: Recipe
@@ -185,7 +185,7 @@ extend type Mutation {
 input InputRecipeGroup {
   name: String!
   imageURL: String
-  recipes: [InputRecipe!]
+  recipes: [InputRecipe!]!
   asMenu: InputAsMenuArgs
 }
 
@@ -194,7 +194,7 @@ input InputRecipe {
   category: String!
   recipeType: InputRecipeType
   glassType: InputGlassType
-  steps: [InputStep!]
+  steps: [InputStep!]!
   asMenu: InputAsMenuItemArgs
 }
 
@@ -237,7 +237,7 @@ extend type Query {
 type RecipeGroup {
   name: String!
   imageURL: String
-  recipes: [Recipe!]
+  recipes: [Recipe!]!
   # asMenu: AsMenu
 }
 
@@ -246,7 +246,7 @@ type Recipe {
   category: String!
   type: RecipeType
   glass: GlassType
-  steps: [Step!]
+  steps: [Step!]!
   # asMenu: AsMenuItem
 }
 

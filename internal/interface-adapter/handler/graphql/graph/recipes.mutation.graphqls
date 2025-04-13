@@ -5,7 +5,7 @@ extend type Mutation {
 input InputRecipeGroup {
   name: String!
   imageURL: String
-  recipes: [InputRecipe!]
+  recipes: [InputRecipe!]!
   asMenu: InputAsMenuArgs
 }
 
@@ -14,7 +14,7 @@ input InputRecipe {
   category: String!
   recipeType: InputRecipeType
   glassType: InputGlassType
-  steps: [InputStep!]
+  steps: [InputStep!]!
   asMenu: InputAsMenuItemArgs
 }
 

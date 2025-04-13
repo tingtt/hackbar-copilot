@@ -114,14 +114,14 @@ export type InputRecipe = {
   glassType?: InputMaybe<InputGlassType>
   name: Scalars["String"]["input"]
   recipeType?: InputMaybe<InputRecipeType>
-  steps?: InputMaybe<Array<InputStep>>
+  steps: Array<InputStep>
 }
 
 export type InputRecipeGroup = {
   asMenu?: InputMaybe<InputAsMenuArgs>
   imageURL?: InputMaybe<Scalars["String"]["input"]>
   name: Scalars["String"]["input"]
-  recipes?: InputMaybe<Array<InputRecipe>>
+  recipes: Array<InputRecipe>
 }
 
 export type InputRecipeType = {
@@ -153,14 +153,14 @@ export type MenuItem = {
   imageURL?: Maybe<Scalars["String"]["output"]>
   minPriceYen: Scalars["Float"]["output"]
   name: Scalars["String"]["output"]
-  options?: Maybe<Array<MenuItemOption>>
+  options: Array<MenuItemOption>
 }
 
 export type MenuItemOption = {
   __typename?: "MenuItemOption"
   category: Scalars["String"]["output"]
   imageURL?: Maybe<Scalars["String"]["output"]>
-  materials?: Maybe<Array<Scalars["String"]["output"]>>
+  materials: Array<Scalars["String"]["output"]>
   name: Scalars["String"]["output"]
   outOfStock: Scalars["Boolean"]["output"]
   priceYen: Scalars["Float"]["output"]
@@ -253,7 +253,7 @@ export type Recipe = {
   category: Scalars["String"]["output"]
   glass?: Maybe<GlassType>
   name: Scalars["String"]["output"]
-  steps?: Maybe<Array<Step>>
+  steps: Array<Step>
   type?: Maybe<RecipeType>
 }
 
@@ -261,7 +261,7 @@ export type RecipeGroup = {
   __typename?: "RecipeGroup"
   imageURL?: Maybe<Scalars["String"]["output"]>
   name: Scalars["String"]["output"]
-  recipes?: Maybe<Array<Recipe>>
+  recipes: Array<Recipe>
 }
 
 export type RecipeType = {

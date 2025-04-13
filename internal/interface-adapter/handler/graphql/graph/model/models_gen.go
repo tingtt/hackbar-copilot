@@ -84,14 +84,14 @@ type InputRecipe struct {
 	Category   string               `json:"category"`
 	RecipeType *InputRecipeType     `json:"recipeType,omitempty"`
 	GlassType  *InputGlassType      `json:"glassType,omitempty"`
-	Steps      []*InputStep         `json:"steps,omitempty"`
+	Steps      []*InputStep         `json:"steps"`
 	AsMenu     *InputAsMenuItemArgs `json:"asMenu,omitempty"`
 }
 
 type InputRecipeGroup struct {
 	Name     string           `json:"name"`
 	ImageURL *string          `json:"imageURL,omitempty"`
-	Recipes  []*InputRecipe   `json:"recipes,omitempty"`
+	Recipes  []*InputRecipe   `json:"recipes"`
 	AsMenu   *InputAsMenuArgs `json:"asMenu,omitempty"`
 }
 
@@ -121,7 +121,7 @@ type MenuItem struct {
 	Name        string            `json:"name"`
 	ImageURL    *string           `json:"imageURL,omitempty"`
 	Flavor      *string           `json:"flavor,omitempty"`
-	Options     []*MenuItemOption `json:"options,omitempty"`
+	Options     []*MenuItemOption `json:"options"`
 	MinPriceYen float64           `json:"minPriceYen"`
 }
 
@@ -129,7 +129,7 @@ type MenuItemOption struct {
 	Name       string   `json:"name"`
 	Category   string   `json:"category"`
 	ImageURL   *string  `json:"imageURL,omitempty"`
-	Materials  []string `json:"materials,omitempty"`
+	Materials  []string `json:"materials"`
 	OutOfStock bool     `json:"outOfStock"`
 	PriceYen   float64  `json:"priceYen"`
 	Recipe     *Recipe  `json:"recipe,omitempty"`
@@ -166,13 +166,13 @@ type Recipe struct {
 	Category string      `json:"category"`
 	Type     *RecipeType `json:"type,omitempty"`
 	Glass    *GlassType  `json:"glass,omitempty"`
-	Steps    []*Step     `json:"steps,omitempty"`
+	Steps    []*Step     `json:"steps"`
 }
 
 type RecipeGroup struct {
 	Name     string    `json:"name"`
 	ImageURL *string   `json:"imageURL,omitempty"`
-	Recipes  []*Recipe `json:"recipes,omitempty"`
+	Recipes  []*Recipe `json:"recipes"`
 }
 
 type RecipeType struct {
