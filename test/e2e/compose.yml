@@ -1,3 +1,4 @@
+name: hackbar-copilot-e2e
 services:
   oauth2rbac:
     image: tingtt/oauth2rbac:v1.0.2
@@ -21,7 +22,7 @@ services:
         "google;${OAUTH2_GOOGLE}",
       ]
 
-  hackbar-copilot:
+  app:
     build:
       context: ../../
       dockerfile: Dockerfile

@@ -32,11 +32,11 @@ OAUTH2_GOOGLE="<your-client-id>;<your-client-secret>"
 
   ```diff
     proxies:
-      - external_url: "http://localhost:8080/"
-        target: "http://hackbar-copilot:80"
+      - external_url: "http://localhost:8081/"
+        target: "http://app:80"
 
     acl:
-      "http://localhost:8080":
+      "http://localhost:8081":
         paths:
           "/":
             - methods: ["*"]
@@ -55,4 +55,5 @@ OAUTH2_GOOGLE="<your-client-id>;<your-client-secret>"
 make e2e-up
 ```
 
-http://localhost:8080
+- http://localhost:8081 for requesting via oauth2rbac
+- http://localhost:8080 for direct
