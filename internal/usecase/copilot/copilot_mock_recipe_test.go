@@ -7,44 +7,50 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var _ recipe.SaveLister = new(MockRecipeSaveLister)
+var _ recipe.SaveListRemover = new(MockRecipeSaveListRemover)
 
-type MockRecipeSaveLister struct {
+type MockRecipeSaveListRemover struct {
 	mock.Mock
 }
 
 // All implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) All() iter.Seq2[recipe.RecipeGroup, error] {
+func (m *MockRecipeSaveListRemover) All() iter.Seq2[recipe.RecipeGroup, error] {
 	args := m.Called()
 	return args.Get(0).(iter.Seq2[recipe.RecipeGroup, error])
 }
 
 // AllGlassTypes implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) AllGlassTypes() iter.Seq2[recipe.GlassType, error] {
+func (m *MockRecipeSaveListRemover) AllGlassTypes() iter.Seq2[recipe.GlassType, error] {
 	args := m.Called()
 	return args.Get(0).(iter.Seq2[recipe.GlassType, error])
 }
 
 // AllRecipeTypes implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) AllRecipeTypes() iter.Seq2[recipe.RecipeType, error] {
+func (m *MockRecipeSaveListRemover) AllRecipeTypes() iter.Seq2[recipe.RecipeType, error] {
 	args := m.Called()
 	return args.Get(0).(iter.Seq2[recipe.RecipeType, error])
 }
 
 // Save implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) Save(rg recipe.RecipeGroup) error {
+func (m *MockRecipeSaveListRemover) Save(rg recipe.RecipeGroup) error {
 	args := m.Called(rg)
 	return args.Error(0)
 }
 
 // SaveGlassType implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) SaveGlassType(gt recipe.GlassType) error {
+func (m *MockRecipeSaveListRemover) SaveGlassType(gt recipe.GlassType) error {
 	args := m.Called(gt)
 	return args.Error(0)
 }
 
 // SaveRecipeType implements recipe.SaveLister.
-func (m *MockRecipeSaveLister) SaveRecipeType(rt recipe.RecipeType) error {
+func (m *MockRecipeSaveListRemover) SaveRecipeType(rt recipe.RecipeType) error {
 	args := m.Called(rt)
+	return args.Error(0)
+}
+
+// Remove implements recipe.SaveListRemover.
+func (m *MockRecipeSaveListRemover) Remove(recipeGroupName string) error {
+	args := m.Called(recipeGroupName)
 	return args.Error(0)
 }

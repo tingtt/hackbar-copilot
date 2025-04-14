@@ -20,7 +20,7 @@ func Test_copilot_ListRecipes(t *testing.T) {
 			return want[i].Name < want[j].Name
 		})
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeSaveLister.On("All").Return(recipeGroup, nil)
 
 		c := &copilot{recipe: recipeSaveLister}

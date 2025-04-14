@@ -21,7 +21,7 @@ func TestNew(t *testing.T) {
 		t.Parallel()
 
 		copilot := New(Dependencies{
-			Recipe:  new(MockRecipeSaveLister),
+			Recipe:  new(MockRecipeSaveListRemover),
 			Menu:    new(MockMenu),
 			Stock:   new(MockStockSaveLister),
 			Order:   new(MockOrder),

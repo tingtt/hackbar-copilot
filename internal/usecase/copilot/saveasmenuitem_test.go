@@ -22,7 +22,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		t.Run("found", func(t *testing.T) {
 			t.Parallel()
 
-			recipeSaveLister := new(MockRecipeSaveLister)
+			recipeSaveLister := new(MockRecipeSaveListRemover)
 			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
 			menuSaveLister := new(MockMenu)
@@ -41,7 +41,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		t.Run("not found", func(t *testing.T) {
 			t.Parallel()
 
-			recipeSaveLister := new(MockRecipeSaveLister)
+			recipeSaveLister := new(MockRecipeSaveListRemover)
 			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
 			c := &copilot{recipe: recipeSaveLister}
@@ -53,7 +53,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 	t.Run("will return menu group converted from recipe group", func(t *testing.T) {
 		t.Parallel()
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
 
 		menuSaveLister := new(MockMenu)
@@ -96,7 +96,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 	t.Run("will save new material", func(t *testing.T) {
 		t.Parallel()
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeGroups := func() iter.Seq2[recipe.RecipeGroup, error] {
 			return func(yield func(recipe.RecipeGroup, error) bool) {
 				for rg := range recipetest.ExampleRecipeGroupsIter {

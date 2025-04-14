@@ -227,7 +227,7 @@ func Test_copilot_SaveRecipe(t *testing.T) {
 		for _, tt := range saveRecipeTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				recipeMock := new(MockRecipeSaveLister)
+				recipeMock := new(MockRecipeSaveListRemover)
 				recipeMock.On("All").Return(recipetest.IterWithNilError([]recipe.RecipeGroup{tt.RecipeGroup}))
 				recipeMock.On("Save", mock.Anything).Return(nil)
 				stockMock := new(MockStockSaveLister)
@@ -261,7 +261,7 @@ func Test_copilot_SaveRecipe(t *testing.T) {
 		for _, tt := range saveRecipeTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				recipeMock := new(MockRecipeSaveLister)
+				recipeMock := new(MockRecipeSaveListRemover)
 				recipeMock.On("All").Return(recipetest.IterWithNilError([]recipe.RecipeGroup{tt.RecipeGroup}))
 				recipeMock.On("Save", mock.Anything).Return(nil)
 				stockMock := new(MockStockSaveLister)

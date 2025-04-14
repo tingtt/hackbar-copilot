@@ -5,10 +5,11 @@ import (
 	"iter"
 )
 
-type SaveFindLister interface {
+type SaveFindListRemover interface {
 	saver
 	Finder
 	Lister
+	Remover
 }
 
 type FindLister interface {
@@ -30,13 +31,17 @@ type Lister interface {
 	All() iter.Seq2[Item, error]
 }
 
-type Repository SaveFindLister
+type Remover interface {
+	Remove(itemName string) error
+}
+
+type Repository SaveFindListRemover
 
 func NewFindLister(r Repository) FindLister {
 	return &saveFindLister{r}
 }
 
-func NewSaveLister(r Repository) SaveFindLister {
+func NewSaveLister(r Repository) SaveFindListRemover {
 	return &saveFindLister{r}
 }
 

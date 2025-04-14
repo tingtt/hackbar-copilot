@@ -22,7 +22,7 @@ func Test_copilot_FindRecipeType(t *testing.T) {
 			"blend": {Name: "blend", Description: ptr("blend description")},
 		}
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeSaveLister.On("AllRecipeTypes").Return(recipeTypes, nil)
 
 		c := &copilot{recipe: recipeSaveLister}

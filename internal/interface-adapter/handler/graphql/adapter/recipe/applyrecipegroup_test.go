@@ -84,6 +84,66 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 			},
 		},
 	},
+	{
+		name: "will apply changed recipe (replace)",
+		base: recipe.RecipeGroup{
+			Name:    "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
+		},
+		input: model.InputRecipeGroup{
+			Replace: ptr(true),
+			Recipes: []*model.InputRecipe{{
+				Name:     "new recipe",
+				Category: "category 2",
+			}},
+		},
+		want: recipe.RecipeGroup{
+			Name: "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{
+				{
+					Name:     "new recipe",
+					Category: "category 2",
+				},
+			},
+		},
+	},
+	{
+		name: "will apply changed recipe (remove)",
+		base: recipe.RecipeGroup{
+			Name:    "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
+		},
+		input: model.InputRecipeGroup{
+			Recipes: []*model.InputRecipe{{
+				Name:     "exists recipe",
+				Category: "category 1",
+				Remove:   ptr(true),
+			}},
+		},
+		want: recipe.RecipeGroup{
+			Name:    "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{},
+		},
+	},
+	{
+		name: "will apply changed recipe (remove)",
+		base: recipe.RecipeGroup{
+			Name:    "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
+		},
+		input: model.InputRecipeGroup{
+			Replace: ptr(true),
+			Recipes: []*model.InputRecipe{{
+				Name:     "exists recipe",
+				Category: "category 1",
+				Remove:   ptr(true),
+			}},
+		},
+		want: recipe.RecipeGroup{
+			Name:    "ExistsRecipeGroup",
+			Recipes: []recipe.Recipe{},
+		},
+	},
 }
 
 func Test_recipeAdapterIn_ApplyRecipeGroup(t *testing.T) {

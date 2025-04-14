@@ -18,10 +18,17 @@ func (s *inputAdapter) ApplyRecipeGroup(base recipe.RecipeGroup, input model.Inp
 		base.ImageURL = input.ImageURL
 	}
 	baseRecipesMap := make(map[string]recipe.Recipe, len(base.Recipes))
-	for _, recipe := range base.Recipes {
-		baseRecipesMap[recipe.Name] = recipe
+
+	if input.Replace == nil || !*input.Replace {
+		for _, recipe := range base.Recipes {
+			baseRecipesMap[recipe.Name] = recipe
+		}
 	}
 	for baseRecipe, inputRecipe := range s.iterInputRecipes(base.Recipes, sliceutil.FilterNonNilPointerValues(input.Recipes)) {
+		if inputRecipe.Remove != nil && *inputRecipe.Remove {
+			delete(baseRecipesMap, baseRecipe.Name)
+			continue
+		}
 		baseRecipesMap[inputRecipe.Name] = s.applyRecipe(baseRecipe, inputRecipe)
 	}
 	base.Recipes = slices.Collect(maps.Values(baseRecipesMap))

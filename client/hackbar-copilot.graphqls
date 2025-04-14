@@ -185,7 +185,9 @@ extend type Mutation {
 input InputRecipeGroup {
   name: String!
   imageURL: String
+  replace: Boolean
   recipes: [InputRecipe!]!
+  remove: Boolean
   asMenu: InputAsMenuArgs
 }
 
@@ -195,6 +197,7 @@ input InputRecipe {
   recipeType: InputRecipeType
   glassType: InputGlassType
   steps: [InputStep!]!
+  remove: Boolean
   asMenu: InputAsMenuItemArgs
 }
 
@@ -219,6 +222,7 @@ input InputStep {
 
 input InputAsMenuArgs {
   flavor: String
+  remove: Boolean
 }
 
 input InputAsMenuItemArgs {

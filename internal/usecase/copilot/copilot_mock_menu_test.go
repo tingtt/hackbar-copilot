@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var _ menu.SaveFindLister = new(MockMenu)
+var _ menu.SaveFindListRemover = new(MockMenu)
 
 type MockMenu struct {
 	mock.Mock
@@ -28,5 +28,11 @@ func (m *MockMenu) All() iter.Seq2[menu.Item, error] {
 // Save implements menu.SaveLister.
 func (m *MockMenu) Save(g menu.Item) error {
 	args := m.Called(g)
+	return args.Error(0)
+}
+
+// Remove implements menu.SaveFindListRemover.
+func (m *MockMenu) Remove(itemName string) error {
+	args := m.Called(itemName)
 	return args.Error(0)
 }

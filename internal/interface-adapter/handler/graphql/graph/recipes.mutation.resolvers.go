@@ -21,6 +21,11 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 		return nil, errors.New("forbidden")
 	}
 
+	if input.Remove != nil && *input.Remove {
+		err := r.Copilot.RemoveRecipeAndMenuItem(input.Name)
+		return nil, err
+	}
+
 	currentRecipeGroup, err := r.Copilot.FindRecipeGroup(input.Name)
 	if err != nil && !errors.Is(err, usecaseutils.ErrNotFound) {
 		return nil, err
@@ -34,6 +39,11 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 		return nil, err
 	}
 	newRecipeGroup := r.recipeAdapter.ApplyRecipeGroup(currentRecipeGroup, input)
+	if len(newRecipeGroup.Recipes) == 0 {
+		err := r.Copilot.RemoveRecipeAndMenuItem(input.Name)
+		return nil, err
+	}
+
 	newRecipeTypes, err := r.recipeAdapter.ApplyRecipeTypes(currentRecipeTypes, input)
 	if err != nil {
 		return nil, err

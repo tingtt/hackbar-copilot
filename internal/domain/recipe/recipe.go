@@ -1,12 +1,14 @@
 package recipe
 
 import (
+	"errors"
 	"iter"
 )
 
-type SaveLister interface {
+type SaveListRemover interface {
 	Saver
 	Lister
+	Remover
 }
 
 type Saver interface {
@@ -21,13 +23,19 @@ type Lister interface {
 	AllGlassTypes() iter.Seq2[GlassType, error]
 }
 
-type Repository SaveLister
+var ErrNotFound = errors.New("menu not found")
 
-func NewSaveLister(r Repository) SaveLister {
+type Remover interface {
+	Remove(recipeGroupName string) error
+}
+
+type Repository SaveListRemover
+
+func NewSaveLister(r Repository) SaveListRemover {
 	return &saverLister{r}
 }
 
-var _ SaveLister = new(saverLister)
+var _ SaveListRemover = new(saverLister)
 
 type saverLister struct {
 	Repository

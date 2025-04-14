@@ -3,6 +3,7 @@ package filesystem
 import (
 	"hackbar-copilot/internal/domain/menu"
 	"iter"
+	"slices"
 )
 
 var _ menu.Repository = (*menuRepository)(nil)
@@ -46,4 +47,15 @@ func (m *menuRepository) Save(g menu.Item) error {
 	}
 	m.fs.data.menuItems = append(m.fs.data.menuItems, g)
 	return nil
+}
+
+// Remove implements menu.Repository.
+func (m *menuRepository) Remove(itemName string) error {
+	for i, savedMenuGroup := range m.fs.data.menuItems {
+		if savedMenuGroup.Name == itemName {
+			m.fs.data.menuItems = slices.Delete(m.fs.data.menuItems, i, i+1)
+			return nil
+		}
+	}
+	return menu.ErrNotFound
 }

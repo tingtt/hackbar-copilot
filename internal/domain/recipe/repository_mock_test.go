@@ -47,3 +47,9 @@ func (m *MockRepository) SaveRecipeType(rt RecipeType) error {
 	args := m.Called(rt)
 	return args.Error(0)
 }
+
+// Remove implements Repository.
+func (m *MockRepository) Remove(recipeGroupName string) error {
+	args := m.Called(recipeGroupName)
+	return args.Error(0)
+}

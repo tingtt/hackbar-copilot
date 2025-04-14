@@ -14,6 +14,7 @@ import (
 type Copilot interface {
 	ListRecipes(sortFunc sort.Yield[recipe.RecipeGroup]) ([]recipe.RecipeGroup, error)
 	SaveRecipe(rg recipe.RecipeGroup) error
+	RemoveRecipeAndMenuItem(name string) error
 	SaveRecipeType(rt recipe.RecipeType) error
 	SaveGlassType(gt recipe.GlassType) error
 	FindRecipeGroup(name string) (recipe.RecipeGroup, error)
@@ -70,8 +71,8 @@ func (d Dependencies) validate() {
 }
 
 type copilot struct {
-	recipe  recipe.SaveLister
-	menu    menu.SaveFindLister
+	recipe  recipe.SaveListRemover
+	menu    menu.SaveFindListRemover
 	stock   stock.SaveLister
 	order   order.SaveFindListListener
 	cashout cashout.Lister

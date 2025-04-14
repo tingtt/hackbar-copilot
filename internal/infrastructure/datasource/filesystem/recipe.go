@@ -3,6 +3,7 @@ package filesystem
 import (
 	"hackbar-copilot/internal/domain/recipe"
 	"iter"
+	"slices"
 )
 
 var _ recipe.Repository = (*recipeRepository)(nil)
@@ -72,4 +73,15 @@ func (r *recipeRepository) SaveRecipeType(new recipe.RecipeType) error {
 	}
 	r.fs.data.recipeTypes[new.Name] = new
 	return nil
+}
+
+// Remove implements recipe.Repository.
+func (r *recipeRepository) Remove(recipeGroupName string) error {
+	for i, savedRecipeGroup := range r.fs.data.recipeGroups {
+		if savedRecipeGroup.Name == recipeGroupName {
+			r.fs.data.recipeGroups = slices.Delete(r.fs.data.recipeGroups, i, i+1)
+			return nil
+		}
+	}
+	return recipe.ErrNotFound
 }

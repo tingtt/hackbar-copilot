@@ -17,7 +17,7 @@ func Test_copilot_FindRecipeGroup(t *testing.T) {
 		recipeGroup := recipetest.ExampleRecipeGroupsIter
 		want := recipetest.ExampleRecipeGroups[0]
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeSaveLister.On("All").Return(recipeGroup, nil)
 
 		c := &copilot{recipe: recipeSaveLister}
@@ -32,7 +32,7 @@ func Test_copilot_FindRecipeGroup(t *testing.T) {
 
 		recipeGroup := recipetest.ExampleRecipeGroupsIter
 
-		recipeSaveLister := new(MockRecipeSaveLister)
+		recipeSaveLister := new(MockRecipeSaveListRemover)
 		recipeSaveLister.On("All").Return(recipeGroup, nil)
 
 		c := &copilot{recipe: recipeSaveLister}

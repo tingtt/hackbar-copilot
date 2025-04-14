@@ -6480,7 +6480,7 @@ func (ec *executionContext) unmarshalInputInputAsMenuArgs(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"flavor"}
+	fieldsInOrder := [...]string{"flavor", "remove"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -6494,6 +6494,13 @@ func (ec *executionContext) unmarshalInputInputAsMenuArgs(ctx context.Context, o
 				return it, err
 			}
 			it.Flavor = data
+		case "remove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Remove = data
 		}
 	}
 
@@ -6773,7 +6780,7 @@ func (ec *executionContext) unmarshalInputInputRecipe(ctx context.Context, obj a
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "category", "recipeType", "glassType", "steps", "asMenu"}
+	fieldsInOrder := [...]string{"name", "category", "recipeType", "glassType", "steps", "remove", "asMenu"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -6815,6 +6822,13 @@ func (ec *executionContext) unmarshalInputInputRecipe(ctx context.Context, obj a
 				return it, err
 			}
 			it.Steps = data
+		case "remove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Remove = data
 		case "asMenu":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("asMenu"))
 			data, err := ec.unmarshalOInputAsMenuItemArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemArgs(ctx, v)
@@ -6835,7 +6849,7 @@ func (ec *executionContext) unmarshalInputInputRecipeGroup(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "imageURL", "recipes", "asMenu"}
+	fieldsInOrder := [...]string{"name", "imageURL", "replace", "recipes", "remove", "asMenu"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -6856,6 +6870,13 @@ func (ec *executionContext) unmarshalInputInputRecipeGroup(ctx context.Context, 
 				return it, err
 			}
 			it.ImageURL = data
+		case "replace":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("replace"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Replace = data
 		case "recipes":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("recipes"))
 			data, err := ec.unmarshalNInputRecipe2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputRecipeᚄ(ctx, v)
@@ -6863,6 +6884,13 @@ func (ec *executionContext) unmarshalInputInputRecipeGroup(ctx context.Context, 
 				return it, err
 			}
 			it.Recipes = data
+		case "remove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Remove = data
 		case "asMenu":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("asMenu"))
 			data, err := ec.unmarshalOInputAsMenuArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuArgs(ctx, v)
