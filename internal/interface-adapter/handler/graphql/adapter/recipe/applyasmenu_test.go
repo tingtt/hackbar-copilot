@@ -61,6 +61,15 @@ var applyAsMenuTests = []applyAsMenuTest{
 			},
 		},
 	},
+	{
+		name: "apply remove",
+		arg: model.InputRecipeGroup{
+			AsMenu: &model.InputAsMenuArgs{
+				Remove: ptr(true),
+			},
+		},
+		want: &copilot.SaveAsMenuItemArg{Remove: true},
+	},
 }
 
 func Test_recipeAdapterIn_ApplyAsMenu(t *testing.T) {

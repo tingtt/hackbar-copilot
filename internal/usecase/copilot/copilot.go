@@ -35,6 +35,7 @@ type Copilot interface {
 type SaveAsMenuItemArg struct {
 	Flavor  *string
 	Options map[string]MenuFromRecipeGroupArg
+	Remove  bool
 }
 
 type MenuFromRecipeGroupArg struct {

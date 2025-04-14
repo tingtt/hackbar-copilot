@@ -9,6 +9,10 @@ import (
 func (s *inputAdapter) ApplyAsMenu(input model.InputRecipeGroup) (asMenuArg *copilot.SaveAsMenuItemArg, err error) {
 	asMenuArg = &copilot.SaveAsMenuItemArg{}
 	if input.AsMenu != nil {
+		if input.AsMenu.Remove != nil && *input.AsMenu.Remove {
+			asMenuArg.Remove = true
+			return asMenuArg, nil
+		}
 		asMenuArg.Flavor = input.AsMenu.Flavor
 	}
 	items := make(map[string]copilot.MenuFromRecipeGroupArg)

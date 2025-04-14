@@ -7,6 +7,11 @@ import (
 
 // SaveAsMenuItem implements Copilot.
 func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) (menu.Item, error) {
+	if arg.Remove {
+		err := c.menu.Remove(recipeGroupName)
+		return menu.Item{}, err
+	}
+
 	rg, err := c.FindRecipeGroup(recipeGroupName)
 	if err != nil {
 		return menu.Item{}, err

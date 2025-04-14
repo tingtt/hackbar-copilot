@@ -161,4 +161,16 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		menuSaveLister.AssertCalled(t, "Save", want)
 		stockSaveLister.AssertCalled(t, "Save", []string{"New Material"}, mock.Anything)
 	})
+
+	t.Run("will call menu.Remove with recipeGroupName", func(t *testing.T) {
+		t.Parallel()
+
+		menuSaveLister := new(MockMenu)
+		menuSaveLister.On("Remove", mock.Anything).Return(nil)
+
+		c := &copilot{menu: menuSaveLister}
+		_, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{Remove: true})
+		assert.NoError(t, err)
+		menuSaveLister.AssertCalled(t, "Remove", "Phuket Sling")
+	})
 }
