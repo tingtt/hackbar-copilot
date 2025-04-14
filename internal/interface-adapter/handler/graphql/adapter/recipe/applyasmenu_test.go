@@ -18,7 +18,7 @@ var applyAsMenuTests = []applyAsMenuTest{
 	{
 		name: "apply flavor",
 		arg: model.InputRecipeGroup{
-			AsMenu: &model.InputAsMenuArgs{
+			AsMenu: &model.InputAsMenuItemArgs{
 				Flavor: ptr("Sweet"),
 			},
 		},
@@ -33,14 +33,14 @@ var applyAsMenuTests = []applyAsMenuTest{
 			Recipes: []*model.InputRecipe{
 				{
 					Name: "Single",
-					AsMenu: &model.InputAsMenuItemArgs{
+					AsMenu: &model.InputAsMenuItemOptionArgs{
 						ImageURL: ptr("https://example.com/path/to/image/whisky-single"),
 						Price:    1000,
 					},
 				},
 				{
 					Name: "Double",
-					AsMenu: &model.InputAsMenuItemArgs{
+					AsMenu: &model.InputAsMenuItemOptionArgs{
 						ImageURL: ptr("https://example.com/path/to/image/whisky-double"),
 						Price:    2000,
 					},
@@ -64,7 +64,7 @@ var applyAsMenuTests = []applyAsMenuTest{
 	{
 		name: "apply remove",
 		arg: model.InputRecipeGroup{
-			AsMenu: &model.InputAsMenuArgs{
+			AsMenu: &model.InputAsMenuItemArgs{
 				Remove: ptr(true),
 			},
 		},

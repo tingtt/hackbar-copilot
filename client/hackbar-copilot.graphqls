@@ -194,7 +194,7 @@ input InputRecipeGroup {
   replace: Boolean
   recipes: [InputRecipe!]!
   remove: Boolean
-  asMenu: InputAsMenuArgs
+  asMenu: InputAsMenuItemArgs
 }
 
 input InputRecipe {
@@ -204,7 +204,7 @@ input InputRecipe {
   glassType: InputGlassType
   steps: [InputStep!]!
   remove: Boolean
-  asMenu: InputAsMenuItemArgs
+  asMenu: InputAsMenuItemOptionArgs
 }
 
 input InputRecipeType {
@@ -226,12 +226,12 @@ input InputStep {
   description: String
 }
 
-input InputAsMenuArgs {
+input InputAsMenuItemArgs {
   flavor: String
   remove: Boolean
 }
 
-input InputAsMenuItemArgs {
+input InputAsMenuItemOptionArgs {
   imageURL: String
   price: Float!
 }

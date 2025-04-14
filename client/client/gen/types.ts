@@ -65,12 +65,12 @@ export type GlassType = {
   name: Scalars["String"]["output"]
 }
 
-export type InputAsMenuArgs = {
+export type InputAsMenuItemArgs = {
   flavor?: InputMaybe<Scalars["String"]["input"]>
   remove?: InputMaybe<Scalars["Boolean"]["input"]>
 }
 
-export type InputAsMenuItemArgs = {
+export type InputAsMenuItemOptionArgs = {
   imageURL?: InputMaybe<Scalars["String"]["input"]>
   price: Scalars["Float"]["input"]
 }
@@ -110,7 +110,7 @@ export type InputPriceDiff = {
 }
 
 export type InputRecipe = {
-  asMenu?: InputMaybe<InputAsMenuItemArgs>
+  asMenu?: InputMaybe<InputAsMenuItemOptionArgs>
   category: Scalars["String"]["input"]
   glassType?: InputMaybe<InputGlassType>
   name: Scalars["String"]["input"]
@@ -120,7 +120,7 @@ export type InputRecipe = {
 }
 
 export type InputRecipeGroup = {
-  asMenu?: InputMaybe<InputAsMenuArgs>
+  asMenu?: InputMaybe<InputAsMenuItemArgs>
   imageURL?: InputMaybe<Scalars["String"]["input"]>
   name: Scalars["String"]["input"]
   recipes: Array<InputRecipe>

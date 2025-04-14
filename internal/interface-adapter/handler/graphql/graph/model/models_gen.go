@@ -40,12 +40,12 @@ type GlassType struct {
 	Description *string `json:"description,omitempty"`
 }
 
-type InputAsMenuArgs struct {
+type InputAsMenuItemArgs struct {
 	Flavor *string `json:"flavor,omitempty"`
 	Remove *bool   `json:"remove,omitempty"`
 }
 
-type InputAsMenuItemArgs struct {
+type InputAsMenuItemOptionArgs struct {
 	ImageURL *string `json:"imageURL,omitempty"`
 	Price    float64 `json:"price"`
 }
@@ -85,22 +85,22 @@ type InputPriceDiff struct {
 }
 
 type InputRecipe struct {
-	Name       string               `json:"name"`
-	Category   string               `json:"category"`
-	RecipeType *InputRecipeType     `json:"recipeType,omitempty"`
-	GlassType  *InputGlassType      `json:"glassType,omitempty"`
-	Steps      []*InputStep         `json:"steps"`
-	Remove     *bool                `json:"remove,omitempty"`
-	AsMenu     *InputAsMenuItemArgs `json:"asMenu,omitempty"`
+	Name       string                     `json:"name"`
+	Category   string                     `json:"category"`
+	RecipeType *InputRecipeType           `json:"recipeType,omitempty"`
+	GlassType  *InputGlassType            `json:"glassType,omitempty"`
+	Steps      []*InputStep               `json:"steps"`
+	Remove     *bool                      `json:"remove,omitempty"`
+	AsMenu     *InputAsMenuItemOptionArgs `json:"asMenu,omitempty"`
 }
 
 type InputRecipeGroup struct {
-	Name     string           `json:"name"`
-	ImageURL *string          `json:"imageURL,omitempty"`
-	Replace  *bool            `json:"replace,omitempty"`
-	Recipes  []*InputRecipe   `json:"recipes"`
-	Remove   *bool            `json:"remove,omitempty"`
-	AsMenu   *InputAsMenuArgs `json:"asMenu,omitempty"`
+	Name     string               `json:"name"`
+	ImageURL *string              `json:"imageURL,omitempty"`
+	Replace  *bool                `json:"replace,omitempty"`
+	Recipes  []*InputRecipe       `json:"recipes"`
+	Remove   *bool                `json:"remove,omitempty"`
+	AsMenu   *InputAsMenuItemArgs `json:"asMenu,omitempty"`
 }
 
 type InputRecipeType struct {

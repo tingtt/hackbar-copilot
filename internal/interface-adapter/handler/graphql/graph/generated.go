@@ -724,8 +724,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputCashoutInput,
-		ec.unmarshalInputInputAsMenuArgs,
 		ec.unmarshalInputInputAsMenuItemArgs,
+		ec.unmarshalInputInputAsMenuItemOptionArgs,
 		ec.unmarshalInputInputCashoutQuery,
 		ec.unmarshalInputInputCheckout,
 		ec.unmarshalInputInputGlassType,
@@ -6520,8 +6520,8 @@ func (ec *executionContext) unmarshalInputCashoutInput(ctx context.Context, obj 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInputAsMenuArgs(ctx context.Context, obj any) (model.InputAsMenuArgs, error) {
-	var it model.InputAsMenuArgs
+func (ec *executionContext) unmarshalInputInputAsMenuItemArgs(ctx context.Context, obj any) (model.InputAsMenuItemArgs, error) {
+	var it model.InputAsMenuItemArgs
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6554,8 +6554,8 @@ func (ec *executionContext) unmarshalInputInputAsMenuArgs(ctx context.Context, o
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInputAsMenuItemArgs(ctx context.Context, obj any) (model.InputAsMenuItemArgs, error) {
-	var it model.InputAsMenuItemArgs
+func (ec *executionContext) unmarshalInputInputAsMenuItemOptionArgs(ctx context.Context, obj any) (model.InputAsMenuItemOptionArgs, error) {
+	var it model.InputAsMenuItemOptionArgs
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6878,7 +6878,7 @@ func (ec *executionContext) unmarshalInputInputRecipe(ctx context.Context, obj a
 			it.Remove = data
 		case "asMenu":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("asMenu"))
-			data, err := ec.unmarshalOInputAsMenuItemArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemArgs(ctx, v)
+			data, err := ec.unmarshalOInputAsMenuItemOptionArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemOptionArgs(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6940,7 +6940,7 @@ func (ec *executionContext) unmarshalInputInputRecipeGroup(ctx context.Context, 
 			it.Remove = data
 		case "asMenu":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("asMenu"))
-			data, err := ec.unmarshalOInputAsMenuArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuArgs(ctx, v)
+			data, err := ec.unmarshalOInputAsMenuItemArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemArgs(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9593,19 +9593,19 @@ func (ec *executionContext) marshalOGlassType2ᚖhackbarᚑcopilotᚋinternalᚋ
 	return ec._GlassType(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOInputAsMenuArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuArgs(ctx context.Context, v any) (*model.InputAsMenuArgs, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputInputAsMenuArgs(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalOInputAsMenuItemArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemArgs(ctx context.Context, v any) (*model.InputAsMenuItemArgs, error) {
 	if v == nil {
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputInputAsMenuItemArgs(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOInputAsMenuItemOptionArgs2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐInputAsMenuItemOptionArgs(ctx context.Context, v any) (*model.InputAsMenuItemOptionArgs, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputInputAsMenuItemOptionArgs(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
