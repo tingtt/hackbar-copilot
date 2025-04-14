@@ -176,7 +176,7 @@ export type Mutation = {
   cashout: Cashout
   checkout: Checkout
   order: Order
-  saveRecipe: RecipeGroup
+  saveRecipe: SaveRecipeResult
   updateOrderStatus: Order
   updateStock: Array<Material>
 }
@@ -273,6 +273,13 @@ export type RecipeType = {
   description?: Maybe<Scalars["String"]["output"]>
   name: Scalars["String"]["output"]
 }
+
+export type RemovedRecipeGroup = {
+  __typename?: "RemovedRecipeGroup"
+  name: Scalars["String"]["output"]
+}
+
+export type SaveRecipeResult = RecipeGroup | RemovedRecipeGroup
 
 export type Step = {
   __typename?: "Step"

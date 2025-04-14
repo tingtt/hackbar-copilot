@@ -1,5 +1,11 @@
 extend type Mutation {
-  saveRecipe(input: InputRecipeGroup!): RecipeGroup!
+  saveRecipe(input: InputRecipeGroup!): SaveRecipeResult!
+}
+
+union SaveRecipeResult = RecipeGroup | RemovedRecipeGroup
+
+type RemovedRecipeGroup {
+  name: String!
 }
 
 input InputRecipeGroup {

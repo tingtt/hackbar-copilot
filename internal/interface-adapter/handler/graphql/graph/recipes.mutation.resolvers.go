@@ -12,7 +12,7 @@ import (
 )
 
 // SaveRecipe is the resolver for the saveRecipe field.
-func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error) {
+func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (model.SaveRecipeResult, error) {
 	_, err := r.authAdapter.GetEmail(ctx)
 	if /* unauthorized */ err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 
 	if input.Remove != nil && *input.Remove {
 		err := r.Copilot.RemoveRecipeAndMenuItem(input.Name)
-		return nil, err
+		return &model.RemovedRecipeGroup{Name: input.Name}, err
 	}
 
 	currentRecipeGroup, err := r.Copilot.FindRecipeGroup(input.Name)
@@ -41,7 +41,7 @@ func (r *mutationResolver) SaveRecipe(ctx context.Context, input model.InputReci
 	newRecipeGroup := r.recipeAdapter.ApplyRecipeGroup(currentRecipeGroup, input)
 	if len(newRecipeGroup.Recipes) == 0 {
 		err := r.Copilot.RemoveRecipeAndMenuItem(input.Name)
-		return nil, err
+		return &model.RemovedRecipeGroup{Name: input.Name}, err
 	}
 
 	newRecipeTypes, err := r.recipeAdapter.ApplyRecipeTypes(currentRecipeTypes, input)

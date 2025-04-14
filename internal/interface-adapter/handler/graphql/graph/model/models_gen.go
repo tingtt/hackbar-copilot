@@ -8,6 +8,10 @@ import (
 	"strconv"
 )
 
+type SaveRecipeResult interface {
+	IsSaveRecipeResult()
+}
+
 type Cashout struct {
 	Checkouts []*Checkout `json:"checkouts"`
 	Revenue   float64     `json:"revenue"`
@@ -179,10 +183,18 @@ type RecipeGroup struct {
 	Recipes  []*Recipe `json:"recipes"`
 }
 
+func (RecipeGroup) IsSaveRecipeResult() {}
+
 type RecipeType struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 }
+
+type RemovedRecipeGroup struct {
+	Name string `json:"name"`
+}
+
+func (RemovedRecipeGroup) IsSaveRecipeResult() {}
 
 type Step struct {
 	Material    *string `json:"material,omitempty"`

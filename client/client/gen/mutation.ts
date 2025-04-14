@@ -108,25 +108,30 @@ export const saveRecipe = (variables: { input: types.InputRecipeGroup }) => ({
         input: $input
       ) {
         __typename
-        name
-        imageURL
-        recipes {
+        ... on RecipeGroup {
           name
-          category
-          type {
+          imageURL
+          recipes {
             name
-            description
+            category
+            type {
+              name
+              description
+            }
+            glass {
+              name
+              imageURL
+              description
+            }
+            steps {
+              material
+              amount
+              description
+            }
           }
-          glass {
-            name
-            imageURL
-            description
-          }
-          steps {
-            material
-            amount
-            description
-          }
+        }
+        ... on RemovedRecipeGroup {
+          name
         }
       }
     }

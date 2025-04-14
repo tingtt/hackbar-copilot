@@ -151,6 +151,10 @@ type ComplexityRoot struct {
 		Name        func(childComplexity int) int
 	}
 
+	RemovedRecipeGroup struct {
+		Name func(childComplexity int) int
+	}
+
 	Step struct {
 		Amount      func(childComplexity int) int
 		Description func(childComplexity int) int
@@ -168,7 +172,7 @@ type MutationResolver interface {
 	Checkout(ctx context.Context, input model.InputCheckout) (*model.Checkout, error)
 	Order(ctx context.Context, input model.InputOrder) (*model.Order, error)
 	UpdateOrderStatus(ctx context.Context, input model.InputOrderStatusUpdate) (*model.Order, error)
-	SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (*model.RecipeGroup, error)
+	SaveRecipe(ctx context.Context, input model.InputRecipeGroup) (model.SaveRecipeResult, error)
 	UpdateStock(ctx context.Context, input model.InputStockUpdate) ([]*model.Material, error)
 }
 type QueryResolver interface {
@@ -668,6 +672,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.RecipeType.Name(childComplexity), true
+
+	case "RemovedRecipeGroup.name":
+		if e.complexity.RemovedRecipeGroup.Name == nil {
+			break
+		}
+
+		return e.complexity.RemovedRecipeGroup.Name(childComplexity), true
 
 	case "Step.amount":
 		if e.complexity.Step.Amount == nil {
@@ -2706,9 +2717,9 @@ func (ec *executionContext) _Mutation_saveRecipe(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.RecipeGroup)
+	res := resTmp.(model.SaveRecipeResult)
 	fc.Result = res
-	return ec.marshalNRecipeGroup2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐRecipeGroup(ctx, field.Selections, res)
+	return ec.marshalNSaveRecipeResult2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐSaveRecipeResult(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_saveRecipe(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2718,15 +2729,7 @@ func (ec *executionContext) fieldContext_Mutation_saveRecipe(ctx context.Context
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "name":
-				return ec.fieldContext_RecipeGroup_name(ctx, field)
-			case "imageURL":
-				return ec.fieldContext_RecipeGroup_imageURL(ctx, field)
-			case "recipes":
-				return ec.fieldContext_RecipeGroup_recipes(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RecipeGroup", field.Name)
+			return nil, errors.New("field of type SaveRecipeResult does not have child fields")
 		},
 	}
 	defer func() {
@@ -4267,6 +4270,50 @@ func (ec *executionContext) _RecipeType_description(ctx context.Context, field g
 func (ec *executionContext) fieldContext_RecipeType_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RecipeType",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RemovedRecipeGroup_name(ctx context.Context, field graphql.CollectedField, obj *model.RemovedRecipeGroup) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RemovedRecipeGroup_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RemovedRecipeGroup_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RemovedRecipeGroup",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -7024,6 +7071,29 @@ func (ec *executionContext) unmarshalInputInputStockUpdate(ctx context.Context, 
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _SaveRecipeResult(ctx context.Context, sel ast.SelectionSet, obj model.SaveRecipeResult) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.RecipeGroup:
+		return ec._RecipeGroup(ctx, sel, &obj)
+	case *model.RecipeGroup:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._RecipeGroup(ctx, sel, obj)
+	case model.RemovedRecipeGroup:
+		return ec._RemovedRecipeGroup(ctx, sel, &obj)
+	case *model.RemovedRecipeGroup:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._RemovedRecipeGroup(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
@@ -7849,7 +7919,7 @@ func (ec *executionContext) _Recipe(ctx context.Context, sel ast.SelectionSet, o
 	return out
 }
 
-var recipeGroupImplementors = []string{"RecipeGroup"}
+var recipeGroupImplementors = []string{"RecipeGroup", "SaveRecipeResult"}
 
 func (ec *executionContext) _RecipeGroup(ctx context.Context, sel ast.SelectionSet, obj *model.RecipeGroup) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, recipeGroupImplementors)
@@ -7913,6 +7983,45 @@ func (ec *executionContext) _RecipeType(ctx context.Context, sel ast.SelectionSe
 			}
 		case "description":
 			out.Values[i] = ec._RecipeType_description(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var removedRecipeGroupImplementors = []string{"RemovedRecipeGroup", "SaveRecipeResult"}
+
+func (ec *executionContext) _RemovedRecipeGroup(ctx context.Context, sel ast.SelectionSet, obj *model.RemovedRecipeGroup) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, removedRecipeGroupImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RemovedRecipeGroup")
+		case "name":
+			out.Values[i] = ec._RemovedRecipeGroup_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9019,10 +9128,6 @@ func (ec *executionContext) marshalNRecipe2ᚖhackbarᚑcopilotᚋinternalᚋint
 	return ec._Recipe(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRecipeGroup2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐRecipeGroup(ctx context.Context, sel ast.SelectionSet, v model.RecipeGroup) graphql.Marshaler {
-	return ec._RecipeGroup(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRecipeGroup2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐRecipeGroupᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RecipeGroup) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9075,6 +9180,16 @@ func (ec *executionContext) marshalNRecipeGroup2ᚖhackbarᚑcopilotᚋinternal�
 		return graphql.Null
 	}
 	return ec._RecipeGroup(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSaveRecipeResult2hackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐSaveRecipeResult(ctx context.Context, sel ast.SelectionSet, v model.SaveRecipeResult) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SaveRecipeResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNStep2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐStepᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Step) graphql.Marshaler {

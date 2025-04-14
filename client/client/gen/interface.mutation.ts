@@ -22,7 +22,8 @@ export interface MutationClient {
   saveRecipe(
     input: types.InputRecipeGroup,
   ): Promise<
-    { data: null; error: string } | { data: types.RecipeGroup; error: null }
+    | { data: null; error: string }
+    | { data: types.SaveRecipeResult; error: null }
   >
   updateStock(
     input: types.InputStockUpdate,
