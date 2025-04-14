@@ -19,12 +19,11 @@ func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*
 		return nil, err
 	}
 
-	menuItemID, err := order.ParseMenuItemID(input.MenuItemID)
-	if err != nil {
-		return nil, err
+	orderMenuItemID := order.MenuItemID{
+		ItemName:   input.MenuItemName,
+		OptionName: input.MenuItemOptionName,
 	}
-
-	savedOrder, err := r.OrderService.Order(order.CustomerEmail(email), input.CustomerName, menuItemID)
+	savedOrder, err := r.OrderService.Order(order.CustomerEmail(email), input.CustomerName, orderMenuItemID)
 	if err != nil {
 		return nil, err
 	}

@@ -75,6 +75,11 @@ type ComplexityRoot struct {
 		Name    func(childComplexity int) int
 	}
 
+	MenuID struct {
+		ItemName   func(childComplexity int) int
+		OptionName func(childComplexity int) int
+	}
+
 	MenuItem struct {
 		Flavor      func(childComplexity int) int
 		ImageURL    func(childComplexity int) int
@@ -106,7 +111,7 @@ type ComplexityRoot struct {
 		CustomerEmail func(childComplexity int) int
 		CustomerName  func(childComplexity int) int
 		ID            func(childComplexity int) int
-		MenuItemID    func(childComplexity int) int
+		MenuID        func(childComplexity int) int
 		Price         func(childComplexity int) int
 		Status        func(childComplexity int) int
 		Timestamps    func(childComplexity int) int
@@ -316,6 +321,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Material.Name(childComplexity), true
 
+	case "MenuID.itemName":
+		if e.complexity.MenuID.ItemName == nil {
+			break
+		}
+
+		return e.complexity.MenuID.ItemName(childComplexity), true
+
+	case "MenuID.optionName":
+		if e.complexity.MenuID.OptionName == nil {
+			break
+		}
+
+		return e.complexity.MenuID.OptionName(childComplexity), true
+
 	case "MenuItem.flavor":
 		if e.complexity.MenuItem.Flavor == nil {
 			break
@@ -493,12 +512,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Order.ID(childComplexity), true
 
-	case "Order.menuItemID":
-		if e.complexity.Order.MenuItemID == nil {
+	case "Order.menuID":
+		if e.complexity.Order.MenuID == nil {
 			break
 		}
 
-		return e.complexity.Order.MenuItemID(childComplexity), true
+		return e.complexity.Order.MenuID(childComplexity), true
 
 	case "Order.price":
 		if e.complexity.Order.Price == nil {
@@ -1869,6 +1888,94 @@ func (ec *executionContext) fieldContext_Material_inStock(_ context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _MenuID_itemName(ctx context.Context, field graphql.CollectedField, obj *model.MenuID) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuID_itemName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ItemName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuID_itemName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuID",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MenuID_optionName(ctx context.Context, field graphql.CollectedField, obj *model.MenuID) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MenuID_optionName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OptionName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MenuID_optionName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MenuID",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MenuItem_name(ctx context.Context, field graphql.CollectedField, obj *model.MenuItem) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MenuItem_name(ctx, field)
 	if err != nil {
@@ -2594,8 +2701,8 @@ func (ec *executionContext) fieldContext_Mutation_order(ctx context.Context, fie
 				return ec.fieldContext_Order_customerEmail(ctx, field)
 			case "customerName":
 				return ec.fieldContext_Order_customerName(ctx, field)
-			case "menuItemID":
-				return ec.fieldContext_Order_menuItemID(ctx, field)
+			case "menuID":
+				return ec.fieldContext_Order_menuID(ctx, field)
 			case "timestamps":
 				return ec.fieldContext_Order_timestamps(ctx, field)
 			case "status":
@@ -2665,8 +2772,8 @@ func (ec *executionContext) fieldContext_Mutation_updateOrderStatus(ctx context.
 				return ec.fieldContext_Order_customerEmail(ctx, field)
 			case "customerName":
 				return ec.fieldContext_Order_customerName(ctx, field)
-			case "menuItemID":
-				return ec.fieldContext_Order_menuItemID(ctx, field)
+			case "menuID":
+				return ec.fieldContext_Order_menuID(ctx, field)
 			case "timestamps":
 				return ec.fieldContext_Order_timestamps(ctx, field)
 			case "status":
@@ -2939,8 +3046,8 @@ func (ec *executionContext) fieldContext_Order_customerName(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Order_menuItemID(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Order_menuItemID(ctx, field)
+func (ec *executionContext) _Order_menuID(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Order_menuID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2953,7 +3060,7 @@ func (ec *executionContext) _Order_menuItemID(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.MenuItemID, nil
+		return obj.MenuID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2965,19 +3072,25 @@ func (ec *executionContext) _Order_menuItemID(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.MenuID)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNMenuID2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuID(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Order_menuItemID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Order_menuID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Order",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "itemName":
+				return ec.fieldContext_MenuID_itemName(ctx, field)
+			case "optionName":
+				return ec.fieldContext_MenuID_optionName(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MenuID", field.Name)
 		},
 	}
 	return fc, nil
@@ -3520,8 +3633,8 @@ func (ec *executionContext) fieldContext_Query_orders(_ context.Context, field g
 				return ec.fieldContext_Order_customerEmail(ctx, field)
 			case "customerName":
 				return ec.fieldContext_Order_customerName(ctx, field)
-			case "menuItemID":
-				return ec.fieldContext_Order_menuItemID(ctx, field)
+			case "menuID":
+				return ec.fieldContext_Order_menuID(ctx, field)
 			case "timestamps":
 				return ec.fieldContext_Order_timestamps(ctx, field)
 			case "status":
@@ -6725,20 +6838,27 @@ func (ec *executionContext) unmarshalInputInputOrder(ctx context.Context, obj an
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"menuItemID", "customerName"}
+	fieldsInOrder := [...]string{"menuItemName", "menuItemOptionName", "customerName"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "menuItemID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("menuItemID"))
+		case "menuItemName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("menuItemName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.MenuItemID = data
+			it.MenuItemName = data
+		case "menuItemOptionName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("menuItemOptionName"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MenuItemOptionName = data
 		case "customerName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customerName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -7308,6 +7428,50 @@ func (ec *executionContext) _Material(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
+var menuIDImplementors = []string{"MenuID"}
+
+func (ec *executionContext) _MenuID(ctx context.Context, sel ast.SelectionSet, obj *model.MenuID) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, menuIDImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MenuID")
+		case "itemName":
+			out.Values[i] = ec._MenuID_itemName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "optionName":
+			out.Values[i] = ec._MenuID_optionName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var menuItemImplementors = []string{"MenuItem"}
 
 func (ec *executionContext) _MenuItem(ctx context.Context, sel ast.SelectionSet, obj *model.MenuItem) graphql.Marshaler {
@@ -7534,8 +7698,8 @@ func (ec *executionContext) _Order(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "menuItemID":
-			out.Values[i] = ec._Order_menuItemID(ctx, field, obj)
+		case "menuID":
+			out.Values[i] = ec._Order_menuID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -8788,6 +8952,16 @@ func (ec *executionContext) marshalNMaterial2ᚖhackbarᚑcopilotᚋinternalᚋi
 		return graphql.Null
 	}
 	return ec._Material(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMenuID2ᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuID(ctx context.Context, sel ast.SelectionSet, v *model.MenuID) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MenuID(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMenuItem2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐMenuItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MenuItem) graphql.Marshaler {

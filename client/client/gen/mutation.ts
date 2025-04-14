@@ -63,7 +63,10 @@ export const order = (variables: { input: types.InputOrder }) => ({
         id
         customerEmail
         customerName
-        menuItemID
+        menuID {
+          itemName
+          optionName
+        }
         timestamps {
           status
           timestamp
@@ -88,7 +91,10 @@ export const updateOrderStatus = (variables: {
         id
         customerEmail
         customerName
-        menuItemID
+        menuID {
+          itemName
+          optionName
+        }
         timestamps {
           status
           timestamp

@@ -96,7 +96,8 @@ export type InputGlassType = {
 
 export type InputOrder = {
   customerName?: InputMaybe<Scalars["String"]["input"]>
-  menuItemID: Scalars["String"]["input"]
+  menuItemName: Scalars["String"]["input"]
+  menuItemOptionName: Scalars["String"]["input"]
 }
 
 export type InputOrderStatusUpdate = {
@@ -149,6 +150,12 @@ export type Material = {
   __typename?: "Material"
   inStock: Scalars["Boolean"]["output"]
   name: Scalars["String"]["output"]
+}
+
+export type MenuId = {
+  __typename?: "MenuID"
+  itemName: Scalars["String"]["output"]
+  optionName: Scalars["String"]["output"]
 }
 
 export type MenuItem = {
@@ -210,7 +217,7 @@ export type Order = {
   customerEmail: Scalars["String"]["output"]
   customerName: Scalars["String"]["output"]
   id: Scalars["String"]["output"]
-  menuItemID: Scalars["String"]["output"]
+  menuID: MenuId
   price: Scalars["Float"]["output"]
   status: OrderStatus
   timestamps: Array<OrderStatusUpdateTimestamp>

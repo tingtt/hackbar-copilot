@@ -31,10 +31,6 @@ type MenuItemID struct {
 	OptionName string
 }
 
-func (m MenuItemID) String() string {
-	return m.ItemName + "-" + m.OptionName
-}
-
 type Status string
 
 const (

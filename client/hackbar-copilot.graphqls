@@ -130,7 +130,8 @@ extend type Mutation {
 }
 
 input InputOrder {
-  menuItemID: String!
+  menuItemName: String!
+  menuItemOptionName: String!
   customerName: String
 }
 
@@ -151,10 +152,15 @@ type Order {
   id: String!
   customerEmail: String!
   customerName: String!
-  menuItemID: String!
+  menuID: MenuID!
   timestamps: [OrderStatusUpdateTimestamp!]!
   status: OrderStatus!
   price: Float!
+}
+
+type MenuID {
+  itemName: String!
+  optionName: String!
 }
 
 type OrderStatusUpdateTimestamp {

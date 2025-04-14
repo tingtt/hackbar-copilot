@@ -70,8 +70,9 @@ type InputGlassType struct {
 }
 
 type InputOrder struct {
-	MenuItemID   string  `json:"menuItemID"`
-	CustomerName *string `json:"customerName,omitempty"`
+	MenuItemName       string  `json:"menuItemName"`
+	MenuItemOptionName string  `json:"menuItemOptionName"`
+	CustomerName       *string `json:"customerName,omitempty"`
 }
 
 type InputOrderStatusUpdate struct {
@@ -125,6 +126,11 @@ type Material struct {
 	InStock bool   `json:"inStock"`
 }
 
+type MenuID struct {
+	ItemName   string `json:"itemName"`
+	OptionName string `json:"optionName"`
+}
+
 type MenuItem struct {
 	Name        string            `json:"name"`
 	ImageURL    *string           `json:"imageURL,omitempty"`
@@ -150,7 +156,7 @@ type Order struct {
 	ID            string                        `json:"id"`
 	CustomerEmail string                        `json:"customerEmail"`
 	CustomerName  string                        `json:"customerName"`
-	MenuItemID    string                        `json:"menuItemID"`
+	MenuID        *MenuID                       `json:"menuID"`
 	Timestamps    []*OrderStatusUpdateTimestamp `json:"timestamps"`
 	Status        OrderStatus                   `json:"status"`
 	Price         float64                       `json:"price"`

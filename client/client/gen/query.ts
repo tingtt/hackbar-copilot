@@ -98,7 +98,10 @@ export const getOrders = () => ({
         id
         customerEmail
         customerName
-        menuItemID
+        menuID {
+          itemName
+          optionName
+        }
         timestamps {
           status
           timestamp
