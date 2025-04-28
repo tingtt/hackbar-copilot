@@ -43,7 +43,7 @@ func (d Dependencies) validate() {
 }
 
 type cashier struct {
-	order    order.Lister
+	order    order.SaveFindListListener
 	checkout checkout.SaveLister
 	cashout  cashout.RegisterLister
 }

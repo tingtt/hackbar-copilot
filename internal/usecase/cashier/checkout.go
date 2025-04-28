@@ -1,9 +1,11 @@
 package cashier
 
 import (
+	"errors"
 	"fmt"
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/order"
+	usecaseutils "hackbar-copilot/internal/usecase/utils"
 	"time"
 
 	"github.com/google/uuid"
@@ -28,13 +30,17 @@ func (c *cashier) Checkout(
 		orderIDsMap[id] = true
 	}
 
-	for order, err := range c.order.Latest(order.IgnoreCheckedOut()) {
+	for order_, err := range c.order.Latest(order.IgnoreCheckedOut()) {
 		if err != nil {
 			return checkout.Checkout{}, err
 		}
-		if /* specified order */ orderIDsMap[order.ID] {
-			newCheckout.TotalPrice += order.Price
-			delete(orderIDsMap, order.ID)
+		if /* specified order */ orderIDsMap[order_.ID] {
+			newCheckout.TotalPrice += order_.Price
+			delete(orderIDsMap, order_.ID)
+			_, err := updateOrderStatus(c.order, order_.ID, order.StatusCheckedOut, newCheckout.Timestamp)
+			if err != nil {
+				return checkout.Checkout{}, err
+			}
 		}
 	}
 	for notFoundOrderID := range orderIDsMap {
@@ -50,4 +56,26 @@ func (c *cashier) Checkout(
 		return checkout.Checkout{}, err
 	}
 	return newCheckout, nil
+}
+
+func updateOrderStatus(order_ order.SaveFindListListener, id order.ID, status order.Status, timestamp time.Time) (order.Order, error) {
+	o, err := order_.Find(id)
+	if err != nil {
+		if errors.Is(err, order.ErrNotFound) {
+			return order.Order{}, usecaseutils.ErrNotFound
+		}
+		return order.Order{}, err
+	}
+
+	o.Status = status
+	o.Timestamps = append(o.Timestamps, order.StatusUpdateTimestamp{
+		Status:    status,
+		Timestamp: timestamp,
+	})
+
+	err = order_.Save(o)
+	if err != nil {
+		return order.Order{}, err
+	}
+	return o, nil
 }
