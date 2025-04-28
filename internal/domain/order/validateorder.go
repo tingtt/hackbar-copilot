@@ -32,6 +32,7 @@ func validateStatus(s Status) error {
 	case StatusPrepared:
 	case StatusDelivered:
 	case StatusCanceled:
+	case StatusCheckedOut:
 	default:
 		return fmt.Errorf("invalid status")
 	}
