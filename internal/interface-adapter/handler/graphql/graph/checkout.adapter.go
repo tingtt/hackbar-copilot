@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"fmt"
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
@@ -9,7 +10,7 @@ import (
 
 type inputCheckout model.InputCheckout
 
-func (i inputCheckout) apply() (order.CustomerEmail, []order.ID, []checkout.Diff, checkout.PaymentType) {
+func (i inputCheckout) apply() (order.CustomerEmail, []order.ID, []checkout.Diff, checkout.PaymentType, error) {
 	orderIDs := make([]order.ID, 0, len(i.OrderIDs))
 	for _, orderID := range i.OrderIDs {
 		orderIDs = append(orderIDs, order.ID(orderID))
@@ -23,7 +24,42 @@ func (i inputCheckout) apply() (order.CustomerEmail, []order.ID, []checkout.Diff
 		})
 	}
 
-	return order.CustomerEmail(i.CustomerEmail), orderIDs, diffs, checkout.PaymentType(i.PaymentType)
+	paymentType, err := inputCheckoutType(i.PaymentType).apply()
+	if err != nil {
+		return "", nil, nil, "", err
+	}
+
+	return order.CustomerEmail(i.CustomerEmail), orderIDs, diffs, paymentType, nil
+}
+
+type inputCheckoutType model.CheckoutType
+
+func (i inputCheckoutType) apply() (checkout.PaymentType, error) {
+	switch model.CheckoutType(i) {
+	case model.CheckoutTypeCredit:
+		return checkout.CheckoutTypeCreditCard, nil
+	case model.CheckoutTypeQR:
+		return checkout.CheckoutTypeQR, nil
+	case model.CheckoutTypeCash:
+		return checkout.CheckoutTypeCash, nil
+	default:
+		return "", fmt.Errorf("invalid checkout type")
+	}
+}
+
+type paymentType checkout.PaymentType
+
+func (p paymentType) apply() model.CheckoutType {
+	switch checkout.PaymentType(p) {
+	case checkout.CheckoutTypeCreditCard:
+		return model.CheckoutTypeCredit
+	case checkout.CheckoutTypeQR:
+		return model.CheckoutTypeQR
+	case checkout.CheckoutTypeCash:
+		return model.CheckoutTypeCash
+	default:
+		return "unknown"
+	}
 }
 
 type checkout_ checkout.Checkout
@@ -33,7 +69,7 @@ func (c checkout_) apply() *model.Checkout {
 		ID:            string(c.ID),
 		CustomerEmail: string(c.CustomerEmail),
 		TotalPrice:    float64(c.TotalPrice),
-		PaymentType:   model.CheckoutType(c.PaymentType),
+		PaymentType:   paymentType(c.PaymentType).apply(),
 		Timestamp:     c.Timestamp.UTC().Format(time.RFC3339),
 	}
 	for _, orderID := range c.OrderIDs {

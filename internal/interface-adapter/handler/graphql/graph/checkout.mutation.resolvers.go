@@ -20,7 +20,12 @@ func (r *mutationResolver) Checkout(ctx context.Context, input model.InputChecko
 		return nil, errors.New("forbidden")
 	}
 
-	c, err := r.Cashier.Checkout(inputCheckout(input).apply())
+	customerEmail, orderIDs, diffs, paymentType, err := inputCheckout(input).apply()
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := r.Cashier.Checkout(customerEmail, orderIDs, diffs, paymentType)
 	if err != nil {
 		return nil, err
 	}
