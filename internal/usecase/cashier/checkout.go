@@ -30,7 +30,7 @@ func (c *cashier) Checkout(
 		orderIDsMap[id] = true
 	}
 
-	for order_, err := range c.order.Latest(order.IgnoreCheckedOut()) {
+	for order_, err := range c.order.Latest(order.FilterCustomerEmail(customerEmail), order.IgnoreCheckedOut()) {
 		if err != nil {
 			return checkout.Checkout{}, err
 		}
@@ -38,6 +38,11 @@ func (c *cashier) Checkout(
 			newCheckout.TotalPrice += order_.Price
 			delete(orderIDsMap, order_.ID)
 			_, err := updateOrderStatus(c.order, order_.ID, order.StatusCheckedOut, newCheckout.Timestamp)
+			if err != nil {
+				return checkout.Checkout{}, err
+			}
+		} else {
+			_, err := updateOrderStatus(c.order, order_.ID, order.StatusCanceled, newCheckout.Timestamp)
 			if err != nil {
 				return checkout.Checkout{}, err
 			}
