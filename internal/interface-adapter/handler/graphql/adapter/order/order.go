@@ -10,6 +10,7 @@ func (o *outputAdapter) Order(order order.Order) *model.Order {
 	return &model.Order{
 		ID:            string(order.ID),
 		CustomerEmail: string(order.CustomerEmail),
+		CustomerName:  order.CustomerName,
 		MenuID: &model.MenuID{
 			ItemName:   order.MenuItemID.ItemName,
 			OptionName: order.MenuItemID.OptionName,
