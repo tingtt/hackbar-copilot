@@ -28,6 +28,8 @@ func (o *orderRepository) Find(id order.ID) (order.Order, error) {
 func (o *orderRepository) Latest(optionAppliers ...options.Applier[order.ListerOption]) iter.Seq2[order.Order, error] {
 	option := options.Create(optionAppliers...)
 
+	var canceledListBuffer []order.Order
+
 	return func(yield func(order.Order, error) bool) {
 		for _, o := range o.fs.data.orders {
 			if option.Since != nil && o.CreatedAt().Before(*option.Since) {
@@ -37,12 +39,28 @@ func (o *orderRepository) Latest(optionAppliers ...options.Applier[order.ListerO
 				continue
 			}
 			if option.IgnoreCheckedOut && o.Status == order.StatusCheckedOut {
-				break
+				return
 			}
+			if o.Status == order.StatusCanceled {
+				canceledListBuffer = append(canceledListBuffer, o)
+				continue
+			}
+			for _, o := range canceledListBuffer {
+				if !yield(o, nil) {
+					return
+				}
+			}
+			canceledListBuffer = nil
 			if !yield(o, nil) {
 				return
 			}
 		}
+		for _, o := range canceledListBuffer {
+			if !yield(o, nil) {
+				return
+			}
+		}
+		canceledListBuffer = nil
 	}
 }
 
