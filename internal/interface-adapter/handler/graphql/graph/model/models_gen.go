@@ -209,8 +209,9 @@ type Step struct {
 }
 
 type User struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	Email         string `json:"email"`
+	Name          string `json:"name"`
+	NameConfirmed bool   `json:"nameConfirmed"`
 }
 
 type CheckoutType string

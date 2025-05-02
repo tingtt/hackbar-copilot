@@ -10,7 +10,7 @@ import (
 
 type Order interface {
 	GetUserInfo(customerEmail order.CustomerEmail) (user.User, error)
-	SetUserInfo(customerEmail order.CustomerEmail, customerName string) (user.User, error)
+	SetUserInfo(customerEmail order.CustomerEmail, customerName string, autofill bool) (user.User, error)
 	ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error)
 	Order(customerEmail order.CustomerEmail, customerName *string, menuItemID order.MenuItemID) (order.Order, error)
 	ListUncheckedOrders(customerEmail order.CustomerEmail) ([]order.Order, error)

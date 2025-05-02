@@ -9,8 +9,9 @@ type userAdapter user.User
 
 func (c userAdapter) apply() *model.User {
 	m := model.User{
-		Email: string(c.Email),
-		Name:  c.Name,
+		Email:         string(c.Email),
+		Name:          c.Name,
+		NameConfirmed: c.NameConfirmed,
 	}
 	return &m
 }

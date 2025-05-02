@@ -329,5 +329,6 @@ extend type Query {
 type User {
   email: String!
   name: String!
+  nameConfirmed: Boolean!
 }
 

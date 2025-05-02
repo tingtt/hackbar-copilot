@@ -299,4 +299,5 @@ export type User = {
   __typename?: "User"
   email: Scalars["String"]["output"]
   name: Scalars["String"]["output"]
+  nameConfirmed: Scalars["Boolean"]["output"]
 }

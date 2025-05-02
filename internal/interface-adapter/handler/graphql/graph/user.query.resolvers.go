@@ -34,7 +34,7 @@ func (r *queryResolver) UserInfo(ctx context.Context) (*model.User, error) {
 				slog.String("error", err.Error()),
 			)
 		} else {
-			u, err := r.OrderService.SetUserInfo(order.CustomerEmail(email), name)
+			u, err := r.OrderService.SetUserInfo(order.CustomerEmail(email), name, true /* autofill */)
 			if err != nil {
 				slog.Error("failed to set user info", slog.String("error", err.Error()))
 			}

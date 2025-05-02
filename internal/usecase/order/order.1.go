@@ -15,11 +15,19 @@ func (o *orderimpl) Order(customerEmail order.CustomerEmail, customerName *strin
 		u, err := o.user.Get(user.Email(customerEmail))
 		if err != nil {
 			if errors.Is(err, user.ErrNotFound) {
-				return order.Order{}, errors.New("customer name not specified")
+				return order.Order{}, errors.New("customer not found")
 			}
 			return order.Order{}, err
 		}
+		if u.Name == "" {
+			return order.Order{}, errors.New("customer name not specified")
+		}
 		customerName = &u.Name
+	} else {
+		_, err := o.SetUserInfo(customerEmail, *customerName, false /* not autofill */)
+		if err != nil {
+			return order.Order{}, err
+		}
 	}
 
 	menuItem, err := o.menu.Find(menuItemID.ItemName, menuItemID.OptionName)

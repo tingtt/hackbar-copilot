@@ -6,8 +6,9 @@ import (
 )
 
 type User struct {
-	Email Email
-	Name  string
+	Email         Email
+	Name          string
+	NameConfirmed bool
 }
 
 type Email string

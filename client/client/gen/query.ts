@@ -162,6 +162,7 @@ export const getUserInfo = () => ({
         __typename
         email
         name
+        nameConfirmed
       }
     }
   `,
