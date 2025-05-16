@@ -12,8 +12,8 @@ func (c *Checkout) Validate() error {
 	if c.CustomerEmail == "" {
 		return errors.New("CustomerEmail cannot be empty")
 	}
-	if c.TotalPrice <= 0 {
-		return errors.New("total price cannot be less than or equal to zero")
+	if c.TotalPrice < 0 {
+		return errors.New("total price cannot be less than zero")
 	}
 	if c.Timestamp.IsZero() {
 		return fmt.Errorf("timestamp cannot be zero")
