@@ -8,6 +8,7 @@ import (
 	"hackbar-copilot/internal/infrastructure/datasource/filesystem"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph"
+	"hackbar-copilot/internal/usecase/barcounter"
 	"hackbar-copilot/internal/usecase/cashier"
 	"hackbar-copilot/internal/usecase/copilot"
 	"hackbar-copilot/internal/usecase/order"
@@ -34,11 +35,10 @@ func run() error {
 	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, os.Kill)
 
 	option := getCLIOption(os.Args)
-	deps, close, err := loadDependencies(option.DataDirPath)
+	deps, err := loadDependencies(option.DataDirPath)
 	if err != nil {
 		return err
 	}
-	defer close()
 
 	server := http.NewServer(
 		fmt.Sprintf("%s:%s", option.Host, option.Port),
@@ -112,36 +112,29 @@ type depsUsecase struct {
 	GraphQL graph.Dependencies
 }
 
-func loadDependencies(dataDirPath string) (dependencies, func() /* close func */, error) {
+func loadDependencies(dataDirPath string) (dependencies, error) {
 	fs, err := filesystem.NewRepository(dataDirPath)
 	if err != nil {
-		return dependencies{}, nil, err
+		return dependencies{}, err
 	}
-
-	orderRepo, close := fs.Order()
 
 	return dependencies{
 		Datasources: depsDatasources{fs},
 		Usecase: depsUsecase{
 			GraphQL: graph.Dependencies{
 				Copilot: copilot.New(copilot.Dependencies{
-					Recipe:  fs.Recipe(),
-					Menu:    fs.Menu(),
-					Stock:   fs.Stock(),
-					Order:   orderRepo,
-					Cashout: fs.Cashout(),
+					Gateway: fs.CopilotGateway(),
 				}),
 				OrderService: order.New(order.Dependencies{
-					Menu:  fs.Menu(),
-					Order: orderRepo,
-					User:  fs.User(),
+					Gateway: fs.OrderGateway(),
+				}),
+				BarCounter: barcounter.New(barcounter.Dependencies{
+					Gateway: fs.BarCounterGateway(),
 				}),
 				Cashier: cashier.New(cashier.Dependencies{
-					Order:    orderRepo,
-					Checkout: fs.Checkout(),
-					Cashout:  fs.Cashout(),
+					Gateway: fs.CashierGateway(),
 				}),
 			},
 		},
-	}, close, nil
+	}, nil
 }

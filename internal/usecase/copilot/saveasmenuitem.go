@@ -1,6 +1,7 @@
 package copilot
 
 import (
+	"fmt"
 	"hackbar-copilot/internal/domain/menu"
 	"slices"
 )
@@ -8,19 +9,22 @@ import (
 // SaveAsMenuItem implements Copilot.
 func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) (menu.Item, error) {
 	if arg.Remove {
-		err := c.menu.Remove(recipeGroupName)
-		return menu.Item{}, err
+		err := c.datasource.Menu().Remove(recipeGroupName)
+		if err != nil {
+			return menu.Item{}, fmt.Errorf("failed to remove menu item: %w", err)
+		}
+		return menu.Item{}, nil
 	}
 
 	rg, err := c.FindRecipeGroup(recipeGroupName)
 	if err != nil {
-		return menu.Item{}, err
+		return menu.Item{}, fmt.Errorf("failed to find recipe group: %w", err)
 	}
 
 	materialNames := map[string]bool{}
 	materials, err := c.Materials(SortMaterialByName())
 	if err != nil {
-		return menu.Item{}, err
+		return menu.Item{}, fmt.Errorf("failed to retrieve materials: %w", err)
 	}
 	for _, material := range materials {
 		materialNames[material.Name] = true
@@ -62,14 +66,20 @@ func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) 
 			}
 		}
 	}
-	err = c.menu.Save(mi)
+
+	err = mi.Validate()
 	if err != nil {
-		return menu.Item{}, err
+		return menu.Item{}, fmt.Errorf("failed to create menu item: %w", err)
+	}
+
+	err = c.datasource.Menu().Save(mi)
+	if err != nil {
+		return menu.Item{}, fmt.Errorf("failed to save menu item: %w", err)
 	}
 	if len(newMaterials) > 0 {
-		err = c.stock.Save(newMaterials, nil)
+		err = c.datasource.Stock().Save(newMaterials, nil)
 		if err != nil {
-			return menu.Item{}, err
+			return menu.Item{}, fmt.Errorf("failed to save new materials: %w", err)
 		}
 	}
 	return mi, nil

@@ -1,14 +1,12 @@
 package copilot
 
 import (
-	"hackbar-copilot/internal/domain/cashout"
 	"hackbar-copilot/internal/domain/menu"
-	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/domain/recipe"
 	"hackbar-copilot/internal/domain/stock"
 	"hackbar-copilot/internal/usecase/sort"
+	"iter"
 	"reflect"
-	"time"
 )
 
 type Copilot interface {
@@ -22,14 +20,9 @@ type Copilot interface {
 	FindGlassType() (map[string]recipe.GlassType, error)
 
 	SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) (menu.Item, error)
-	ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error)
 
 	Materials(sortFunc sort.Yield[stock.Material], optionAppliers ...QueryOptionApplier) ([]stock.Material, error)
 	UpdateStock(inStockMaterials, outOfStockMaterials []string) error
-
-	LatestUncheckedOrders() ([]order.Order, error)
-	ListenOrder() (chan order.SavedOrder, error)
-	UpdateOrderStatus(id order.ID, status order.Status, timestamp time.Time) (order.Order, error)
 }
 
 type SaveAsMenuItemArg struct {
@@ -45,21 +38,11 @@ type MenuFromRecipeGroupArg struct {
 
 func New(deps Dependencies) Copilot {
 	deps.validate()
-	return &copilot{
-		recipe:  recipe.NewSaveLister(deps.Recipe),
-		menu:    menu.NewSaveLister(deps.Menu),
-		stock:   stock.NewSaveLister(deps.Stock),
-		order:   order.NewSaveListListener(deps.Order),
-		cashout: cashout.NewRegisterLister(deps.Order, deps.Cashout),
-	}
+	return &copilot{deps.Gateway}
 }
 
 type Dependencies struct {
-	Recipe  recipe.Repository
-	Menu    menu.Repository
-	Stock   stock.Repository
-	Order   order.Repository
-	Cashout cashout.Repository
+	Gateway Gateway
 }
 
 func (d Dependencies) validate() {
@@ -72,9 +55,32 @@ func (d Dependencies) validate() {
 }
 
 type copilot struct {
-	recipe  recipe.SaveListRemover
-	menu    menu.SaveFindListRemover
-	stock   stock.SaveLister
-	order   order.SaveFindListListener
-	cashout cashout.Lister
+	datasource Gateway
+}
+
+type Gateway interface {
+	Recipe() RecipeSaveListRemover
+	Menu() MenuSaveListRemover
+	Stock() StockSaveLister
+}
+
+type RecipeSaveListRemover interface {
+	Save(rg recipe.RecipeGroup) error
+	SaveRecipeType(rt recipe.RecipeType) error
+	SaveGlassType(gt recipe.GlassType) error
+	All() iter.Seq2[recipe.RecipeGroup, error]
+	AllRecipeTypes() iter.Seq2[recipe.RecipeType, error]
+	AllGlassTypes() iter.Seq2[recipe.GlassType, error]
+	Remove(recipeGroupName string) error
+}
+
+type MenuSaveListRemover interface {
+	Save(g menu.Item) error
+	All() iter.Seq2[menu.Item, error]
+	Remove(itemName string) error
+}
+
+type StockSaveLister interface {
+	Save(inStockMaterials, outOfStockMaterials []string) error
+	All() iter.Seq2[stock.Material, error]
 }

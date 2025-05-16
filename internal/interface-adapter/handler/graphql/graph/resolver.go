@@ -5,6 +5,7 @@ import (
 	menuadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/menu"
 	orderadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/order"
 	recipeadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/recipe"
+	"hackbar-copilot/internal/usecase/barcounter"
 	"hackbar-copilot/internal/usecase/cashier"
 	"hackbar-copilot/internal/usecase/copilot"
 	"hackbar-copilot/internal/usecase/order"
@@ -37,6 +38,8 @@ type Dependencies struct {
 
 	OrderService order.Order
 	orderAdapter orderadapter.Adapter
+
+	BarCounter barcounter.BarCounter
 
 	Cashier cashier.Cashier
 

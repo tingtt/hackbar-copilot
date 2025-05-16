@@ -2,14 +2,19 @@ package copilot
 
 import (
 	"errors"
-	"hackbar-copilot/internal/domain/menu"
+	"fmt"
+	usecaseutils "hackbar-copilot/internal/usecase/utils"
 )
 
 // RemoveRecipeAndMenuItem implements Copilot.
 func (c *copilot) RemoveRecipeAndMenuItem(name string) error {
-	err := c.menu.Remove(name)
-	if err != nil && !errors.Is(err, menu.ErrNotFound) {
-		return err
+	err := c.datasource.Menu().Remove(name)
+	if err != nil && !errors.Is(err, usecaseutils.ErrNotFound) {
+		return fmt.Errorf("failed to remove menu item: %w", err)
 	}
-	return c.recipe.Remove(name)
+	err = c.datasource.Recipe().Remove(name)
+	if err != nil && !errors.Is(err, usecaseutils.ErrNotFound) {
+		return fmt.Errorf("failed to remove recipe: %w", err)
+	}
+	return nil
 }

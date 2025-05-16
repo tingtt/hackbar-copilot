@@ -43,12 +43,13 @@ func Test_loadData(t *testing.T) {
 				}(),
 			},
 			wantD: data{
-				recipeGroups: nil,
-				recipeTypes:  nil,
-				glassTypes:   nil,
-				menuItems:    nil,
-				stocks:       nil,
-				orders:       nil,
+				recipeGroups:         nil,
+				recipeTypes:          nil,
+				glassTypes:           nil,
+				menuItems:            nil,
+				stocks:               nil,
+				uncheckedOrders:      nil,
+				uncashedoutCheckouts: nil,
 			},
 			wantErr: false,
 		},
@@ -62,12 +63,13 @@ func Test_loadData(t *testing.T) {
 				}(),
 			},
 			wantD: data{
-				recipeGroups: nil,
-				recipeTypes:  nil,
-				glassTypes:   nil,
-				menuItems:    nil,
-				stocks:       nil,
-				orders:       nil,
+				recipeGroups:         nil,
+				recipeTypes:          nil,
+				glassTypes:           nil,
+				menuItems:            nil,
+				stocks:               nil,
+				uncheckedOrders:      nil,
+				uncashedoutCheckouts: nil,
 			},
 			wantErr: false,
 		},
@@ -226,7 +228,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 						"Grapefruit juice": true,
 						"Tonic water":      true,
 					},
-					orders: []order.Order{
+					uncheckedOrders: []order.Order{
 						{
 							ID:            "",
 							CustomerEmail: "",
@@ -311,7 +313,7 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					assert.Equal(t, tt.data.glassTypes, data.glassTypes["glass_type"])
 					assert.Equal(t, tt.data.menuItems, data.menuGroups["menu_items"])
 					assert.Equal(t, tt.data.stocks, data.stocks["stock"])
-					assert.Equal(t, tt.data.orders, data.orders["order"])
+					assert.Equal(t, tt.data.uncheckedOrders, data.orders["order"])
 				}
 			})
 		}

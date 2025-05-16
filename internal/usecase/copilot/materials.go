@@ -1,6 +1,7 @@
 package copilot
 
 import (
+	"fmt"
 	"hackbar-copilot/internal/domain/stock"
 	"hackbar-copilot/internal/usecase/sort"
 
@@ -12,9 +13,9 @@ func (c *copilot) Materials(sortFunc sort.Yield[stock.Material], optionAppliers 
 	option := options.Create(optionAppliers...)
 
 	var root *sort.Node[stock.Material]
-	for material, err := range c.stock.All() {
+	for material, err := range c.datasource.Stock().All() {
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to retrieve materials: %w", err)
 		}
 		if option.filterByName != nil {
 			if material.Name != *option.filterByName {

@@ -47,7 +47,7 @@ func (r *mutationResolver) UpdateOrderStatus(ctx context.Context, input model.In
 		return nil, err
 	}
 
-	savedOrder, err := r.Copilot.UpdateOrderStatus(order.ID(input.ID), status, time.Now())
+	savedOrder, err := r.BarCounter.UpdateOrderStatus(order.ID(input.ID), status, time.Now())
 	if err != nil {
 		return nil, err
 	}

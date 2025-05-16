@@ -76,7 +76,7 @@ extend type Query {
 type Checkout {
   id: String!
   customerEmail: String!
-  orderIDs: [String!]!
+  orders: [Order!]!
   diffs: [PaymentDiff!]!
   totalPrice: Float!
   paymentType: CheckoutType!
@@ -145,7 +145,7 @@ input InputOrderStatusUpdate {
 #*
 
 extend type Query {
-  orders: [Order!]!
+  uncheckedOrders: [Order!]!
 }
 
 type Order {

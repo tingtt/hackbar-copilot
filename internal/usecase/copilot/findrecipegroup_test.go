@@ -17,10 +17,11 @@ func Test_copilot_FindRecipeGroup(t *testing.T) {
 		recipeGroup := recipetest.ExampleRecipeGroupsIter
 		want := recipetest.ExampleRecipeGroups[0]
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("All").Return(recipeGroup, nil)
+		recipeMock := new(MockRecipe)
+		recipeMock.On("All").Return(recipeGroup, nil)
+		gateway := MockGateway{recipe: recipeMock}
 
-		c := &copilot{recipe: recipeSaveLister}
+		c := &copilot{&gateway}
 
 		got, err := c.FindRecipeGroup(want.Name)
 		assert.NoError(t, err)
@@ -32,10 +33,11 @@ func Test_copilot_FindRecipeGroup(t *testing.T) {
 
 		recipeGroup := recipetest.ExampleRecipeGroupsIter
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("All").Return(recipeGroup, nil)
+		recipeMock := new(MockRecipe)
+		recipeMock.On("All").Return(recipeGroup, nil)
+		gateway := MockGateway{recipe: recipeMock}
 
-		c := &copilot{recipe: recipeSaveLister}
+		c := &copilot{&gateway}
 
 		_, err := c.FindRecipeGroup("notfound")
 		assert.ErrorIs(t, err, usecaseutils.ErrNotFound)

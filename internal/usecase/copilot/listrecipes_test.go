@@ -20,10 +20,11 @@ func Test_copilot_ListRecipes(t *testing.T) {
 			return want[i].Name < want[j].Name
 		})
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("All").Return(recipeGroup, nil)
+		recipeMock := new(MockRecipe)
+		recipeMock.On("All").Return(recipeGroup, nil)
+		gateway := MockGateway{recipe: recipeMock}
 
-		c := &copilot{recipe: recipeSaveLister}
+		c := &copilot{&gateway}
 
 		got, err := c.ListRecipes(SortRecipeGroupByName())
 		assert.NoError(t, err)

@@ -1,5 +1,5 @@
 extend type Query {
-  orders: [Order!]!
+  uncheckedOrders: [Order!]!
 }
 
 type Order {

@@ -8,8 +8,8 @@ import (
 	"context"
 	"errors"
 	"hackbar-copilot/internal/domain/order"
-	"hackbar-copilot/internal/domain/user"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
+	usecaseutils "hackbar-copilot/internal/usecase/utils"
 	"log/slog"
 )
 
@@ -22,7 +22,7 @@ func (r *queryResolver) UserInfo(ctx context.Context) (*model.User, error) {
 
 	u, err := r.OrderService.GetUserInfo(order.CustomerEmail(email))
 	if err != nil {
-		if !errors.Is(err, user.ErrNotFound) {
+		if !errors.Is(err, usecaseutils.ErrNotFound) {
 			return nil, err
 		}
 

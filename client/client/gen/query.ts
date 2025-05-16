@@ -12,7 +12,21 @@ export const getCashouts = (variables: { input: types.InputCashoutQuery }) => ({
         checkouts {
           id
           customerEmail
-          orderIDs
+          orders {
+            id
+            customerEmail
+            customerName
+            menuID {
+              itemName
+              optionName
+            }
+            timestamps {
+              status
+              timestamp
+            }
+            status
+            price
+          }
           diffs {
             price
             description
@@ -37,7 +51,21 @@ export const getCheckouts = () => ({
         __typename
         id
         customerEmail
-        orderIDs
+        orders {
+          id
+          customerEmail
+          customerName
+          menuID {
+            itemName
+            optionName
+          }
+          timestamps {
+            status
+            timestamp
+          }
+          status
+          price
+        }
         diffs {
           price
           description
@@ -90,10 +118,10 @@ export const getMenu = () => ({
   `,
 })
 
-export const getOrders = () => ({
+export const getUncheckedOrders = () => ({
   query: `
-    query getOrders {
-      orders  {
+    query getUncheckedOrders {
+      uncheckedOrders  {
         __typename
         id
         customerEmail

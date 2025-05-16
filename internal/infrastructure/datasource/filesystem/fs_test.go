@@ -19,6 +19,18 @@ func TestNewRepository(t *testing.T) {
 		assert.NotNil(t, fs)
 	})
 
+	t.Run("will return non-nil implements", func(t *testing.T) {
+		t.Parallel()
+
+		fs, err := NewRepository(t.TempDir())
+
+		assert.NoError(t, err)
+		assert.NotNil(t, fs.BarCounterGateway())
+		assert.NotNil(t, fs.CashierGateway())
+		assert.NotNil(t, fs.CopilotGateway())
+		assert.NotNil(t, fs.OrderGateway())
+	})
+
 	t.Run("may return error, if fail to create data files", func(t *testing.T) {
 		t.Parallel()
 
@@ -26,44 +38,5 @@ func TestNewRepository(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, fs)
-	})
-}
-
-func Test_filesystem_Recipe(t *testing.T) {
-	t.Parallel()
-
-	t.Run("will return non-nil struct", func(t *testing.T) {
-		t.Parallel()
-
-		fs, err := NewRepository(t.TempDir())
-
-		assert.NoError(t, err)
-		assert.NotNil(t, fs.Recipe())
-	})
-}
-
-func Test_filesystem_Menu(t *testing.T) {
-	t.Parallel()
-
-	t.Run("will return non-nil struct", func(t *testing.T) {
-		t.Parallel()
-
-		fs, err := NewRepository(t.TempDir())
-
-		assert.NoError(t, err)
-		assert.NotNil(t, fs.Menu())
-	})
-}
-
-func Test_filesystem_Stock(t *testing.T) {
-	t.Parallel()
-
-	t.Run("will return non-nil struct", func(t *testing.T) {
-		t.Parallel()
-
-		fs, err := NewRepository(t.TempDir())
-
-		assert.NoError(t, err)
-		assert.NotNil(t, fs.Stock())
 	})
 }

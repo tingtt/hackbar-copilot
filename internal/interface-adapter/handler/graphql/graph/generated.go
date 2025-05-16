@@ -58,7 +58,7 @@ type ComplexityRoot struct {
 		CustomerEmail func(childComplexity int) int
 		Diffs         func(childComplexity int) int
 		ID            func(childComplexity int) int
-		OrderIDs      func(childComplexity int) int
+		Orders        func(childComplexity int) int
 		PaymentType   func(childComplexity int) int
 		Timestamp     func(childComplexity int) int
 		TotalPrice    func(childComplexity int) int
@@ -128,13 +128,13 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Cashouts  func(childComplexity int, input model.InputCashoutQuery) int
-		Checkouts func(childComplexity int) int
-		Materials func(childComplexity int) int
-		Menu      func(childComplexity int) int
-		Orders    func(childComplexity int) int
-		Recipes   func(childComplexity int) int
-		UserInfo  func(childComplexity int) int
+		Cashouts        func(childComplexity int, input model.InputCashoutQuery) int
+		Checkouts       func(childComplexity int) int
+		Materials       func(childComplexity int) int
+		Menu            func(childComplexity int) int
+		Recipes         func(childComplexity int) int
+		UncheckedOrders func(childComplexity int) int
+		UserInfo        func(childComplexity int) int
 	}
 
 	Recipe struct {
@@ -185,7 +185,7 @@ type QueryResolver interface {
 	Cashouts(ctx context.Context, input model.InputCashoutQuery) ([]*model.Cashout, error)
 	Checkouts(ctx context.Context) ([]*model.Checkout, error)
 	Menu(ctx context.Context) ([]*model.MenuItem, error)
-	Orders(ctx context.Context) ([]*model.Order, error)
+	UncheckedOrders(ctx context.Context) ([]*model.Order, error)
 	Recipes(ctx context.Context) ([]*model.RecipeGroup, error)
 	Materials(ctx context.Context) ([]*model.Material, error)
 	UserInfo(ctx context.Context) (*model.User, error)
@@ -259,12 +259,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Checkout.ID(childComplexity), true
 
-	case "Checkout.orderIDs":
-		if e.complexity.Checkout.OrderIDs == nil {
+	case "Checkout.orders":
+		if e.complexity.Checkout.Orders == nil {
 			break
 		}
 
-		return e.complexity.Checkout.OrderIDs(childComplexity), true
+		return e.complexity.Checkout.Orders(childComplexity), true
 
 	case "Checkout.paymentType":
 		if e.complexity.Checkout.PaymentType == nil {
@@ -602,19 +602,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Menu(childComplexity), true
 
-	case "Query.orders":
-		if e.complexity.Query.Orders == nil {
-			break
-		}
-
-		return e.complexity.Query.Orders(childComplexity), true
-
 	case "Query.recipes":
 		if e.complexity.Query.Recipes == nil {
 			break
 		}
 
 		return e.complexity.Query.Recipes(childComplexity), true
+
+	case "Query.uncheckedOrders":
+		if e.complexity.Query.UncheckedOrders == nil {
+			break
+		}
+
+		return e.complexity.Query.UncheckedOrders(childComplexity), true
 
 	case "Query.userInfo":
 		if e.complexity.Query.UserInfo == nil {
@@ -1219,8 +1219,8 @@ func (ec *executionContext) fieldContext_Cashout_checkouts(_ context.Context, fi
 				return ec.fieldContext_Checkout_id(ctx, field)
 			case "customerEmail":
 				return ec.fieldContext_Checkout_customerEmail(ctx, field)
-			case "orderIDs":
-				return ec.fieldContext_Checkout_orderIDs(ctx, field)
+			case "orders":
+				return ec.fieldContext_Checkout_orders(ctx, field)
 			case "diffs":
 				return ec.fieldContext_Checkout_diffs(ctx, field)
 			case "totalPrice":
@@ -1456,8 +1456,8 @@ func (ec *executionContext) fieldContext_Checkout_customerEmail(_ context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Checkout_orderIDs(ctx context.Context, field graphql.CollectedField, obj *model.Checkout) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Checkout_orderIDs(ctx, field)
+func (ec *executionContext) _Checkout_orders(ctx context.Context, field graphql.CollectedField, obj *model.Checkout) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Checkout_orders(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1470,7 +1470,7 @@ func (ec *executionContext) _Checkout_orderIDs(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.OrderIDs, nil
+		return obj.Orders, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1482,19 +1482,35 @@ func (ec *executionContext) _Checkout_orderIDs(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.([]*model.Order)
 	fc.Result = res
-	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Checkout_orderIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Checkout_orders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Checkout",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Order_id(ctx, field)
+			case "customerEmail":
+				return ec.fieldContext_Order_customerEmail(ctx, field)
+			case "customerName":
+				return ec.fieldContext_Order_customerName(ctx, field)
+			case "menuID":
+				return ec.fieldContext_Order_menuID(ctx, field)
+			case "timestamps":
+				return ec.fieldContext_Order_timestamps(ctx, field)
+			case "status":
+				return ec.fieldContext_Order_status(ctx, field)
+			case "price":
+				return ec.fieldContext_Order_price(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Order", field.Name)
 		},
 	}
 	return fc, nil
@@ -2636,8 +2652,8 @@ func (ec *executionContext) fieldContext_Mutation_checkout(ctx context.Context, 
 				return ec.fieldContext_Checkout_id(ctx, field)
 			case "customerEmail":
 				return ec.fieldContext_Checkout_customerEmail(ctx, field)
-			case "orderIDs":
-				return ec.fieldContext_Checkout_orderIDs(ctx, field)
+			case "orders":
+				return ec.fieldContext_Checkout_orders(ctx, field)
 			case "diffs":
 				return ec.fieldContext_Checkout_diffs(ctx, field)
 			case "totalPrice":
@@ -3523,8 +3539,8 @@ func (ec *executionContext) fieldContext_Query_checkouts(_ context.Context, fiel
 				return ec.fieldContext_Checkout_id(ctx, field)
 			case "customerEmail":
 				return ec.fieldContext_Checkout_customerEmail(ctx, field)
-			case "orderIDs":
-				return ec.fieldContext_Checkout_orderIDs(ctx, field)
+			case "orders":
+				return ec.fieldContext_Checkout_orders(ctx, field)
 			case "diffs":
 				return ec.fieldContext_Checkout_diffs(ctx, field)
 			case "totalPrice":
@@ -3596,8 +3612,8 @@ func (ec *executionContext) fieldContext_Query_menu(_ context.Context, field gra
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_orders(ctx, field)
+func (ec *executionContext) _Query_uncheckedOrders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_uncheckedOrders(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3610,7 +3626,7 @@ func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Orders(rctx)
+		return ec.resolvers.Query().UncheckedOrders(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3627,7 +3643,7 @@ func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.Col
 	return ec.marshalNOrder2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_orders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_uncheckedOrders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -7347,8 +7363,8 @@ func (ec *executionContext) _Checkout(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "orderIDs":
-			out.Values[i] = ec._Checkout_orderIDs(ctx, field, obj)
+		case "orders":
+			out.Values[i] = ec._Checkout_orders(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -7965,7 +7981,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "orders":
+		case "uncheckedOrders":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -7974,7 +7990,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_orders(ctx, field)
+				res = ec._Query_uncheckedOrders(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

@@ -7,5 +7,5 @@ import (
 
 // GetUserInfo implements Order.
 func (o *orderimpl) GetUserInfo(customerEmail order.CustomerEmail) (user.User, error) {
-	return o.user.Get(user.Email(customerEmail))
+	return o.datasource.User().Get(user.Email(customerEmail))
 }

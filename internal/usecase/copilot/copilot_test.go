@@ -20,19 +20,9 @@ func TestNew(t *testing.T) {
 	t.Run("will return non-nil struct", func(t *testing.T) {
 		t.Parallel()
 
-		copilot := New(Dependencies{
-			Recipe:  new(MockRecipeSaveListRemover),
-			Menu:    new(MockMenu),
-			Stock:   new(MockStockSaveLister),
-			Order:   new(MockOrder),
-			Cashout: new(MockCashout),
-		}).(*copilot)
+		copilot := New(Dependencies{new(MockGateway)}).(*copilot)
 
 		assert.NotNil(t, copilot)
-		assert.NotNil(t, copilot.recipe)
-		assert.NotNil(t, copilot.menu)
-		assert.NotNil(t, copilot.stock)
-		assert.NotNil(t, copilot.order)
-		assert.NotNil(t, copilot.cashout)
+		assert.NotNil(t, copilot.datasource)
 	})
 }

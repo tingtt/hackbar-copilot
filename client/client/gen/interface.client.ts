@@ -14,7 +14,7 @@ export interface QueryClient {
   getMenu(): Promise<
     { data: null; error: string } | { data: types.MenuItem[]; error: null }
   >
-  getOrders(): Promise<
+  getUncheckedOrders(): Promise<
     { data: null; error: string } | { data: types.Order[]; error: null }
   >
   getRecipes(): Promise<

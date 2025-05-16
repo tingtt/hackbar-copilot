@@ -1,15 +1,17 @@
 package copilot
 
+import "fmt"
+
 // InStock implements Copilot.
 func (c *copilot) UpdateStock(inStockMaterials, outOfStockMaterials []string) error {
-	err := c.stock.Save(inStockMaterials, outOfStockMaterials)
+	err := c.datasource.Stock().Save(inStockMaterials, outOfStockMaterials)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to save stock: %w", err)
 	}
 
 	materials, err := c.Materials(SortMaterialByName())
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to retrieve materials: %w", err)
 	}
 	inStockMaterialNames := map[string]bool{}
 	for _, material := range materials {
@@ -18,7 +20,7 @@ func (c *copilot) UpdateStock(inStockMaterials, outOfStockMaterials []string) er
 		}
 	}
 
-	for menuGroup, err := range c.menu.All() {
+	for menuGroup, err := range c.datasource.Menu().All() {
 		if err != nil {
 			return err
 		}
@@ -37,9 +39,14 @@ func (c *copilot) UpdateStock(inStockMaterials, outOfStockMaterials []string) er
 			}
 		}
 		if update {
-			err := c.menu.Save(menuGroup)
+			err := menuGroup.Validate()
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to update menu group: invalid menu group: %w", err)
+			}
+
+			err = c.datasource.Menu().Save(menuGroup)
+			if err != nil {
+				return fmt.Errorf("failed to save menu group: %w", err)
 			}
 		}
 	}

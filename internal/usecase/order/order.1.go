@@ -2,21 +2,16 @@ package order
 
 import (
 	"errors"
+	"fmt"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/domain/user"
-	"time"
-
-	"github.com/google/uuid"
 )
 
 // Order implements Order.
 func (o *orderimpl) Order(customerEmail order.CustomerEmail, customerName *string, menuItemID order.MenuItemID) (order.Order, error) {
 	if customerName == nil {
-		u, err := o.user.Get(user.Email(customerEmail))
+		u, err := o.datasource.User().Get(user.Email(customerEmail))
 		if err != nil {
-			if errors.Is(err, user.ErrNotFound) {
-				return order.Order{}, errors.New("customer not found")
-			}
 			return order.Order{}, err
 		}
 		if u.Name == "" {
@@ -30,24 +25,29 @@ func (o *orderimpl) Order(customerEmail order.CustomerEmail, customerName *strin
 		}
 	}
 
-	menuItem, err := o.menu.Find(menuItemID.ItemName, menuItemID.OptionName)
+	menuItem, err := o.datasource.Menu().Find(menuItemID.ItemName, menuItemID.OptionName)
 	if err != nil {
 		return order.Order{}, err
 	}
 
-	new := order.Order{
-		ID:            order.ID(uuid.NewString()),
-		CustomerEmail: customerEmail,
-		CustomerName:  *customerName,
-		MenuItemID:    menuItemID,
-		Timestamps: []order.StatusUpdateTimestamp{
-			{
-				Status:    order.StatusOrdered,
-				Timestamp: time.Now(),
-			},
+	newOrder, err := order.New(
+		order.Customer{
+			Email: customerEmail,
+			Name:  *customerName,
 		},
-		Status: order.StatusOrdered,
-		Price:  menuItem.Price,
+		order.MenuItem{
+			ID:    menuItemID,
+			Price: menuItem.Price,
+		},
+	)
+	if err != nil {
+		return order.Order{}, fmt.Errorf("failed to create new order: %w", err)
 	}
-	return new, o.order.Save(new)
+
+	err = o.datasource.Order().Save(newOrder)
+	if err != nil {
+		return order.Order{}, fmt.Errorf("failed to save new order: %w", err)
+	}
+
+	return newOrder, nil
 }

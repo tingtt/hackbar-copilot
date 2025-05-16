@@ -14,7 +14,7 @@ import (
 
 // Menu is the resolver for the menu field.
 func (r *queryResolver) Menu(ctx context.Context) ([]*model.MenuItem, error) {
-	menuGroups, err := r.Copilot.ListMenu(copilot.SortMenuGroupByName())
+	menuGroups, err := r.OrderService.ListMenu(copilot.SortMenuGroupByName())
 	if err != nil {
 		return nil, err
 	}

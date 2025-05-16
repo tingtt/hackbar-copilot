@@ -22,10 +22,11 @@ func Test_copilot_FindRecipeType(t *testing.T) {
 			"blend": {Name: "blend", Description: ptr("blend description")},
 		}
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("AllRecipeTypes").Return(recipeTypes, nil)
+		recipeMock := new(MockRecipe)
+		recipeMock.On("AllRecipeTypes").Return(recipeTypes, nil)
+		gateway := MockGateway{recipe: recipeMock}
 
-		c := &copilot{recipe: recipeSaveLister}
+		c := &copilot{&gateway}
 
 		got, err := c.FindRecipeType()
 		assert.NoError(t, err)

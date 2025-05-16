@@ -8,7 +8,7 @@ import (
 // ListMenu implements Order.
 func (o *orderimpl) ListMenu(sortFunc sort.Yield[menu.Item]) ([]menu.Item, error) {
 	var root *sort.Node[menu.Item]
-	for rg, err := range o.menu.All() {
+	for rg, err := range o.datasource.Menu().All() {
 		if err != nil {
 			return nil, err
 		}

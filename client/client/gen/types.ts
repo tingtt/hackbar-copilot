@@ -46,7 +46,7 @@ export type Checkout = {
   customerEmail: Scalars["String"]["output"]
   diffs: Array<PaymentDiff>
   id: Scalars["String"]["output"]
-  orderIDs: Array<Scalars["String"]["output"]>
+  orders: Array<Order>
   paymentType: CheckoutType
   timestamp: Scalars["DateTime"]["output"]
   totalPrice: Scalars["Float"]["output"]
@@ -250,8 +250,8 @@ export type Query = {
   checkouts: Array<Checkout>
   materials: Array<Material>
   menu: Array<MenuItem>
-  orders: Array<Order>
   recipes: Array<RecipeGroup>
+  uncheckedOrders: Array<Order>
   userInfo: User
 }
 

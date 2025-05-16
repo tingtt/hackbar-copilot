@@ -80,47 +80,45 @@ func migrate(dataDir string) error {
 
 func registerData(fs filesystem.Filesystem) error {
 	for user := range usertest.ExampleUsersIter {
-		err := fs.User().Save(user)
+		err := fs.OrderGateway().User().Save(user)
 		if err != nil {
 			return err
 		}
 	}
 	for recipeGroup := range recipetest.ExampleRecipeGroupsIter {
-		err := fs.Recipe().Save(recipeGroup)
+		err := fs.CopilotGateway().Recipe().Save(recipeGroup)
 		if err != nil {
 			return err
 		}
 	}
 	for recipeType := range recipetest.ExampleRecipeTypesIter {
-		err := fs.Recipe().SaveRecipeType(recipeType)
+		err := fs.CopilotGateway().Recipe().SaveRecipeType(recipeType)
 		if err != nil {
 			return err
 		}
 	}
 	for glassType := range recipetest.ExampleGlassTypesIter {
-		err := fs.Recipe().SaveGlassType(glassType)
+		err := fs.CopilotGateway().Recipe().SaveGlassType(glassType)
 		if err != nil {
 			return err
 		}
 	}
 
 	for menuGroup := range menutest.ExampleItemsIter {
-		err := fs.Menu().Save(menuGroup)
+		err := fs.CopilotGateway().Menu().Save(menuGroup)
 		if err != nil {
 			return err
 		}
 	}
 
 	inStockMaterialNames, outOfStockMaterialNames := stocktest.ExampleMaterialNames()
-	err := fs.Stock().Save(inStockMaterialNames, outOfStockMaterialNames)
+	err := fs.CopilotGateway().Stock().Save(inStockMaterialNames, outOfStockMaterialNames)
 	if err != nil {
 		return err
 	}
 
-	orderRepo, close := fs.Order()
-	defer close()
 	for order := range ordertest.ExampleOrdersIter {
-		err := orderRepo.Save(order)
+		err := fs.OrderGateway().Order().Save(order)
 		if err != nil {
 			return err
 		}

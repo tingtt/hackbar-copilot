@@ -112,14 +112,15 @@ func Test_copilot_UpdateStock(t *testing.T) {
 		for _, tt := range updateStockTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				stockMock := new(MockStockSaveLister)
+				stockMock := new(MockStock)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.UpdatedMaterials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
 				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
+				gateway := MockGateway{menu: menuMock, stock: stockMock}
 
-				c := &copilot{menu: menuMock, stock: stockMock}
+				c := &copilot{&gateway}
 				err := c.UpdateStock(tt.InStockMaterials, tt.OutOfStockMaterials)
 
 				assert.NoError(t, err)
@@ -134,14 +135,15 @@ func Test_copilot_UpdateStock(t *testing.T) {
 		for _, tt := range updateStockTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				stockMock := new(MockStockSaveLister)
+				stockMock := new(MockStock)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.UpdatedMaterials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
 				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
+				gateway := MockGateway{menu: menuMock, stock: stockMock}
 
-				c := &copilot{menu: menuMock, stock: stockMock}
+				c := &copilot{&gateway}
 				err := c.UpdateStock(tt.InStockMaterials, tt.OutOfStockMaterials)
 
 				assert.NoError(t, err)

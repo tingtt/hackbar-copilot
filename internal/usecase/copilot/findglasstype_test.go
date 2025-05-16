@@ -43,10 +43,11 @@ func Test_copilot_FindGlassType(t *testing.T) {
 			},
 		}
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("AllGlassTypes").Return(glassTypes, nil)
+		recipeMock := new(MockRecipe)
+		recipeMock.On("AllGlassTypes").Return(glassTypes, nil)
+		gateway := MockGateway{recipe: recipeMock}
 
-		c := &copilot{recipe: recipeSaveLister}
+		c := &copilot{&gateway}
 
 		got, err := c.FindGlassType()
 		assert.NoError(t, err)

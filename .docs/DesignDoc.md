@@ -40,14 +40,15 @@ Provides support for bartender operations copilot.
 │   ├── usecase/            # Scopes: application bussiness rules
 │   │   ├── copilot/
 │   │   ├── order/
-│   │   └── cashout/
+│   │   └── cashier/
 │   └── domain/             # Scopes: enterprise bussiness rules
-│       ├── user/
-│       ├── menu/
-│       ├── order/
-│       ├── ordersummary/
 │       ├── recipe/
-│       └── stock/
+│       ├── menu/
+│       ├── stock/
+│       ├── user/
+│       ├── order/
+│       ├── checkout/
+│       └── cashout/
 └── test/
     ├── e2e/    # E2E test environments
     └── ci/     # CI test environments

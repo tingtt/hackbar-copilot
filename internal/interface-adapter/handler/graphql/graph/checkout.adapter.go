@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/order"
+	orderadapter "hackbar-copilot/internal/interface-adapter/handler/graphql/adapter/order"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	"time"
 )
@@ -65,6 +66,8 @@ func (p paymentType) apply() model.CheckoutType {
 type checkout_ checkout.Checkout
 
 func (c checkout_) apply() *model.Checkout {
+	orderAdapter := orderadapter.NewOutputAdapter()
+
 	m := model.Checkout{
 		ID:            string(c.ID),
 		CustomerEmail: string(c.CustomerEmail),
@@ -72,15 +75,8 @@ func (c checkout_) apply() *model.Checkout {
 		PaymentType:   paymentType(c.PaymentType).apply(),
 		Timestamp:     c.Timestamp.UTC().Format(time.RFC3339),
 	}
-	for _, orderID := range c.OrderIDs {
-		m.OrderIDs = append(m.OrderIDs, string(orderID))
-	}
-	for _, diff := range c.Diffs {
-		m.Diffs = append(m.Diffs, &model.PaymentDiff{
-			Price:       float64(diff.Price),
-			Description: diff.Description,
-		})
-	}
+	m.Orders = orderAdapter.Orders(c.Orders)
+	m.Diffs = diffs_(c.Diffs).apply()
 	return &m
 }
 
@@ -92,4 +88,23 @@ func (c checkouts_) apply() []*model.Checkout {
 		checkouts = append(checkouts, checkout_(checkout).apply())
 	}
 	return checkouts
+}
+
+type diffs_ []checkout.Diff
+
+func (d diffs_) apply() []*model.PaymentDiff {
+	diffs := make([]*model.PaymentDiff, 0, len(d))
+	for _, diff := range d {
+		diffs = append(diffs, diff_(diff).apply())
+	}
+	return diffs
+}
+
+type diff_ checkout.Diff
+
+func (d diff_) apply() *model.PaymentDiff {
+	return &model.PaymentDiff{
+		Price:       float64(d.Price),
+		Description: d.Description,
+	}
 }

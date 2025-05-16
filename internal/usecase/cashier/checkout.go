@@ -1,86 +1,81 @@
 package cashier
 
 import (
-	"errors"
 	"fmt"
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/order"
-	usecaseutils "hackbar-copilot/internal/usecase/utils"
+	"hackbar-copilot/internal/utils/sliceutil"
+	"iter"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // Checkout implements Cashier.
 func (c *cashier) Checkout(
-	customerEmail order.CustomerEmail, orderIDs []order.ID, diffs []checkout.Diff, paymentType checkout.PaymentType,
+	customerEmail order.CustomerEmail,
+	orderIDs []order.ID,
+	diffs []checkout.Diff,
+	paymentType checkout.PaymentType,
 ) (checkout.Checkout, error) {
-	newCheckout := checkout.Checkout{
-		ID:            checkout.ID(uuid.NewString()),
-		CustomerEmail: customerEmail,
-		OrderIDs:      orderIDs,
-		Diffs:         diffs,
-		TotalPrice:    0,
-		PaymentType:   paymentType,
-		Timestamp:     time.Now(),
-	}
+	currentTimestamp := time.Now().UTC()
 
-	orderIDsMap := make(map[order.ID]bool, len(orderIDs))
-	for _, id := range orderIDs {
-		orderIDsMap[id] = true
-	}
-
-	for order_, err := range c.order.Latest(order.FilterCustomerEmail(customerEmail), order.IgnoreCheckedOut()) {
+	orders := make([]order.Order, 0, len(orderIDs))
+	for order_, err := range iterateOrders(c.datasource.Order(), orderIDs, customerEmail) {
 		if err != nil {
 			return checkout.Checkout{}, err
 		}
-		if /* specified order */ orderIDsMap[order_.ID] {
-			newCheckout.TotalPrice += order_.Price
-			delete(orderIDsMap, order_.ID)
-			_, err := updateOrderStatus(c.order, order_.ID, order.StatusCheckedOut, newCheckout.Timestamp)
-			if err != nil {
-				return checkout.Checkout{}, err
-			}
+		if order_.specified {
+			orders = append(orders,
+				order_.ApplyStatus(order.StatusCheckedOut, currentTimestamp),
+			)
 		} else {
-			_, err := updateOrderStatus(c.order, order_.ID, order.StatusCanceled, newCheckout.Timestamp)
-			if err != nil {
-				return checkout.Checkout{}, err
-			}
+			orders = append(orders,
+				order_.ApplyStatus(order.StatusCanceled, currentTimestamp),
+			)
 		}
 	}
-	for notFoundOrderID := range orderIDsMap {
-		return checkout.Checkout{}, fmt.Errorf("order not found or already checked out: %s", notFoundOrderID)
-	}
 
-	for _, diff := range diffs {
-		newCheckout.TotalPrice += diff.Price
-	}
-
-	err := c.checkout.Save(newCheckout)
+	newCheckout, err := checkout.New(customerEmail, orders, diffs, paymentType)
 	if err != nil {
-		return checkout.Checkout{}, err
+		return checkout.Checkout{}, fmt.Errorf("failed to create new checkout: %w", err)
 	}
+
+	err = c.datasource.Checkout().Save(newCheckout)
+	if err != nil {
+		return checkout.Checkout{}, fmt.Errorf("failed to save new checkout: %w", err)
+	}
+	err = c.datasource.Order().Remove(sliceutil.Map(orders,
+		func(o order.Order) order.ID { return o.ID },
+	)...)
+	if err != nil {
+		return checkout.Checkout{}, fmt.Errorf("failed to remove orders: %w", err)
+	}
+
 	return newCheckout, nil
 }
 
-func updateOrderStatus(order_ order.SaveFindListListener, id order.ID, status order.Status, timestamp time.Time) (order.Order, error) {
-	o, err := order_.Find(id)
-	if err != nil {
-		if errors.Is(err, order.ErrNotFound) {
-			return order.Order{}, usecaseutils.ErrNotFound
+type iterableOrder struct {
+	order.Order
+	specified bool
+}
+
+// iterateOrders iterates over the orders and yields them.
+func iterateOrders(orderLister OrderLister, orderIDs []order.ID, customerEmail order.CustomerEmail) iter.Seq2[iterableOrder, error] {
+	return func(yield func(iterableOrder, error) bool) {
+		orderIDsMap := make(map[order.ID]bool, len(orderIDs))
+		for _, id := range orderIDs {
+			orderIDsMap[id] = true
 		}
-		return order.Order{}, err
-	}
 
-	o.Status = status
-	o.Timestamps = append(o.Timestamps, order.StatusUpdateTimestamp{
-		Status:    status,
-		Timestamp: timestamp,
-	})
-
-	err = order_.Save(o)
-	if err != nil {
-		return order.Order{}, err
+		for order_, err := range orderLister.LatestUncheckedOrders() {
+			if err != nil {
+				yield(iterableOrder{}, err)
+				return
+			}
+			if /* specified order */ orderIDsMap[order_.ID] {
+				yield(iterableOrder{Order: order_, specified: true}, nil)
+			} else if order_.CustomerEmail == customerEmail {
+				yield(iterableOrder{Order: order_, specified: false}, nil)
+			}
+		}
 	}
-	return o, nil
 }

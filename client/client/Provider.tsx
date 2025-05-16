@@ -2,7 +2,7 @@ import { createContext, useContext } from "react"
 import type { QueryClient } from "./gen/interface.client"
 import type { MutationClient } from "./gen/interface.mutation"
 
-type Client = QueryClient & MutationClient
+export type Client = QueryClient & MutationClient
 
 const clientContext = createContext({} as Client)
 

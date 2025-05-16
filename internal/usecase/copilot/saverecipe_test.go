@@ -40,9 +40,10 @@ var saveRecipeTests = []SaveRecipeTest{
 			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
+					Name:     "Cocktail",
+					Category: "Cocktail",
+					Type:     "build",
+					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
 							Material: ptr("Peach liqueur"),
@@ -77,9 +78,10 @@ var saveRecipeTests = []SaveRecipeTest{
 			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
+					Name:     "Cocktail",
+					Category: "Cocktail",
+					Type:     "build",
+					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
 							Material: ptr("Peach liqueur"),
@@ -112,6 +114,7 @@ var saveRecipeTests = []SaveRecipeTest{
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
@@ -134,6 +137,7 @@ var saveRecipeTests = []SaveRecipeTest{
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
@@ -151,9 +155,10 @@ var saveRecipeTests = []SaveRecipeTest{
 			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
-					Name:  "Cocktail",
-					Type:  "build",
-					Glass: "collins",
+					Name:     "Cocktail",
+					Category: "Cocktail",
+					Type:     "build",
+					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
 							Material: ptr("Peach liqueur"),
@@ -186,6 +191,7 @@ var saveRecipeTests = []SaveRecipeTest{
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice"},
 						OutOfStock: false,
@@ -207,6 +213,7 @@ var saveRecipeTests = []SaveRecipeTest{
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
+						Category:   "Cocktail",
 						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
@@ -227,17 +234,18 @@ func Test_copilot_SaveRecipe(t *testing.T) {
 		for _, tt := range saveRecipeTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				recipeMock := new(MockRecipeSaveListRemover)
+				recipeMock := new(MockRecipe)
 				recipeMock.On("All").Return(recipetest.IterWithNilError([]recipe.RecipeGroup{tt.RecipeGroup}))
 				recipeMock.On("Save", mock.Anything).Return(nil)
-				stockMock := new(MockStockSaveLister)
+				stockMock := new(MockStock)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.Materials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
 				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
+				gateway := MockGateway{recipe: recipeMock, menu: menuMock, stock: stockMock}
 
-				c := &copilot{recipe: recipeMock, menu: menuMock, stock: stockMock}
+				c := &copilot{&gateway}
 				err := c.SaveRecipe(tt.RecipeGroup)
 
 				assert.NoError(t, err)
@@ -261,17 +269,18 @@ func Test_copilot_SaveRecipe(t *testing.T) {
 		for _, tt := range saveRecipeTests {
 			t.Run(tt.Name, func(t *testing.T) {
 				t.Parallel()
-				recipeMock := new(MockRecipeSaveListRemover)
+				recipeMock := new(MockRecipe)
 				recipeMock.On("All").Return(recipetest.IterWithNilError([]recipe.RecipeGroup{tt.RecipeGroup}))
 				recipeMock.On("Save", mock.Anything).Return(nil)
-				stockMock := new(MockStockSaveLister)
+				stockMock := new(MockStock)
 				stockMock.On("All").Return(stocktest.IterWithNilError(tt.Materials))
 				stockMock.On("Save", mock.Anything, mock.Anything).Return(nil)
 				menuMock := new(MockMenu)
 				menuMock.On("All").Return(menutest.IterWithNilError(tt.Menu))
 				menuMock.On("Save", mock.Anything).Return(nil)
+				gateway := MockGateway{recipe: recipeMock, menu: menuMock, stock: stockMock}
 
-				c := &copilot{recipe: recipeMock, menu: menuMock, stock: stockMock}
+				c := &copilot{&gateway}
 				err := c.SaveRecipe(tt.RecipeGroup)
 
 				assert.NoError(t, err)

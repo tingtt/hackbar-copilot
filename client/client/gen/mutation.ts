@@ -12,7 +12,21 @@ export const cashout = (variables: { input: types.CashoutInput }) => ({
         checkouts {
           id
           customerEmail
-          orderIDs
+          orders {
+            id
+            customerEmail
+            customerName
+            menuID {
+              itemName
+              optionName
+            }
+            timestamps {
+              status
+              timestamp
+            }
+            status
+            price
+          }
           diffs {
             price
             description
@@ -39,7 +53,21 @@ export const checkout = (variables: { input: types.InputCheckout }) => ({
         __typename
         id
         customerEmail
-        orderIDs
+        orders {
+          id
+          customerEmail
+          customerName
+          menuID {
+            itemName
+            optionName
+          }
+          timestamps {
+            status
+            timestamp
+          }
+          status
+          price
+        }
         diffs {
           price
           description

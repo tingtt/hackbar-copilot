@@ -27,7 +27,7 @@ type CashoutInput struct {
 type Checkout struct {
 	ID            string         `json:"id"`
 	CustomerEmail string         `json:"customerEmail"`
-	OrderIDs      []string       `json:"orderIDs"`
+	Orders        []*Order       `json:"orders"`
 	Diffs         []*PaymentDiff `json:"diffs"`
 	TotalPrice    float64        `json:"totalPrice"`
 	PaymentType   CheckoutType   `json:"paymentType"`

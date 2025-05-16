@@ -8,7 +8,7 @@ import (
 type Checkout struct {
 	ID            ID
 	CustomerEmail order.CustomerEmail
-	OrderIDs      []order.ID
+	Orders        []order.Order
 	Diffs         []Diff
 	TotalPrice    float32
 	PaymentType   PaymentType

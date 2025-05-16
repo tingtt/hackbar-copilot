@@ -5,8 +5,7 @@ import (
 	"time"
 )
 
-// Register implements RegisterLister.
-func (s *registerLister) Register(staffID StaffID, checkouts []checkout.Checkout) (Cashout, error) {
+func New(staffID StaffID, checkouts []checkout.Checkout) (Cashout, error) {
 	summary := Cashout{
 		Checkouts: checkouts,
 		Revenue:   0,
@@ -15,11 +14,6 @@ func (s *registerLister) Register(staffID StaffID, checkouts []checkout.Checkout
 	}
 	for _, c := range checkouts {
 		summary.Revenue += c.TotalPrice
-	}
-
-	err := s.Repository.Save(summary)
-	if err != nil {
-		return Cashout{}, err
 	}
 	return summary, nil
 }

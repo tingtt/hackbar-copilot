@@ -1,23 +1,22 @@
 package filesystem
 
 import (
-	"hackbar-copilot/internal/domain/cashout"
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/domain/menu"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/domain/recipe"
-	"hackbar-copilot/internal/domain/stock"
 	"hackbar-copilot/internal/domain/user"
+	"hackbar-copilot/internal/usecase/barcounter"
+	"hackbar-copilot/internal/usecase/cashier"
+	"hackbar-copilot/internal/usecase/copilot"
+	orderusecase "hackbar-copilot/internal/usecase/order"
 )
 
 type Filesystem interface {
-	Recipe() recipe.Repository
-	Menu() menu.Repository
-	Stock() stock.Repository
-	Order() (r order.Repository, close func())
-	Cashout() cashout.Repository
-	Checkout() checkout.Repository
-	User() user.Repository
+	BarCounterGateway() barcounter.Gateway
+	CashierGateway() cashier.Gateway
+	CopilotGateway() copilot.Gateway
+	OrderGateway() orderusecase.Gateway
 	SavePersistently() error
 }
 
@@ -54,7 +53,8 @@ func NewRepository(baseDir string) (Filesystem, error) {
 		return nil, err
 	}
 
-	fs := filesystem{read: fsR, write: fsW, data: data}
+	fs := filesystem{fsR, fsW, data, gateway{}}
+	fs.initializeGateway()
 
 	if fs.data.isEmpty() {
 		// check base dir is writable
@@ -68,9 +68,10 @@ func NewRepository(baseDir string) (Filesystem, error) {
 }
 
 type filesystem struct {
-	read  fsR
-	write fsW
-	data  data
+	read    fsR
+	write   fsW
+	data    data
+	gateway gateway
 }
 
 type data struct {
@@ -81,59 +82,19 @@ type data struct {
 	menuItems    []menu.Item
 	stocks       map[string]bool
 
-	// orders
+	// uncheckedOrders
 	//
-	// orders is sorted by created desc.
-	orders []order.Order
+	// uncheckedOrders is sorted by created desc.
+	uncheckedOrders []order.Order
 
-	// checkouts
+	// uncashedoutCheckouts
 	//
-	// checkouts is sorted by created desc.
-	checkouts []checkout.Checkout
+	// uncashedoutCheckouts is sorted by created desc.
+	uncashedoutCheckouts []checkout.Checkout
 }
 
 func (data data) isEmpty() bool {
 	return len(data.recipeGroups) == 0 &&
 		len(data.recipeTypes) == 0 && len(data.glassTypes) == 0 &&
-		len(data.menuItems) == 0 && len(data.orders) == 0
-}
-
-// Recipe implements Filesystem.
-func (f *filesystem) Recipe() recipe.Repository {
-	return &recipeRepository{f}
-}
-
-// Menu implements Filesystem.
-func (f *filesystem) Menu() menu.Repository {
-	return &menuRepository{f}
-}
-
-// Stock implements Filesystem.
-func (f *filesystem) Stock() stock.Repository {
-	return &stockRepository{f}
-}
-
-// Order implements Filesystem.
-func (f *filesystem) Order() (_ order.Repository, _close func()) {
-	r := &orderRepository{f, nil}
-	return r, func() {
-		if r.save != nil {
-			close(r.save)
-		}
-	}
-}
-
-// Cashout implements Filesystem.
-func (f *filesystem) Cashout() cashout.Repository {
-	return &cashoutRepository{f}
-}
-
-// Checkout implements Filesystem.
-func (f *filesystem) Checkout() checkout.Repository {
-	return &checkoutRepository{f}
-}
-
-// User implements Filesystem.
-func (f *filesystem) User() user.Repository {
-	return newUserRepository(f)
+		len(data.menuItems) == 0 && len(data.uncheckedOrders) == 0
 }

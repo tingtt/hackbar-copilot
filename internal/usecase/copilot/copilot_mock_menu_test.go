@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var _ menu.SaveFindListRemover = new(MockMenu)
+var _ MenuSaveListRemover = new(MockMenu)
 
 type MockMenu struct {
 	mock.Mock

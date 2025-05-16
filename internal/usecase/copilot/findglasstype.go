@@ -1,13 +1,16 @@
 package copilot
 
-import "hackbar-copilot/internal/domain/recipe"
+import (
+	"fmt"
+	"hackbar-copilot/internal/domain/recipe"
+)
 
 // FindGlassType implements Copilot.
 func (c *copilot) FindGlassType() (map[string]recipe.GlassType, error) {
 	glassTypes := map[string]recipe.GlassType{}
-	for gt, err := range c.recipe.AllGlassTypes() {
+	for gt, err := range c.datasource.Recipe().AllGlassTypes() {
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to retrieve glass types: %w", err)
 		}
 		glassTypes[gt.Name] = gt
 	}

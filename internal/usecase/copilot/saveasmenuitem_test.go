@@ -22,17 +22,16 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		t.Run("found", func(t *testing.T) {
 			t.Parallel()
 
-			recipeSaveLister := new(MockRecipeSaveListRemover)
-			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+			recipe := new(MockRecipe)
+			recipe.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+			menu := new(MockMenu)
+			menu.On("Save", mock.Anything).Return(nil)
+			stock := new(MockStock)
+			stock.On("All").Return(stocktest.ExampleMaterialsIter, nil)
+			stock.On("Save", mock.Anything, mock.Anything).Return(nil)
+			gateway := MockGateway{recipe: recipe, menu: menu, stock: stock}
 
-			menuSaveLister := new(MockMenu)
-			menuSaveLister.On("Save", mock.Anything).Return(nil)
-
-			stockSaveLister := new(MockStockSaveLister)
-			stockSaveLister.On("All").Return(stocktest.ExampleMaterialsIter, nil)
-			stockSaveLister.On("Save", mock.Anything, mock.Anything).Return(nil)
-
-			c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
+			c := &copilot{&gateway}
 			got, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{})
 			assert.NoError(t, err)
 			assert.Equal(t, "Phuket Sling", got.Name)
@@ -41,10 +40,11 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		t.Run("not found", func(t *testing.T) {
 			t.Parallel()
 
-			recipeSaveLister := new(MockRecipeSaveListRemover)
-			recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+			recipe := new(MockRecipe)
+			recipe.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+			gateway := MockGateway{recipe: recipe}
 
-			c := &copilot{recipe: recipeSaveLister}
+			c := &copilot{&gateway}
 			_, err := c.SaveAsMenuItem("-", SaveAsMenuItemArg{})
 			assert.ErrorIs(t, err, usecaseutils.ErrNotFound)
 		})
@@ -53,16 +53,15 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 	t.Run("will return menu group converted from recipe group", func(t *testing.T) {
 		t.Parallel()
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
-		recipeSaveLister.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+		recipe := new(MockRecipe)
+		recipe.On("All").Return(recipetest.ExampleRecipeGroupsIter, nil)
+		_menu := new(MockMenu)
+		_menu.On("Save", mock.Anything).Return(nil)
+		stock := new(MockStock)
+		stock.On("All").Return(stocktest.ExampleMaterialsIter, nil)
+		gateway := MockGateway{recipe: recipe, menu: _menu, stock: stock}
 
-		menuSaveLister := new(MockMenu)
-		menuSaveLister.On("Save", mock.Anything).Return(nil)
-
-		stockSaveLister := new(MockStockSaveLister)
-		stockSaveLister.On("All").Return(stocktest.ExampleMaterialsIter, nil)
-
-		c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
+		c := &copilot{&gateway}
 		got, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{
 			Flavor: ptr("Sweet"),
 			Options: map[string]MenuFromRecipeGroupArg{
@@ -89,14 +88,14 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		}
 		assert.NoError(t, err)
 		assert.Equal(t, want, got)
-		menuSaveLister.AssertCalled(t, "Save", want)
-		stockSaveLister.AssertNotCalled(t, "Save")
+		_menu.AssertCalled(t, "Save", want)
+		stock.AssertNotCalled(t, "Save")
 	})
 
 	t.Run("will save new material", func(t *testing.T) {
 		t.Parallel()
 
-		recipeSaveLister := new(MockRecipeSaveListRemover)
+		_recipe := new(MockRecipe)
 		recipeGroups := func() iter.Seq2[recipe.RecipeGroup, error] {
 			return func(yield func(recipe.RecipeGroup, error) bool) {
 				for rg := range recipetest.ExampleRecipeGroupsIter {
@@ -123,16 +122,15 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 				}, nil)
 			}
 		}()
-		recipeSaveLister.On("All").Return(recipeGroups, nil)
+		_recipe.On("All").Return(recipeGroups, nil)
+		_menu := new(MockMenu)
+		_menu.On("Save", mock.Anything).Return(nil)
+		stock := new(MockStock)
+		stock.On("All").Return(stocktest.ExampleMaterialsIter, nil)
+		stock.On("Save", mock.Anything, mock.Anything).Return(nil)
+		gateway := MockGateway{recipe: _recipe, menu: _menu, stock: stock}
 
-		menuSaveLister := new(MockMenu)
-		menuSaveLister.On("Save", mock.Anything).Return(nil)
-
-		stockSaveLister := new(MockStockSaveLister)
-		stockSaveLister.On("All").Return(stocktest.ExampleMaterialsIter, nil)
-		stockSaveLister.On("Save", mock.Anything, mock.Anything).Return(nil)
-
-		c := &copilot{recipe: recipeSaveLister, menu: menuSaveLister, stock: stockSaveLister}
+		c := &copilot{&gateway}
 		got, err := c.SaveAsMenuItem("New Recipe", SaveAsMenuItemArg{
 			Flavor: ptr("Fruity"),
 			Options: map[string]MenuFromRecipeGroupArg{
@@ -158,19 +156,20 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 		}
 		assert.NoError(t, err)
 		assert.Equal(t, want, got)
-		menuSaveLister.AssertCalled(t, "Save", want)
-		stockSaveLister.AssertCalled(t, "Save", []string{"New Material"}, mock.Anything)
+		_menu.AssertCalled(t, "Save", want)
+		stock.AssertCalled(t, "Save", []string{"New Material"}, mock.Anything)
 	})
 
 	t.Run("will call menu.Remove with recipeGroupName", func(t *testing.T) {
 		t.Parallel()
 
-		menuSaveLister := new(MockMenu)
-		menuSaveLister.On("Remove", mock.Anything).Return(nil)
+		menuMock := new(MockMenu)
+		menuMock.On("Remove", mock.Anything).Return(nil)
+		gateway := MockGateway{menu: menuMock}
 
-		c := &copilot{menu: menuSaveLister}
+		c := &copilot{&gateway}
 		_, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{Remove: true})
 		assert.NoError(t, err)
-		menuSaveLister.AssertCalled(t, "Remove", "Phuket Sling")
+		menuMock.AssertCalled(t, "Remove", "Phuket Sling")
 	})
 }
