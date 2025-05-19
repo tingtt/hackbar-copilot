@@ -37,13 +37,17 @@ func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) 
 		Flavor:   arg.Flavor,
 	}
 	for _, r := range rg.Recipes {
+		arg, ok := arg.Options[r.Name]
+		if !ok {
+			continue
+		}
 		menuItem := menu.ItemOption{
 			Name:       r.Name,
 			Category:   r.Category,
-			ImageURL:   nil,
+			ImageURL:   arg.ImageURL,
 			Materials:  []string{},
 			OutOfStock: false,
-			Price:      0,
+			Price:      arg.Price,
 		}
 		for _, step := range r.Steps {
 			if step.Material != nil {
@@ -51,11 +55,6 @@ func (c *copilot) SaveAsMenuItem(recipeGroupName string, arg SaveAsMenuItemArg) 
 					menuItem.Materials = append(menuItem.Materials, *step.Material)
 				}
 			}
-		}
-		arg, ok := arg.Options[r.Name]
-		if ok {
-			menuItem.ImageURL = arg.ImageURL
-			menuItem.Price = arg.Price
 		}
 		mi.Options = append(mi.Options, menuItem)
 		for _, materialName := range menuItem.Materials {
