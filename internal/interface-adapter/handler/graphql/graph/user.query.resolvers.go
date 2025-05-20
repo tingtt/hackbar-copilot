@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
+	"fmt"
 	"hackbar-copilot/internal/domain/order"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 	usecaseutils "hackbar-copilot/internal/usecase/utils"
@@ -33,10 +34,17 @@ func (r *queryResolver) UserInfo(ctx context.Context) (*model.User, error) {
 				"providing user skipped, because failed to get user name from OAuth2 provider",
 				slog.String("error", err.Error()),
 			)
+			u, err := r.OrderService.SetUserInfo(order.CustomerEmail(email), email, true /* autofill */)
+			if err != nil {
+				slog.Error("failed to set user info", slog.String("error", err.Error()))
+				return nil, fmt.Errorf("failed to set user info: %w", err)
+			}
+			return userAdapter(u).apply(), nil
 		} else {
 			u, err := r.OrderService.SetUserInfo(order.CustomerEmail(email), name, true /* autofill */)
 			if err != nil {
 				slog.Error("failed to set user info", slog.String("error", err.Error()))
+				return nil, fmt.Errorf("failed to set user info: %w", err)
 			}
 			return userAdapter(u).apply(), nil
 		}
