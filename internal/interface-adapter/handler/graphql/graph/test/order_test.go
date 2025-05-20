@@ -76,13 +76,13 @@ var orderTests = []IntegrationTest{
 						Google: &jwtclaims.ClaimsGoogle{Username: "Customer A"},
 					}),
 					body: &graphql.RawParams{
-						Query: QueryGetUncheckedOrder,
+						Query: QueryGetUncheckedOrdersCustomer,
 					},
 				},
 				want: IntegrationTestWantResponse{
 					assert: func(t *testing.T, ctx context.Context, got *httptest.ResponseRecorder, msgAndArgs ...any) {
 						var res Response[struct {
-							UncheckedOrders []model.Order `json:"uncheckedOrders"`
+							UncheckedOrders []model.Order `json:"uncheckedOrdersCustomer"`
 						}]
 						if err := json.Unmarshal(got.Body.Bytes(), &res); err != nil {
 							assert.Fail(t,

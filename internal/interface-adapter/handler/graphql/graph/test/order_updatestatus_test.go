@@ -22,7 +22,7 @@ var orderUpdateTests = []IntegrationTest{
 			Email:  "customer.a@example.test",
 			Roles:  []string{},
 			Google: &jwtclaims.ClaimsGoogle{Username: "Customer A"},
-		}))...),
+		}), "Customer A")...),
 		request: IntegrationTestRequest{
 			token: graphqltest.NewToken(jwtclaims.Claims{
 				Email: "customer.a@example.test",
@@ -60,7 +60,7 @@ var orderUpdateTests = []IntegrationTest{
 			Email:  "customer.a@example.test",
 			Roles:  []string{},
 			Google: &jwtclaims.ClaimsGoogle{Username: "Customer A"},
-		}))...),
+		}), "Customer A")...),
 		request: IntegrationTestRequest{
 			token: graphqltest.NewToken(jwtclaims.Claims{
 				Email:  "bartender@example.test",
@@ -102,13 +102,13 @@ var orderUpdateTests = []IntegrationTest{
 				request: IntegrationTestRequest{
 					token: graphqltest.NewToken(jwtclaims.Claims{Email: "customer.a@example.test"}),
 					body: &graphql.RawParams{
-						Query: QueryGetUncheckedOrder,
+						Query: QueryGetUncheckedOrdersCustomer,
 					},
 				},
 				want: IntegrationTestWantResponse{
 					assert: func(t *testing.T, ctx context.Context, got *httptest.ResponseRecorder, msgAndArgs ...any) {
 						var res Response[struct {
-							UncheckedOrders []model.Order `json:"uncheckedOrders"`
+							UncheckedOrders []model.Order `json:"uncheckedOrdersCustomer"`
 						}]
 						if err := json.Unmarshal(got.Body.Bytes(), &res); err != nil {
 							assert.Fail(t,
@@ -118,6 +118,7 @@ var orderUpdateTests = []IntegrationTest{
 							return
 						}
 						assert.Nil(t, res.Errors, msgAndArgs...)
+						assert.NotNil(t, res.Data.UncheckedOrders, msgAndArgs...)
 						for _, order := range res.Data.UncheckedOrders {
 							if order.ID == ctx.Value(ContextKey(".before.3")).(map[string]any)["order"].(map[string]any)["id"] {
 								assert.Equal(t, order.Status, model.OrderStatusCanceled, msgAndArgs...)

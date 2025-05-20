@@ -118,6 +118,29 @@ export const getMenu = () => ({
   `,
 })
 
+export const getUncheckedOrdersCustomer = () => ({
+  query: `
+    query getUncheckedOrdersCustomer {
+      uncheckedOrdersCustomer  {
+        __typename
+        id
+        customerEmail
+        customerName
+        menuID {
+          itemName
+          optionName
+        }
+        timestamps {
+          status
+          timestamp
+        }
+        status
+        price
+      }
+    }
+  `,
+})
+
 export const getUncheckedOrders = () => ({
   query: `
     query getUncheckedOrders {

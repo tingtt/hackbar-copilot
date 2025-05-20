@@ -74,7 +74,28 @@ const QueryGetMenu = `
 	}
 `
 
-const QueryGetUncheckedOrder = `
+const QueryGetUncheckedOrdersCustomer = `
+	query getUncheckedOrdersCustomer {
+		uncheckedOrdersCustomer  {
+			__typename
+			id
+			customerEmail
+			customerName
+			menuID {
+				itemName
+				optionName
+			}
+			timestamps {
+				status
+				timestamp
+			}
+			status
+			price
+		}
+	}
+`
+
+const QueryGetUncheckedOrders = `
 	query getUncheckedOrders {
 		uncheckedOrders  {
 			id

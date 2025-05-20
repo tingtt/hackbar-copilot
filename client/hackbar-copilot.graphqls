@@ -145,6 +145,7 @@ input InputOrderStatusUpdate {
 #*
 
 extend type Query {
+  uncheckedOrdersCustomer: [Order!]!
   uncheckedOrders: [Order!]!
 }
 

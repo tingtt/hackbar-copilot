@@ -128,13 +128,14 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Cashouts        func(childComplexity int, input model.InputCashoutQuery) int
-		Checkouts       func(childComplexity int) int
-		Materials       func(childComplexity int) int
-		Menu            func(childComplexity int) int
-		Recipes         func(childComplexity int) int
-		UncheckedOrders func(childComplexity int) int
-		UserInfo        func(childComplexity int) int
+		Cashouts                func(childComplexity int, input model.InputCashoutQuery) int
+		Checkouts               func(childComplexity int) int
+		Materials               func(childComplexity int) int
+		Menu                    func(childComplexity int) int
+		Recipes                 func(childComplexity int) int
+		UncheckedOrders         func(childComplexity int) int
+		UncheckedOrdersCustomer func(childComplexity int) int
+		UserInfo                func(childComplexity int) int
 	}
 
 	Recipe struct {
@@ -185,6 +186,7 @@ type QueryResolver interface {
 	Cashouts(ctx context.Context, input model.InputCashoutQuery) ([]*model.Cashout, error)
 	Checkouts(ctx context.Context) ([]*model.Checkout, error)
 	Menu(ctx context.Context) ([]*model.MenuItem, error)
+	UncheckedOrdersCustomer(ctx context.Context) ([]*model.Order, error)
 	UncheckedOrders(ctx context.Context) ([]*model.Order, error)
 	Recipes(ctx context.Context) ([]*model.RecipeGroup, error)
 	Materials(ctx context.Context) ([]*model.Material, error)
@@ -615,6 +617,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.UncheckedOrders(childComplexity), true
+
+	case "Query.uncheckedOrdersCustomer":
+		if e.complexity.Query.UncheckedOrdersCustomer == nil {
+			break
+		}
+
+		return e.complexity.Query.UncheckedOrdersCustomer(childComplexity), true
 
 	case "Query.userInfo":
 		if e.complexity.Query.UserInfo == nil {
@@ -3607,6 +3616,66 @@ func (ec *executionContext) fieldContext_Query_menu(_ context.Context, field gra
 				return ec.fieldContext_MenuItem_minPriceYen(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MenuItem", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_uncheckedOrdersCustomer(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_uncheckedOrdersCustomer(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().UncheckedOrdersCustomer(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Order)
+	fc.Result = res
+	return ec.marshalNOrder2ᚕᚖhackbarᚑcopilotᚋinternalᚋinterfaceᚑadapterᚋhandlerᚋgraphqlᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_uncheckedOrdersCustomer(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Order_id(ctx, field)
+			case "customerEmail":
+				return ec.fieldContext_Order_customerEmail(ctx, field)
+			case "customerName":
+				return ec.fieldContext_Order_customerName(ctx, field)
+			case "menuID":
+				return ec.fieldContext_Order_menuID(ctx, field)
+			case "timestamps":
+				return ec.fieldContext_Order_timestamps(ctx, field)
+			case "status":
+				return ec.fieldContext_Order_status(ctx, field)
+			case "price":
+				return ec.fieldContext_Order_price(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Order", field.Name)
 		},
 	}
 	return fc, nil
@@ -7969,6 +8038,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_menu(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "uncheckedOrdersCustomer":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_uncheckedOrdersCustomer(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

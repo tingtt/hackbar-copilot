@@ -11,8 +11,8 @@ import (
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
-// UncheckedOrders is the resolver for the orders field.
-func (r *queryResolver) UncheckedOrders(ctx context.Context) ([]*model.Order, error) {
+// UncheckedOrdersCustomer is the resolver for the uncheckedOrdersCustomer field.
+func (r *queryResolver) UncheckedOrdersCustomer(ctx context.Context) ([]*model.Order, error) {
 	email, err := r.authAdapter.GetEmail(ctx)
 	if /* unauthorized */ err != nil {
 		return nil, err
@@ -22,5 +22,21 @@ func (r *queryResolver) UncheckedOrders(ctx context.Context) ([]*model.Order, er
 		return nil, fmt.Errorf("failed to list orders: %w", err)
 	}
 
+	return r.orderAdapter.Orders(orders), nil
+}
+
+// UncheckedOrders is the resolver for the orders field.
+func (r *queryResolver) UncheckedOrders(ctx context.Context) ([]*model.Order, error) {
+	_, err := r.authAdapter.GetEmail(ctx)
+	if /* unauthorized */ err != nil {
+		return nil, err
+	}
+	if !r.authAdapter.HasBartenderRole(ctx) {
+		return nil, fmt.Errorf("forbidden")
+	}
+	orders, err := r.Cashier.LatestUncheckedOrders()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list orders: %w", err)
+	}
 	return r.orderAdapter.Orders(orders), nil
 }

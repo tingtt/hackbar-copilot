@@ -252,6 +252,7 @@ export type Query = {
   menu: Array<MenuItem>
   recipes: Array<RecipeGroup>
   uncheckedOrders: Array<Order>
+  uncheckedOrdersCustomer: Array<Order>
   userInfo: User
 }
 
