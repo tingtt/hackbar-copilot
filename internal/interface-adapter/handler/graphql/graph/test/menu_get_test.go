@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/test/graphqltest"
 	"testing"
 
@@ -252,7 +253,10 @@ var getMenuTests = []IntegrationTest{
 func Test_GetMenu(t *testing.T) {
 	for _, tt := range getMenuTests {
 		t.Run(tt.name, func(t *testing.T) {
-			run(t, graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())), tt)
+			run(t,
+				graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())),
+				context.Background(), tt, "",
+			)
 		})
 	}
 }

@@ -57,3 +57,26 @@ const QueryOrder = `
 		}
 	}
 `
+
+const QueryUpdateOrderStatus = `
+	mutation updateOrderStatus ($input: InputOrderStatusUpdate!) {
+		updateOrderStatus (
+			input: $input
+		) {
+			__typename
+			id
+			customerEmail
+			customerName
+			menuID {
+				itemName
+				optionName
+			}
+			timestamps {
+				status
+				timestamp
+			}
+			status
+			price
+		}
+	}
+`

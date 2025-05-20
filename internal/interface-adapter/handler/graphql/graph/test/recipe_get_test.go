@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	graphqlhandler "hackbar-copilot/internal/interface-adapter/handler/graphql"
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/test/graphqltest"
 	"testing"
@@ -164,7 +165,10 @@ var getRecipeTests = []IntegrationTest{
 func Test_GetRecipe(t *testing.T) {
 	for _, tt := range getRecipeTests {
 		t.Run(tt.name, func(t *testing.T) {
-			run(t, graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())), tt)
+			run(t,
+				graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())),
+				context.Background(), tt, "",
+			)
 		})
 	}
 }

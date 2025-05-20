@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	graphqlhandler "hackbar-copilot/internal/interface-adapter/handler/graphql"
@@ -46,7 +47,7 @@ var orderTests = []IntegrationTest{
 				},
 			},
 		},
-		want: IntegrationTestWantResponse{assert: func(t *testing.T, got *httptest.ResponseRecorder, msgAndArgs ...any) {
+		want: IntegrationTestWantResponse{assert: func(t *testing.T, ctx context.Context, got *httptest.ResponseRecorder, msgAndArgs ...any) {
 			var res Response[struct {
 				Order model.Order `json:"order"`
 			}]
@@ -79,7 +80,7 @@ var orderTests = []IntegrationTest{
 					},
 				},
 				want: IntegrationTestWantResponse{
-					assert: func(t *testing.T, got *httptest.ResponseRecorder, msgAndArgs ...any) {
+					assert: func(t *testing.T, ctx context.Context, got *httptest.ResponseRecorder, msgAndArgs ...any) {
 						var res Response[struct {
 							UncheckedOrders []model.Order `json:"uncheckedOrders"`
 						}]
@@ -134,7 +135,10 @@ var orderTests = []IntegrationTest{
 func Test_Order(t *testing.T) {
 	for _, tt := range orderTests {
 		t.Run(tt.name, func(t *testing.T) {
-			run(t, graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())), tt)
+			run(t,
+				graphqlhandler.NewHandler(graphqltest.Dependencies(t.TempDir())),
+				context.Background(), tt, "",
+			)
 		})
 	}
 }
