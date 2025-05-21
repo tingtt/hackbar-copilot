@@ -114,3 +114,34 @@ const QueryGetUncheckedOrders = `
 		}
 	}
 `
+
+const QueryGetCheckouts = `
+	query getCheckouts {
+		checkouts  {
+			id
+			customerEmail
+			orders {
+				id
+				customerEmail
+				customerName
+				menuID {
+					itemName
+					optionName
+				}
+				timestamps {
+					status
+					timestamp
+				}
+				status
+				price
+			}
+			diffs {
+				price
+				description
+			}
+			totalPrice
+			paymentType
+			timestamp
+		}
+	}
+`

@@ -80,3 +80,37 @@ const QueryUpdateOrderStatus = `
 		}
 	}
 `
+
+const QueryCheckout = `
+	mutation checkout ($input: InputCheckout!) {
+		checkout (
+			input: $input
+		) {
+			__typename
+			id
+			customerEmail
+			orders {
+				id
+				customerEmail
+				customerName
+				menuID {
+					itemName
+					optionName
+				}
+				timestamps {
+					status
+					timestamp
+				}
+				status
+				price
+			}
+			diffs {
+				price
+				description
+			}
+			totalPrice
+			paymentType
+			timestamp
+		}
+	}
+`
