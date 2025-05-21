@@ -6977,7 +6977,7 @@ func (ec *executionContext) unmarshalInputInputOrder(ctx context.Context, obj an
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"menuItemName", "menuItemOptionName", "customerName"}
+	fieldsInOrder := [...]string{"menuItemName", "menuItemOptionName", "customerName", "customerEmail"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7005,6 +7005,13 @@ func (ec *executionContext) unmarshalInputInputOrder(ctx context.Context, obj an
 				return it, err
 			}
 			it.CustomerName = data
+		case "customerEmail":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customerEmail"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomerEmail = data
 		}
 	}
 

@@ -18,6 +18,15 @@ func (r *mutationResolver) Order(ctx context.Context, input model.InputOrder) (*
 	if /* unauthorized */ err != nil {
 		return nil, err
 	}
+	if input.CustomerEmail != nil && *input.CustomerEmail != email {
+		if !r.authAdapter.HasBartenderRole(ctx) {
+			return nil, errors.New("forbidden")
+		}
+		if input.CustomerName == nil || *input.CustomerName == "" {
+			return nil, errors.New("'customerName' cannot be empty for ordering as another account")
+		}
+		email = *input.CustomerEmail
+	}
 
 	orderMenuItemID := order.MenuItemID{
 		ItemName:   input.MenuItemName,

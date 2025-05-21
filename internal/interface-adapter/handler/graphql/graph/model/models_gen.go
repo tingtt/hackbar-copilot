@@ -73,6 +73,7 @@ type InputOrder struct {
 	MenuItemName       string  `json:"menuItemName"`
 	MenuItemOptionName string  `json:"menuItemOptionName"`
 	CustomerName       *string `json:"customerName,omitempty"`
+	CustomerEmail      *string `json:"customerEmail,omitempty"`
 }
 
 type InputOrderStatusUpdate struct {
