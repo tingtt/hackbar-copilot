@@ -10,8 +10,8 @@ import (
 	"hackbar-copilot/internal/interface-adapter/handler/graphql/graph/model"
 )
 
-// Checkouts is the resolver for the checkouts field.
-func (r *queryResolver) Checkouts(ctx context.Context) ([]*model.Checkout, error) {
+// UncashedCheckouts is the resolver for the checkouts field.
+func (r *queryResolver) UncashedCheckouts(ctx context.Context) ([]*model.Checkout, error) {
 	_, err := r.authAdapter.GetEmail(ctx)
 	if /* unauthorized */ err != nil {
 		return nil, err

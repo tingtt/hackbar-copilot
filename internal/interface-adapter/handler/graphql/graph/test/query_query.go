@@ -114,9 +114,9 @@ const QueryGetUncheckedOrders = `
 	}
 `
 
-const QueryGetCheckouts = `
-	query getCheckouts {
-		checkouts  {
+const QueryGetUncashedCheckouts = `
+	query getUncashedCheckouts {
+		uncashedCheckouts  {
 			id
 			customerEmail
 			orders {
@@ -141,6 +141,44 @@ const QueryGetCheckouts = `
 			totalPrice
 			paymentType
 			timestamp
+		}
+	}
+`
+
+const QueryGetCashouts = `
+	query getCashouts ($input: InputCashoutQuery!) {
+		cashouts (
+			input: $input
+		) {
+			checkouts {
+				id
+				customerEmail
+				orders {
+					id
+					customerEmail
+					customerName
+					menuID {
+						itemName
+						optionName
+					}
+					timestamps {
+						status
+						timestamp
+					}
+					status
+					price
+				}
+				diffs {
+					price
+					description
+				}
+				totalPrice
+				paymentType
+				timestamp
+			}
+			revenue
+			timestamp
+			staffID
 		}
 	}
 `

@@ -121,13 +121,13 @@ var checkoutTests = []IntegrationTest{
 						Roles: []string{"bartender"},
 					}),
 					body: &graphql.RawParams{
-						Query: QueryGetCheckouts,
+						Query: QueryGetUncashedCheckouts,
 					},
 				},
 				want: IntegrationTestWantResponse{
 					assert: func(t *testing.T, ctx context.Context, got *httptest.ResponseRecorder, msgAndArgs ...any) {
 						var res Response[struct {
-							Checkouts []model.Checkout `json:"checkouts"`
+							UncashedCheckouts []model.Checkout `json:"uncashedCheckouts"`
 						}]
 						if err := json.Unmarshal(got.Body.Bytes(), &res); err != nil {
 							assert.Fail(t,
@@ -138,9 +138,9 @@ var checkoutTests = []IntegrationTest{
 						}
 
 						assert.Nil(t, res.Errors, msgAndArgs...)
-						assert.Equal(t, len(res.Data.Checkouts), 1, msgAndArgs...)
+						assert.Equal(t, len(res.Data.UncashedCheckouts), 1, msgAndArgs...)
 						wantCheckoutID := ctx.Value(ContextKey(".run")).(map[string]any)["checkout"].(map[string]any)["id"]
-						assert.Equal(t, res.Data.Checkouts[0].ID, wantCheckoutID, msgAndArgs...)
+						assert.Equal(t, res.Data.UncashedCheckouts[0].ID, wantCheckoutID, msgAndArgs...)
 					},
 				},
 			},

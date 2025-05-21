@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hackbar-copilot/internal/domain/cashout"
 	"hackbar-copilot/internal/domain/checkout"
+	"hackbar-copilot/internal/utils/sliceutil"
 	"slices"
 )
 
@@ -27,6 +28,12 @@ func (c *cashier) Cashout(staffID cashout.StaffID, checkoutIDs []checkout.ID) (c
 	err = c.datasource.Cashout().Save(newCashout)
 	if err != nil {
 		return cashout.Cashout{}, fmt.Errorf("failed to save new cashout: %w", err)
+	}
+	err = c.datasource.Checkout().Remove(sliceutil.Map(checkouts,
+		func(o checkout.Checkout) checkout.ID { return o.ID },
+	)...)
+	if err != nil {
+		return cashout.Cashout{}, fmt.Errorf("failed to remove checkouts: %w", err)
 	}
 
 	return newCashout, nil

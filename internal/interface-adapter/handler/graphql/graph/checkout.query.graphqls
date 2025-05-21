@@ -1,5 +1,5 @@
 extend type Query {
-  checkouts: [Checkout!]!
+  uncashedCheckouts: [Checkout!]!
 }
 
 type Checkout {

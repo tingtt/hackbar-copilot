@@ -95,6 +95,7 @@ export type InputGlassType = {
 }
 
 export type InputOrder = {
+  customerEmail?: InputMaybe<Scalars["String"]["input"]>
   customerName?: InputMaybe<Scalars["String"]["input"]>
   menuItemName: Scalars["String"]["input"]
   menuItemOptionName: Scalars["String"]["input"]
@@ -247,10 +248,10 @@ export type PaymentDiff = {
 export type Query = {
   __typename?: "Query"
   cashouts: Array<Cashout>
-  checkouts: Array<Checkout>
   materials: Array<Material>
   menu: Array<MenuItem>
   recipes: Array<RecipeGroup>
+  uncashedCheckouts: Array<Checkout>
   uncheckedOrders: Array<Order>
   uncheckedOrdersCustomer: Array<Order>
   userInfo: User

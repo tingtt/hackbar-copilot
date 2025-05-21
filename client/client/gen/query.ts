@@ -44,10 +44,10 @@ export const getCashouts = (variables: { input: types.InputCashoutQuery }) => ({
   variables,
 })
 
-export const getCheckouts = () => ({
+export const getUncashedCheckouts = () => ({
   query: `
-    query getCheckouts {
-      checkouts  {
+    query getUncashedCheckouts {
+      uncashedCheckouts  {
         __typename
         id
         customerEmail

@@ -94,14 +94,14 @@ export class HackbarClient implements QueryClient, MutationClient {
     }
     return { data: res.data.materials, error: null }
   }
-  async getCheckouts() {
-    const res = await this.fetch<{ checkouts: types.Checkout[] }>(
-      query.getCheckouts(),
+  async getUncashedCheckouts() {
+    const res = await this.fetch<{ uncashedCheckouts: types.Checkout[] }>(
+      query.getUncashedCheckouts(),
     )
     if (res.error !== null) {
       return { data: null, error: res.error }
     }
-    return { data: res.data.checkouts, error: null }
+    return { data: res.data.uncashedCheckouts, error: null }
   }
   async getCashouts(input: types.InputCashoutQuery) {
     const res = await this.fetch<{ cashouts: types.Cashout[] }>(
