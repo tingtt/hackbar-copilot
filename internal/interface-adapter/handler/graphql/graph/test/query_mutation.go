@@ -86,7 +86,6 @@ const QueryCheckout = `
 		checkout (
 			input: $input
 		) {
-			__typename
 			id
 			customerEmail
 			orders {

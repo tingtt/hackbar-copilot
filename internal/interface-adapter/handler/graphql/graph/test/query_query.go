@@ -77,7 +77,6 @@ const QueryGetMenu = `
 const QueryGetUncheckedOrdersCustomer = `
 	query getUncheckedOrdersCustomer {
 		uncheckedOrdersCustomer  {
-			__typename
 			id
 			customerEmail
 			customerName
