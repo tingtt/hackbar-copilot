@@ -59,22 +59,22 @@ export class HackbarClient implements QueryClient, MutationClient {
     return { data: res.data.menu, error: null }
   }
   async getUncheckedOrdersCustomer() {
-    const res = await this.fetch<{ orders: types.Order[] }>(
+    const res = await this.fetch<{ uncheckedOrdersCustomer: types.Order[] }>(
       query.getUncheckedOrdersCustomer(),
     )
     if (res.error !== null) {
       return { data: null, error: res.error }
     }
-    return { data: res.data.orders, error: null }
+    return { data: res.data.uncheckedOrdersCustomer, error: null }
   }
   async getUncheckedOrders() {
-    const res = await this.fetch<{ orders: types.Order[] }>(
+    const res = await this.fetch<{ uncheckedOrders: types.Order[] }>(
       query.getUncheckedOrders(),
     )
     if (res.error !== null) {
       return { data: null, error: res.error }
     }
-    return { data: res.data.orders, error: null }
+    return { data: res.data.uncheckedOrders, error: null }
   }
   async getRecipes() {
     const res = await this.fetch<{ recipes: types.RecipeGroup[] }>(
