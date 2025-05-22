@@ -24,9 +24,13 @@ func (c *cashier) Checkout(
 			return checkout.Checkout{}, err
 		}
 		if order_.specified {
-			orders = append(orders,
-				order_.ApplyStatus(order.StatusCheckedOut, currentTimestamp),
-			)
+			if order_.Order.Status == order.StatusCanceled {
+				orders = append(orders, order_.Order)
+			} else {
+				orders = append(orders,
+					order_.ApplyStatus(order.StatusCheckedOut, currentTimestamp),
+				)
+			}
 		} else {
 			orders = append(orders,
 				order_.ApplyStatus(order.StatusCanceled, currentTimestamp),

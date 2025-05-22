@@ -121,7 +121,7 @@ var cashoutTests = []IntegrationTest{
 					bodyJSON: `
 						{
 							"data": {
-								"uncashedCheckouts": []
+								"uncashedoutCheckouts": []
 							}
 						}
 					`,

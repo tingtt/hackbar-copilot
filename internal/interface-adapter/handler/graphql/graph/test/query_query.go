@@ -116,7 +116,7 @@ const QueryGetUncheckedOrders = `
 
 const QueryGetUncashedCheckouts = `
 	query getUncashedCheckouts {
-		uncashedCheckouts  {
+		uncashedoutCheckouts  {
 			id
 			customerEmail
 			orders {
