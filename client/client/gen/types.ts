@@ -251,7 +251,7 @@ export type Query = {
   materials: Array<Material>
   menu: Array<MenuItem>
   recipes: Array<RecipeGroup>
-  uncashedCheckouts: Array<Checkout>
+  uncashedoutCheckouts: Array<Checkout>
   uncheckedOrders: Array<Order>
   uncheckedOrdersCustomer: Array<Order>
   userInfo: User

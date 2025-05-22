@@ -8,7 +8,7 @@ export interface QueryClient {
   ): Promise<
     { data: null; error: string } | { data: types.Cashout[]; error: null }
   >
-  getUncashedCheckouts(): Promise<
+  getUncashedoutCheckouts(): Promise<
     { data: null; error: string } | { data: types.Checkout[]; error: null }
   >
   getMenu(): Promise<
