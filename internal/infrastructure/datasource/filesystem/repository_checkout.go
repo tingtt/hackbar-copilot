@@ -4,6 +4,7 @@ import (
 	"hackbar-copilot/internal/domain/checkout"
 	"hackbar-copilot/internal/usecase/cashier"
 	"iter"
+	"slices"
 	"sync"
 )
 
@@ -48,15 +49,12 @@ func (r *checkoutRepository) Remove(ids ...checkout.ID) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
-	idsMap := make(map[checkout.ID]bool, len(ids))
 	for _, id := range ids {
-		idsMap[id] = true
-	}
-
-	for i, savedCheckout := range r.fs.data.uncashedoutCheckouts {
-		if idsMap[savedCheckout.ID] {
-			r.fs.data.uncashedoutCheckouts = append(r.fs.data.uncashedoutCheckouts[:i], r.fs.data.uncashedoutCheckouts[i+1:]...)
-			return nil
+		for i, checkout := range r.fs.data.uncashedoutCheckouts {
+			if checkout.ID == id {
+				r.fs.data.uncashedoutCheckouts = slices.Delete(r.fs.data.uncashedoutCheckouts, i, i+1)
+				break
+			}
 		}
 	}
 	return nil

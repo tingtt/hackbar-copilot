@@ -20,7 +20,7 @@ import (
 var cashoutTests = []IntegrationTest{
 	{
 		name: "cashout",
-		before: append(append(
+		before: append(append(append(append(
 			InitialSaveRecipes(),
 			InitialOrders(
 				graphqltest.NewToken(jwtclaims.Claims{
@@ -57,6 +57,42 @@ var cashoutTests = []IntegrationTest{
 						},
 					}
 				},
+			}),
+			InitialOrders(
+				graphqltest.NewToken(jwtclaims.Claims{
+					Email:  "customer.b@example.test",
+					Roles:  []string{},
+					Google: &jwtclaims.ClaimsGoogle{Username: "Customer B"},
+				}), "Customer B",
+			)...),
+			IntegrationTestRequest{
+				token: graphqltest.NewToken(jwtclaims.Claims{
+					Email: "bartender@example.test",
+					Roles: []string{"bartender"},
+				}),
+				createBody: func(ctx context.Context) *graphql.RawParams {
+					orderIDs := []any{
+						ctx.Value(ContextKey(".before.7")).(map[string]any)["order"].(map[string]any)["id"],
+						ctx.Value(ContextKey(".before.8")).(map[string]any)["order"].(map[string]any)["id"],
+						ctx.Value(ContextKey(".before.9")).(map[string]any)["order"].(map[string]any)["id"],
+					}
+					return &graphql.RawParams{
+						Query: QueryCheckout,
+						Variables: map[string]any{
+							"input": map[string]any{
+								"customerEmail": "customer.b@example.test",
+								"orderIDs":      orderIDs,
+								"diffs": []any{
+									map[string]any{
+										"price":       1000,
+										"description": "charge",
+									},
+								},
+								"paymentType": "QR",
+							},
+						},
+					}
+				},
 			},
 		),
 		request: IntegrationTestRequest{
@@ -67,6 +103,7 @@ var cashoutTests = []IntegrationTest{
 			createBody: func(ctx context.Context) *graphql.RawParams {
 				checkoutIDs := []any{
 					ctx.Value(ContextKey(".before.6")).(map[string]any)["checkout"].(map[string]any)["id"],
+					ctx.Value(ContextKey(".before.10")).(map[string]any)["checkout"].(map[string]any)["id"],
 				}
 				return &graphql.RawParams{
 					Query: QueryCashout,
@@ -91,18 +128,18 @@ var cashoutTests = []IntegrationTest{
 				return
 			}
 
-			fmt.Printf("got.Body.String(): %v\n", got.Body.String())
 			assert.Nil(t, res.Errors, msgAndArgs...)
 			assert.NotNil(t, res.Data.Cashout.Checkouts, msgAndArgs...)
-			assert.Equal(t, 1, len(res.Data.Cashout.Checkouts), msgAndArgs...)
+			assert.Equal(t, 2, len(res.Data.Cashout.Checkouts), msgAndArgs...)
 			{
 				wantCheckoutIDs := []any{
 					ctx.Value(ContextKey(".before.6")).(map[string]any)["checkout"].(map[string]any)["id"],
+					ctx.Value(ContextKey(".before.10")).(map[string]any)["checkout"].(map[string]any)["id"],
 				}
 				gotCheckoutIDs := sliceutil.Map(res.Data.Cashout.Checkouts, func(c *model.Checkout) string { return c.ID })
 				assert.ElementsMatch(t, wantCheckoutIDs, gotCheckoutIDs, msgAndArgs...)
 			}
-			assert.Equal(t, float64(3300), res.Data.Cashout.Revenue, msgAndArgs...)
+			assert.Equal(t, float64(6600), res.Data.Cashout.Revenue, msgAndArgs...)
 			assert.Equal(t, "bartender@example.test", res.Data.Cashout.StaffID)
 		}},
 		after: []IntegrationTest{
