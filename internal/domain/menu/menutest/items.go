@@ -4,20 +4,16 @@ import (
 	"hackbar-copilot/internal/domain/menu"
 )
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 var ExampleItems = []menu.Item{
 	{
 		Name:     "Phuket Sling",
-		ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-		Flavor:   ptr("Sweet"),
+		ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+		Flavor:   new("Sweet"),
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				Category:   "Cocktail",
-				ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+				ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 				Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
 				Price:      700,
@@ -25,7 +21,7 @@ var ExampleItems = []menu.Item{
 			{
 				Name:       "Mocktail",
 				Category:   "Mocktail",
-				ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/mocktail"),
+				ImageURL:   new("https://example.com/path/to/image/phuket-sling/mocktail"),
 				Materials:  []string{"Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
 				Price:      500,
@@ -34,13 +30,13 @@ var ExampleItems = []menu.Item{
 	},
 	{
 		Name:     "Passoamoni",
-		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
-		Flavor:   ptr("Fruity"),
+		ImageURL: new("https://example.com/path/to/image/passoamoni"),
+		Flavor:   new("Fruity"),
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				Category:   "Cocktail",
-				ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
+				ImageURL:   new("https://example.com/path/to/image/passoamoni"),
 				Materials:  []string{"Passoa", "Grapefruit juice", "Tonic water"},
 				OutOfStock: false,
 				Price:      700,
@@ -49,13 +45,13 @@ var ExampleItems = []menu.Item{
 	},
 	{
 		Name:     "Blue Devil",
-		ImageURL: ptr("https://example.com/path/to/image/blue-devil"),
-		Flavor:   ptr("Medium sweet and dry"),
+		ImageURL: new("https://example.com/path/to/image/blue-devil"),
+		Flavor:   new("Medium sweet and dry"),
 		Options: []menu.ItemOption{
 			{
 				Name:       "Cocktail",
 				Category:   "Cocktail",
-				ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
+				ImageURL:   new("https://example.com/path/to/image/blue-devil"),
 				Materials:  []string{"Gin", "Blue curacao", "Lemon juice"},
 				OutOfStock: false,
 				Price:      700,

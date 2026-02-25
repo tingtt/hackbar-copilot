@@ -10,8 +10,8 @@ type ValidateStepTest struct {
 var validateStepTests = []ValidateStepTest{
 	{
 		Step: Step{
-			Material: ptr("Peach Liqueur"),
-			Amount:   ptr("30ml"),
+			Material: new("Peach Liqueur"),
+			Amount:   new("30ml"),
 		},
 		Valid: true,
 	},
@@ -26,7 +26,7 @@ var validateStepTests = []ValidateStepTest{
 	{
 		Step: Step{
 			Material:    nil,
-			Amount:      ptr("30ml"),
+			Amount:      new("30ml"),
 			Description: nil,
 		},
 		Valid: false,

@@ -29,7 +29,7 @@ var applyRecipeTypesTests = []ApplyRecipeTypesTest{
 					Name: "recipe",
 					RecipeType: &model.InputRecipeType{
 						Name:        "new recipe type",
-						Description: ptr("new recipe type description"),
+						Description: new("new recipe type description"),
 						Save:        nil,
 					},
 				},
@@ -38,7 +38,7 @@ var applyRecipeTypesTests = []ApplyRecipeTypesTest{
 		want: []recipe.RecipeType{
 			{
 				Name:        "new recipe type",
-				Description: ptr("new recipe type description"),
+				Description: new("new recipe type description"),
 			},
 		},
 	},
@@ -51,8 +51,8 @@ var applyRecipeTypesTests = []ApplyRecipeTypesTest{
 					Name: "recipe",
 					RecipeType: &model.InputRecipeType{
 						Name:        "collins",
-						Description: ptr("exists recipe type description"),
-						Save:        ptr(true),
+						Description: new("exists recipe type description"),
+						Save:        new(true),
 					},
 				},
 			},
@@ -60,7 +60,7 @@ var applyRecipeTypesTests = []ApplyRecipeTypesTest{
 		want: []recipe.RecipeType{
 			{
 				Name:        "collins",
-				Description: ptr("exists recipe type description"),
+				Description: new("exists recipe type description"),
 			},
 		},
 	},
@@ -73,8 +73,8 @@ var applyRecipeTypesTests = []ApplyRecipeTypesTest{
 					Name: "recipe",
 					RecipeType: &model.InputRecipeType{
 						Name:        "build",
-						Description: ptr("exists recipe type description"),
-						Save:        ptr(false),
+						Description: new("exists recipe type description"),
+						Save:        new(false),
 					},
 				},
 			},

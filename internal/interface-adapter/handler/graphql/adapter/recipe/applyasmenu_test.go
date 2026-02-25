@@ -27,11 +27,11 @@ var applyAsMenuTests = []applyAsMenuTest{
 		name: "apply flavor",
 		arg: model.InputRecipeGroup{
 			AsMenu: &model.InputAsMenuItemArgs{
-				Flavor: ptr("Sweet"),
+				Flavor: new("Sweet"),
 			},
 		},
 		want: &copilot.SaveAsMenuItemArg{
-			Flavor:  ptr("Sweet"),
+			Flavor:  new("Sweet"),
 			Options: map[string]copilot.MenuFromRecipeGroupArg{},
 		},
 	},
@@ -42,14 +42,14 @@ var applyAsMenuTests = []applyAsMenuTest{
 				{
 					Name: "Single",
 					AsMenu: &model.InputAsMenuItemOptionArgs{
-						ImageURL: ptr("https://example.com/path/to/image/whisky-single"),
+						ImageURL: new("https://example.com/path/to/image/whisky-single"),
 						Price:    1000,
 					},
 				},
 				{
 					Name: "Double",
 					AsMenu: &model.InputAsMenuItemOptionArgs{
-						ImageURL: ptr("https://example.com/path/to/image/whisky-double"),
+						ImageURL: new("https://example.com/path/to/image/whisky-double"),
 						Price:    2000,
 					},
 				},
@@ -60,11 +60,11 @@ var applyAsMenuTests = []applyAsMenuTest{
 			Flavor: nil,
 			Options: map[string]copilot.MenuFromRecipeGroupArg{
 				"Single": {
-					ImageURL: ptr("https://example.com/path/to/image/whisky-single"),
+					ImageURL: new("https://example.com/path/to/image/whisky-single"),
 					Price:    1000,
 				},
 				"Double": {
-					ImageURL: ptr("https://example.com/path/to/image/whisky-double"),
+					ImageURL: new("https://example.com/path/to/image/whisky-double"),
 					Price:    2000,
 				},
 			},
@@ -74,7 +74,7 @@ var applyAsMenuTests = []applyAsMenuTest{
 		name: "apply remove",
 		arg: model.InputRecipeGroup{
 			AsMenu: &model.InputAsMenuItemArgs{
-				Remove: ptr(true),
+				Remove: new(true),
 			},
 		},
 		want: &copilot.SaveAsMenuItemArg{Remove: true},
@@ -86,14 +86,14 @@ var applyAsMenuTests = []applyAsMenuTest{
 				{
 					Name: "Single",
 					AsMenu: &model.InputAsMenuItemOptionArgs{
-						ImageURL: ptr("https://example.com/path/to/image/whisky-single"),
+						ImageURL: new("https://example.com/path/to/image/whisky-single"),
 						Price:    1000,
 					},
 				},
 				{
 					Name: "Double",
 					AsMenu: &model.InputAsMenuItemOptionArgs{
-						ImageURL: ptr("https://example.com/path/to/image/whisky-double"),
+						ImageURL: new("https://example.com/path/to/image/whisky-double"),
 						Price:    2000,
 					},
 				},

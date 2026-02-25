@@ -27,7 +27,7 @@ func Test_saverLister_Save(t *testing.T) {
 
 		arg := RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []Recipe{
 				{
 					Name:     "Cocktail",
@@ -36,11 +36,11 @@ func Test_saverLister_Save(t *testing.T) {
 					Glass:    "collins",
 					Steps: []Step{
 						{
-							Material: ptr("Peach Liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach Liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 					},
 				},

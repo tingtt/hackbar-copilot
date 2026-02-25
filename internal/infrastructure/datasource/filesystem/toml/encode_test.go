@@ -12,7 +12,7 @@ func TestEncode(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
-		i interface{}
+		i any
 		o []options.Applier[Option]
 	}
 

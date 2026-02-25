@@ -16,8 +16,8 @@ var validateRecipeTests = []ValidateRecipeTest{
 			Glass:    "collins",
 			Steps: []Step{
 				{
-					Material: ptr("Peach Liqueur"),
-					Amount:   ptr("30ml"),
+					Material: new("Peach Liqueur"),
+					Amount:   new("30ml"),
 				},
 			},
 		},

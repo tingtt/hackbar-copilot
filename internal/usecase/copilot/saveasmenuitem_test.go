@@ -63,23 +63,23 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 
 		c := &copilot{&gateway}
 		got, err := c.SaveAsMenuItem("Phuket Sling", SaveAsMenuItemArg{
-			Flavor: ptr("Sweet"),
+			Flavor: new("Sweet"),
 			Options: map[string]MenuFromRecipeGroupArg{
 				"Cocktail": {
-					ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+					ImageURL: new("https://example.com/path/to/image/phuket-sling"),
 					Price:    700,
 				},
 			},
 		})
 		want := menu.Item{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-			Flavor:   ptr("Sweet"),
+			ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+			Flavor:   new("Sweet"),
 			Options: []menu.ItemOption{
 				{
 					Name:       "Cocktail",
 					Category:   "Cocktail",
-					ImageURL:   ptr("https://example.com/path/to/image/phuket-sling"),
+					ImageURL:   new("https://example.com/path/to/image/phuket-sling"),
 					Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 					OutOfStock: false,
 					Price:      700,
@@ -105,7 +105,7 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 				}
 				yield(recipe.RecipeGroup{
 					Name:     "New Recipe",
-					ImageURL: ptr("https://example.com/path/to/image/new"),
+					ImageURL: new("https://example.com/path/to/image/new"),
 					Recipes: []recipe.Recipe{
 						{
 							Name:  "New Recipe",
@@ -113,8 +113,8 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 							Glass: "collins",
 							Steps: []recipe.Step{
 								{
-									Material: ptr("New Material"),
-									Amount:   ptr("30ml"),
+									Material: new("New Material"),
+									Amount:   new("30ml"),
 								},
 							},
 						},
@@ -132,22 +132,22 @@ func Test_copilot_SaveAsMenuItem(t *testing.T) {
 
 		c := &copilot{&gateway}
 		got, err := c.SaveAsMenuItem("New Recipe", SaveAsMenuItemArg{
-			Flavor: ptr("Fruity"),
+			Flavor: new("Fruity"),
 			Options: map[string]MenuFromRecipeGroupArg{
 				"New Recipe": {
-					ImageURL: ptr("https://example.com/path/to/image/new-recipe"),
+					ImageURL: new("https://example.com/path/to/image/new-recipe"),
 					Price:    700,
 				},
 			},
 		})
 		want := menu.Item{
 			Name:     "New Recipe",
-			ImageURL: ptr("https://example.com/path/to/image/new"),
-			Flavor:   ptr("Fruity"),
+			ImageURL: new("https://example.com/path/to/image/new"),
+			Flavor:   new("Fruity"),
 			Options: []menu.ItemOption{
 				{
 					Name:       "New Recipe",
-					ImageURL:   ptr("https://example.com/path/to/image/new-recipe"),
+					ImageURL:   new("https://example.com/path/to/image/new-recipe"),
 					Materials:  []string{"New Material"},
 					OutOfStock: false,
 					Price:      700,

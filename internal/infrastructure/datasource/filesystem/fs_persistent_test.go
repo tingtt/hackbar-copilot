@@ -99,10 +99,6 @@ func (m *MockFSW) Create(name string) (io.WriteCloser, error) {
 	return args.Get(0).(io.WriteCloser), args.Error(1)
 }
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 func Test_filesystem_SavePersistently(t *testing.T) {
 	t.Parallel()
 
@@ -124,23 +120,23 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							Glass: "collins",
 							Steps: []recipe.Step{
 								{
-									Material: ptr("Peach liqueur"),
-									Amount:   ptr("30ml"),
+									Material: new("Peach liqueur"),
+									Amount:   new("30ml"),
 								},
 								{
-									Material: ptr("Blue curacao"),
-									Amount:   ptr("15ml"),
+									Material: new("Blue curacao"),
+									Amount:   new("15ml"),
 								},
 								{
-									Material: ptr("Grapefruit juice"),
-									Amount:   ptr("30ml"),
+									Material: new("Grapefruit juice"),
+									Amount:   new("30ml"),
 								},
 								{
-									Description: ptr("Stir"),
+									Description: new("Stir"),
 								},
 								{
-									Material: ptr("Tonic water"),
-									Amount:   ptr("Full up"),
+									Material: new("Tonic water"),
+									Amount:   new("Full up"),
 								},
 							},
 						}, {
@@ -149,23 +145,23 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 							Glass: "collins",
 							Steps: []recipe.Step{
 								{
-									Material: ptr("Peach syrup"),
-									Amount:   ptr("20ml"),
+									Material: new("Peach syrup"),
+									Amount:   new("20ml"),
 								},
 								{
-									Material: ptr("Blue curacao syrup"),
-									Amount:   ptr("15ml"),
+									Material: new("Blue curacao syrup"),
+									Amount:   new("15ml"),
 								},
 								{
-									Material: ptr("Grapefruit juice"),
-									Amount:   ptr("30ml"),
+									Material: new("Grapefruit juice"),
+									Amount:   new("30ml"),
 								},
 								{
-									Description: ptr("Stir"),
+									Description: new("Stir"),
 								},
 								{
-									Material: ptr("Tonic water"),
-									Amount:   ptr("Full up"),
+									Material: new("Tonic water"),
+									Amount:   new("Full up"),
 								},
 							},
 						}},
@@ -209,12 +205,12 @@ func Test_filesystem_SavePersistently(t *testing.T) {
 					menuItems: []menu.Item{
 						{
 							Name:     "Phuket Sling",
-							ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-							Flavor:   ptr("Sweet"),
+							ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+							Flavor:   new("Sweet"),
 							Options: []menu.ItemOption{
 								{
 									Name:       "Cocktail",
-									ImageURL:   ptr("https://example.com/path/to/image/cocktail"),
+									ImageURL:   new("https://example.com/path/to/image/cocktail"),
 									Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 									OutOfStock: false,
 									Price:      700,

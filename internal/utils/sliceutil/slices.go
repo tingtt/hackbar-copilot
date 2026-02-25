@@ -44,12 +44,7 @@ func MapE[T1, T2 any](slice []T1, yield func(T1) (T2, error)) ([]T2, error) {
 }
 
 func Some[T any](slice []T, match func(T) bool) bool {
-	for _, value := range slice {
-		if match(value) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(slice, match)
 }
 
 func FindOne[T any](slice []T, match func(T) bool) *T {

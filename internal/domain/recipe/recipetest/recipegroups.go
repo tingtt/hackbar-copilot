@@ -7,7 +7,7 @@ import (
 var ExampleRecipeGroups = []recipe.RecipeGroup{
 	{
 		Name:     "Phuket Sling",
-		ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+		ImageURL: new("https://example.com/path/to/image/phuket-sling"),
 		Recipes: []recipe.Recipe{
 			{
 				Name:     "Cocktail",
@@ -16,23 +16,23 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 				Glass:    "collins",
 				Steps: []recipe.Step{
 					{
-						Material: ptr("Peach liqueur"),
-						Amount:   ptr("30ml"),
+						Material: new("Peach liqueur"),
+						Amount:   new("30ml"),
 					},
 					{
-						Material: ptr("Blue curacao"),
-						Amount:   ptr("15ml"),
+						Material: new("Blue curacao"),
+						Amount:   new("15ml"),
 					},
 					{
-						Material: ptr("Grapefruit juice"),
-						Amount:   ptr("30ml"),
+						Material: new("Grapefruit juice"),
+						Amount:   new("30ml"),
 					},
 					{
-						Description: ptr("Stir"),
+						Description: new("Stir"),
 					},
 					{
-						Material: ptr("Tonic water"),
-						Amount:   ptr("Full up"),
+						Material: new("Tonic water"),
+						Amount:   new("Full up"),
 					},
 				},
 			},
@@ -40,7 +40,7 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 	},
 	{
 		Name:     "Passoamoni",
-		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
+		ImageURL: new("https://example.com/path/to/image/passoamoni"),
 		Recipes: []recipe.Recipe{
 			{
 				Name:     "Cocktail",
@@ -49,19 +49,19 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 				Glass:    "collins",
 				Steps: []recipe.Step{
 					{
-						Material: ptr("Passoa"),
-						Amount:   ptr("45ml"),
+						Material: new("Passoa"),
+						Amount:   new("45ml"),
 					},
 					{
-						Material: ptr("Grapefruit juice"),
-						Amount:   ptr("30ml"),
+						Material: new("Grapefruit juice"),
+						Amount:   new("30ml"),
 					},
 					{
-						Description: ptr("Stir"),
+						Description: new("Stir"),
 					},
 					{
-						Material: ptr("Tonic water"),
-						Amount:   ptr("Full up"),
+						Material: new("Tonic water"),
+						Amount:   new("Full up"),
 					},
 				},
 			},
@@ -69,7 +69,7 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 	},
 	{
 		Name:     "Blue Devil",
-		ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
+		ImageURL: new("https://example.com/path/to/image/passoamoni"),
 		Recipes: []recipe.Recipe{
 			{
 				Name:     "Cocktail",
@@ -78,31 +78,31 @@ var ExampleRecipeGroups = []recipe.RecipeGroup{
 				Glass:    "cocktail",
 				Steps: []recipe.Step{
 					{
-						Description: ptr("Chill shaker and glass."),
+						Description: new("Chill shaker and glass."),
 					},
 					{
-						Description: ptr("Put ingredients in a shaker."),
+						Description: new("Put ingredients in a shaker."),
 					},
 					{
-						Material: ptr("Gin"),
-						Amount:   ptr("30ml"),
+						Material: new("Gin"),
+						Amount:   new("30ml"),
 					},
 					{
-						Material: ptr("Blue curacao"),
-						Amount:   ptr("15ml"),
+						Material: new("Blue curacao"),
+						Amount:   new("15ml"),
 					},
 					{
-						Material: ptr("Lemon juice"),
-						Amount:   ptr("15ml"),
+						Material: new("Lemon juice"),
+						Amount:   new("15ml"),
 					},
 					{
-						Description: ptr("Put ice in a shaker."),
+						Description: new("Put ice in a shaker."),
 					},
 					{
-						Description: ptr("Shake."),
+						Description: new("Shake."),
 					},
 					{
-						Description: ptr("Pour into a glass."),
+						Description: new("Pour into a glass."),
 					},
 				},
 			},

@@ -85,5 +85,5 @@ func (r *cashoutRepository) Save(cashout cashout.Cashout) error {
 	defer r.mutex.Unlock()
 
 	filename := fmt.Sprintf(cashoutFilenamePrefix+"%d.toml", cashout.Timestamp.Unix())
-	return r.fs.saveFile(filename, map[string]interface{}{cashoutTomlKey: cashout})
+	return r.fs.saveFile(filename, map[string]any{cashoutTomlKey: cashout})
 }

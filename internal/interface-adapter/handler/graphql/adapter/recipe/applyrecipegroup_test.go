@@ -27,11 +27,11 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 		base: recipe.RecipeGroup{Name: "ExistsRecipeGroup"},
 		input: model.InputRecipeGroup{
 			Name:     "ExistsRecipeGroup",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 		},
 		want: recipe.RecipeGroup{
 			Name:     "ExistsRecipeGroup",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 		},
 	},
 	{
@@ -61,9 +61,9 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 				RecipeType: &model.InputRecipeType{Name: "recipe type"},
 				GlassType:  &model.InputGlassType{Name: "glass type"},
 				Steps: []*model.InputStep{{
-					Material:    ptr("whisky"),
-					Amount:      ptr("30ml"),
-					Description: ptr("description"),
+					Material:    new("whisky"),
+					Amount:      new("30ml"),
+					Description: new("description"),
 				}},
 			}},
 		},
@@ -76,9 +76,9 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 					Type:     "recipe type",
 					Glass:    "glass type",
 					Steps: []recipe.Step{{
-						Material:    ptr("whisky"),
-						Amount:      ptr("30ml"),
-						Description: ptr("description"),
+						Material:    new("whisky"),
+						Amount:      new("30ml"),
+						Description: new("description"),
 					}},
 				},
 			},
@@ -91,7 +91,7 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
 		},
 		input: model.InputRecipeGroup{
-			Replace: ptr(true),
+			Replace: new(true),
 			Recipes: []*model.InputRecipe{{
 				Name:     "new recipe",
 				Category: "category 2",
@@ -117,7 +117,7 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 			Recipes: []*model.InputRecipe{{
 				Name:     "exists recipe",
 				Category: "category 1",
-				Remove:   ptr(true),
+				Remove:   new(true),
 			}},
 		},
 		want: recipe.RecipeGroup{
@@ -132,11 +132,11 @@ var applyRecipeGroupTests = []ApplyRecipeGroupTest{
 			Recipes: []recipe.Recipe{{Name: "exists recipe", Category: "category 1"}},
 		},
 		input: model.InputRecipeGroup{
-			Replace: ptr(true),
+			Replace: new(true),
 			Recipes: []*model.InputRecipe{{
 				Name:     "exists recipe",
 				Category: "category 1",
-				Remove:   ptr(true),
+				Remove:   new(true),
 			}},
 		},
 		want: recipe.RecipeGroup{

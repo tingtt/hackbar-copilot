@@ -37,7 +37,7 @@ var saveRecipeTests = []SaveRecipeTest{
 		Name: "save recipe not in menu",
 		RecipeGroup: recipe.RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+			ImageURL: new("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
 					Name:     "Cocktail",
@@ -46,23 +46,23 @@ var saveRecipeTests = []SaveRecipeTest{
 					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
-							Material: ptr("Peach liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Material: ptr("Blue curacao"),
-							Amount:   ptr("15ml"),
+							Material: new("Blue curacao"),
+							Amount:   new("15ml"),
 						},
 						{
-							Material: ptr("Grapefruit juice"),
-							Amount:   ptr("30ml"),
+							Material: new("Grapefruit juice"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 						{
-							Material: ptr("Tonic water"),
-							Amount:   ptr("Full up"),
+							Material: new("Tonic water"),
+							Amount:   new("Full up"),
 						},
 					},
 				},
@@ -75,7 +75,7 @@ var saveRecipeTests = []SaveRecipeTest{
 		Name: "save recipe used in menu",
 		RecipeGroup: recipe.RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+			ImageURL: new("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
 					Name:     "Cocktail",
@@ -84,23 +84,23 @@ var saveRecipeTests = []SaveRecipeTest{
 					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
-							Material: ptr("Peach liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Material: ptr("Blue curacao"),
-							Amount:   ptr("15ml"),
+							Material: new("Blue curacao"),
+							Amount:   new("15ml"),
 						},
 						{
-							Material: ptr("Grapefruit juice"),
-							Amount:   ptr("30ml"),
+							Material: new("Grapefruit juice"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 						{
-							Material: ptr("Tonic water"),
-							Amount:   ptr("Full up"),
+							Material: new("Tonic water"),
+							Amount:   new("Full up"),
 						},
 					},
 				},
@@ -109,13 +109,13 @@ var saveRecipeTests = []SaveRecipeTest{
 		Menu: []menu.Item{
 			{
 				Name:     "Phuket Sling",
-				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-				Flavor:   ptr("Sweet"),
+				ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+				Flavor:   new("Sweet"),
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						Price:      700,
@@ -132,13 +132,13 @@ var saveRecipeTests = []SaveRecipeTest{
 		SaveAsMenuGroupExpectCall: &SaveRecipeTestExpectCall{
 			SaveMenuGroup: menu.Item{
 				Name:     "Phuket Sling",
-				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-				Flavor:   ptr("Sweet"),
+				ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+				Flavor:   new("Sweet"),
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						Price:      700,
@@ -152,7 +152,7 @@ var saveRecipeTests = []SaveRecipeTest{
 		Name: "save recipe used in menu with new material",
 		RecipeGroup: recipe.RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
+			ImageURL: new("https://example.com/path/to/image/phuket-sling"),
 			Recipes: []recipe.Recipe{
 				{
 					Name:     "Cocktail",
@@ -161,23 +161,23 @@ var saveRecipeTests = []SaveRecipeTest{
 					Glass:    "collins",
 					Steps: []recipe.Step{
 						{
-							Material: ptr("Peach liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Material: ptr("Blue curacao"),
-							Amount:   ptr("15ml"),
+							Material: new("Blue curacao"),
+							Amount:   new("15ml"),
 						},
 						{
-							Material: ptr("Grapefruit juice"),
-							Amount:   ptr("30ml"),
+							Material: new("Grapefruit juice"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 						{
-							Material: ptr("Tonic water"),
-							Amount:   ptr("Full up"),
+							Material: new("Tonic water"),
+							Amount:   new("Full up"),
 						},
 					},
 				},
@@ -186,13 +186,13 @@ var saveRecipeTests = []SaveRecipeTest{
 		Menu: []menu.Item{
 			{
 				Name:     "Phuket Sling",
-				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-				Flavor:   ptr("Sweet"),
+				ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+				Flavor:   new("Sweet"),
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice"},
 						OutOfStock: false,
 						Price:      700,
@@ -208,13 +208,13 @@ var saveRecipeTests = []SaveRecipeTest{
 		SaveAsMenuGroupExpectCall: &SaveRecipeTestExpectCall{
 			SaveMenuGroup: menu.Item{
 				Name:     "Phuket Sling",
-				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-				Flavor:   ptr("Sweet"),
+				ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+				Flavor:   new("Sweet"),
 				Options: []menu.ItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						Price:      700,

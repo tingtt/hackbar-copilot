@@ -10,10 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 func Test_menuAdapterOut_MenuItems(t *testing.T) {
 	t.Parallel()
 
@@ -29,13 +25,13 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 		var want []*model.MenuItem = []*model.MenuItem{
 			{
 				Name:     "Phuket Sling",
-				ImageURL: ptr("https://example.com/path/to/image/phuket-sling"),
-				Flavor:   ptr("Sweet"),
+				ImageURL: new("https://example.com/path/to/image/phuket-sling"),
+				Flavor:   new("Sweet"),
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/cocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/cocktail"),
 						Materials:  []string{"Peach liqueur", "Blue curacao", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						PriceYen:   700,
@@ -44,32 +40,32 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "build",
-								Description: ptr("build description"),
+								Description: new("build description"),
 							},
 							Glass: &model.GlassType{
 								Name:        "collins",
-								ImageURL:    ptr("https://example.com/path/to/image/collins"),
-								Description: ptr("collins glass description"),
+								ImageURL:    new("https://example.com/path/to/image/collins"),
+								Description: new("collins glass description"),
 							},
 							Steps: []*model.Step{
 								{
-									Material: ptr("Peach liqueur"),
-									Amount:   ptr("30ml"),
+									Material: new("Peach liqueur"),
+									Amount:   new("30ml"),
 								},
 								{
-									Material: ptr("Blue curacao"),
-									Amount:   ptr("15ml"),
+									Material: new("Blue curacao"),
+									Amount:   new("15ml"),
 								},
 								{
-									Material: ptr("Grapefruit juice"),
-									Amount:   ptr("30ml"),
+									Material: new("Grapefruit juice"),
+									Amount:   new("30ml"),
 								},
 								{
-									Description: ptr("Stir"),
+									Description: new("Stir"),
 								},
 								{
-									Material: ptr("Tonic water"),
-									Amount:   ptr("Full up"),
+									Material: new("Tonic water"),
+									Amount:   new("Full up"),
 								},
 							},
 						},
@@ -77,7 +73,7 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 					{
 						Name:       "Mocktail",
 						Category:   "Mocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/phuket-sling/mocktail"),
+						ImageURL:   new("https://example.com/path/to/image/phuket-sling/mocktail"),
 						Materials:  []string{"Peach syrup", "Blue curacao syrup", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						PriceYen:   500,
@@ -88,13 +84,13 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 			},
 			{
 				Name:     "Passoamoni",
-				ImageURL: ptr("https://example.com/path/to/image/passoamoni"),
-				Flavor:   ptr("Fruity"),
+				ImageURL: new("https://example.com/path/to/image/passoamoni"),
+				Flavor:   new("Fruity"),
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/passoamoni"),
+						ImageURL:   new("https://example.com/path/to/image/passoamoni"),
 						Materials:  []string{"Passoa", "Grapefruit juice", "Tonic water"},
 						OutOfStock: false,
 						PriceYen:   700,
@@ -103,28 +99,28 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "build",
-								Description: ptr("build description"),
+								Description: new("build description"),
 							},
 							Glass: &model.GlassType{
 								Name:        "collins",
-								ImageURL:    ptr("https://example.com/path/to/image/collins"),
-								Description: ptr("collins glass description"),
+								ImageURL:    new("https://example.com/path/to/image/collins"),
+								Description: new("collins glass description"),
 							},
 							Steps: []*model.Step{
 								{
-									Material: ptr("Passoa"),
-									Amount:   ptr("45ml"),
+									Material: new("Passoa"),
+									Amount:   new("45ml"),
 								},
 								{
-									Material: ptr("Grapefruit juice"),
-									Amount:   ptr("30ml"),
+									Material: new("Grapefruit juice"),
+									Amount:   new("30ml"),
 								},
 								{
-									Description: ptr("Stir"),
+									Description: new("Stir"),
 								},
 								{
-									Material: ptr("Tonic water"),
-									Amount:   ptr("Full up"),
+									Material: new("Tonic water"),
+									Amount:   new("Full up"),
 								},
 							},
 						},
@@ -134,13 +130,13 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 			},
 			{
 				Name:     "Blue Devil",
-				ImageURL: ptr("https://example.com/path/to/image/blue-devil"),
-				Flavor:   ptr("Medium sweet and dry"),
+				ImageURL: new("https://example.com/path/to/image/blue-devil"),
+				Flavor:   new("Medium sweet and dry"),
 				Options: []*model.MenuItemOption{
 					{
 						Name:       "Cocktail",
 						Category:   "Cocktail",
-						ImageURL:   ptr("https://example.com/path/to/image/blue-devil"),
+						ImageURL:   new("https://example.com/path/to/image/blue-devil"),
 						Materials:  []string{"Gin", "Blue curacao", "Lemon juice"},
 						OutOfStock: false,
 						PriceYen:   700,
@@ -149,40 +145,40 @@ func Test_menuAdapterOut_MenuItems(t *testing.T) {
 							Category: "Cocktail",
 							Type: &model.RecipeType{
 								Name:        "shake",
-								Description: ptr("shake description"),
+								Description: new("shake description"),
 							},
 							Glass: &model.GlassType{
 								Name:        "cocktail",
-								ImageURL:    ptr("https://example.com/path/to/image/cocktail"),
-								Description: ptr("cocktail glass description"),
+								ImageURL:    new("https://example.com/path/to/image/cocktail"),
+								Description: new("cocktail glass description"),
 							},
 							Steps: []*model.Step{
 								{
-									Description: ptr("Chill shaker and glass."),
+									Description: new("Chill shaker and glass."),
 								},
 								{
-									Description: ptr("Put ingredients in a shaker."),
+									Description: new("Put ingredients in a shaker."),
 								},
 								{
-									Material: ptr("Gin"),
-									Amount:   ptr("30ml"),
+									Material: new("Gin"),
+									Amount:   new("30ml"),
 								},
 								{
-									Material: ptr("Blue curacao"),
-									Amount:   ptr("15ml"),
+									Material: new("Blue curacao"),
+									Amount:   new("15ml"),
 								},
 								{
-									Material: ptr("Lemon juice"),
-									Amount:   ptr("15ml"),
+									Material: new("Lemon juice"),
+									Amount:   new("15ml"),
 								},
 								{
-									Description: ptr("Put ice in a shaker."),
+									Description: new("Put ice in a shaker."),
 								},
 								{
-									Description: ptr("Shake."),
+									Description: new("Shake."),
 								},
 								{
-									Description: ptr("Pour into a glass."),
+									Description: new("Pour into a glass."),
 								},
 							},
 						},

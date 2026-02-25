@@ -29,7 +29,7 @@ type Dependencies struct {
 func (d Dependencies) validate() {
 	for i := range reflect.ValueOf(d).NumField() {
 		if reflect.ValueOf(d).Field(i).IsNil() {
-			t := reflect.TypeOf(d).Field(i).Type
+			t := reflect.TypeFor[Dependencies]().Field(i).Type
 			panic(t.PkgPath() + "." + t.Name() + " cannot be nil")
 		}
 	}

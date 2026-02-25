@@ -29,8 +29,8 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 					Name: "recipe",
 					GlassType: &model.InputGlassType{
 						Name:        "new glass type",
-						ImageURL:    ptr("https://example.com/path/to/image/new-glass-type"),
-						Description: ptr("new glass type description"),
+						ImageURL:    new("https://example.com/path/to/image/new-glass-type"),
+						Description: new("new glass type description"),
 						Save:        nil,
 					},
 				},
@@ -39,8 +39,8 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 		want: []recipe.GlassType{
 			{
 				Name:        "new glass type",
-				ImageURL:    ptr("https://example.com/path/to/image/new-glass-type"),
-				Description: ptr("new glass type description"),
+				ImageURL:    new("https://example.com/path/to/image/new-glass-type"),
+				Description: new("new glass type description"),
 			},
 		},
 	},
@@ -53,9 +53,9 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 					Name: "recipe",
 					GlassType: &model.InputGlassType{
 						Name:        "collins",
-						ImageURL:    ptr("https://example.com/path/to/image/exists-glass-type"),
-						Description: ptr("exists glass type description"),
-						Save:        ptr(true),
+						ImageURL:    new("https://example.com/path/to/image/exists-glass-type"),
+						Description: new("exists glass type description"),
+						Save:        new(true),
 					},
 				},
 			},
@@ -63,8 +63,8 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 		want: []recipe.GlassType{
 			{
 				Name:        "collins",
-				ImageURL:    ptr("https://example.com/path/to/image/exists-glass-type"),
-				Description: ptr("exists glass type description"),
+				ImageURL:    new("https://example.com/path/to/image/exists-glass-type"),
+				Description: new("exists glass type description"),
 			},
 		},
 	},
@@ -77,9 +77,9 @@ var applyGlassTypesTests = []ApplyGlassTypesTest{
 					Name: "recipe",
 					GlassType: &model.InputGlassType{
 						Name:        "collins",
-						ImageURL:    ptr("https://example.com/path/to/image/exists-glass-type"),
-						Description: ptr("exists glass type description"),
-						Save:        ptr(false),
+						ImageURL:    new("https://example.com/path/to/image/exists-glass-type"),
+						Description: new("exists glass type description"),
+						Save:        new(false),
 					},
 				},
 			},

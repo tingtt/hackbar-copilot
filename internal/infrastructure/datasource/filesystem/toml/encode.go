@@ -17,7 +17,7 @@ type EncodeOption struct {
 	Indent *string
 }
 
-func Encode(w io.Writer, i interface{}, _options ...Applier) error {
+func Encode(w io.Writer, i any, _options ...Applier) error {
 	option := options.Create(_options...)
 	e := toml.NewEncoder(w)
 	if option.Indent != nil {

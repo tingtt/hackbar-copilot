@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-func ptr(s string) *string {
-	return &s
-}
-
 type ValidateRecipeGroupTest struct {
 	RecipeGroup RecipeGroup
 	Valid       bool
@@ -17,7 +13,7 @@ var validateRecipeGroupTests = []ValidateRecipeGroupTest{
 	{
 		RecipeGroup: RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []Recipe{
 				{
 					Name:     "Cocktail",
@@ -26,11 +22,11 @@ var validateRecipeGroupTests = []ValidateRecipeGroupTest{
 					Glass:    "collins",
 					Steps: []Step{
 						{
-							Material: ptr("Peach Liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach Liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 					},
 				},

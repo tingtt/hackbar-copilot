@@ -16,10 +16,10 @@ func Test_copilot_FindRecipeType(t *testing.T) {
 
 		recipeTypes := recipetest.ExampleRecipeTypesIter
 		want := map[string]recipe.RecipeType{
-			"shake": {Name: "shake", Description: ptr("shake description")},
-			"build": {Name: "build", Description: ptr("build description")},
-			"stir":  {Name: "stir", Description: ptr("stir description")},
-			"blend": {Name: "blend", Description: ptr("blend description")},
+			"shake": {Name: "shake", Description: new("shake description")},
+			"build": {Name: "build", Description: new("build description")},
+			"stir":  {Name: "stir", Description: new("stir description")},
+			"blend": {Name: "blend", Description: new("blend description")},
 		}
 
 		recipeMock := new(MockRecipe)

@@ -11,27 +11,27 @@ var (
 	recipeTypes = map[string]recipe.RecipeType{
 		"build": {
 			Name:        "build",
-			Description: ptr("build description"),
+			Description: new("build description"),
 		},
 	}
 	recipeTypesModel = map[string]*model.RecipeType{
 		"build": {
 			Name:        "build",
-			Description: ptr("build description"),
+			Description: new("build description"),
 		},
 	}
 	glassTypes = map[string]recipe.GlassType{
 		"collins": {
 			Name:        "collins",
-			ImageURL:    ptr("https://example.com/path/to/image"),
-			Description: ptr("collins glass description"),
+			ImageURL:    new("https://example.com/path/to/image"),
+			Description: new("collins glass description"),
 		},
 	}
 	glassTypesModel = map[string]*model.GlassType{
 		"collins": {
 			Name:        "collins",
-			ImageURL:    ptr("https://example.com/path/to/image"),
-			Description: ptr("collins glass description"),
+			ImageURL:    new("https://example.com/path/to/image"),
+			Description: new("collins glass description"),
 		},
 	}
 )
@@ -47,29 +47,29 @@ var recipeGroupTests = []recipeGroupTest{
 		name: "will adapt RecipeGroup",
 		in: recipe.RecipeGroup{
 			Name:     "RecipeGroup name",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []recipe.Recipe{
 				{
 					Name: "Recipe name",
 					Steps: []recipe.Step{
 						{
-							Material: ptr("Peach liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Material: ptr("Blue curacao"),
-							Amount:   ptr("15ml"),
+							Material: new("Blue curacao"),
+							Amount:   new("15ml"),
 						},
 						{
-							Material: ptr("Grapefruit juice"),
-							Amount:   ptr("30ml"),
+							Material: new("Grapefruit juice"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 						{
-							Material: ptr("Tonic water"),
-							Amount:   ptr("Full up"),
+							Material: new("Tonic water"),
+							Amount:   new("Full up"),
 						},
 					},
 				},
@@ -77,29 +77,29 @@ var recipeGroupTests = []recipeGroupTest{
 		},
 		out: &model.RecipeGroup{
 			Name:     "RecipeGroup name",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []*model.Recipe{
 				{
 					Name: "Recipe name",
 					Steps: []*model.Step{
 						{
-							Material: ptr("Peach liqueur"),
-							Amount:   ptr("30ml"),
+							Material: new("Peach liqueur"),
+							Amount:   new("30ml"),
 						},
 						{
-							Material: ptr("Blue curacao"),
-							Amount:   ptr("15ml"),
+							Material: new("Blue curacao"),
+							Amount:   new("15ml"),
 						},
 						{
-							Material: ptr("Grapefruit juice"),
-							Amount:   ptr("30ml"),
+							Material: new("Grapefruit juice"),
+							Amount:   new("30ml"),
 						},
 						{
-							Description: ptr("Stir"),
+							Description: new("Stir"),
 						},
 						{
-							Material: ptr("Tonic water"),
-							Amount:   ptr("Full up"),
+							Material: new("Tonic water"),
+							Amount:   new("Full up"),
 						},
 					},
 				},
@@ -110,7 +110,7 @@ var recipeGroupTests = []recipeGroupTest{
 		name: "will adapt RecipeGroup with matched recipeType and GlassType",
 		in: recipe.RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []recipe.Recipe{
 				{
 					Name:  "Cocktail",
@@ -122,7 +122,7 @@ var recipeGroupTests = []recipeGroupTest{
 		},
 		out: &model.RecipeGroup{
 			Name:     "Phuket Sling",
-			ImageURL: ptr("https://example.com/path/to/image"),
+			ImageURL: new("https://example.com/path/to/image"),
 			Recipes: []*model.Recipe{
 				{
 					Name:  "Cocktail",

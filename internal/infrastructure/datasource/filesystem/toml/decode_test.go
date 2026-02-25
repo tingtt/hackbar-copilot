@@ -15,7 +15,7 @@ func TestDecodeStruct(t *testing.T) {
 
 	type args struct {
 		r io.Reader
-		i interface{}
+		i any
 	}
 
 	type child struct {
@@ -123,7 +123,7 @@ func TestDecodeMap(t *testing.T) {
 
 	type args struct {
 		r io.Reader
-		i interface{}
+		i any
 	}
 
 	tests := []struct {

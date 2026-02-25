@@ -7,19 +7,19 @@ import (
 var ExampleRecipeTypes = []recipe.RecipeType{
 	{
 		Name:        "shake",
-		Description: ptr("shake description"),
+		Description: new("shake description"),
 	},
 	{
 		Name:        "build",
-		Description: ptr("build description"),
+		Description: new("build description"),
 	},
 	{
 		Name:        "stir",
-		Description: ptr("stir description"),
+		Description: new("stir description"),
 	},
 	{
 		Name:        "blend",
-		Description: ptr("blend description"),
+		Description: new("blend description"),
 	},
 }
 

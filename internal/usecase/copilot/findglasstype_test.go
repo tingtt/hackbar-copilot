@@ -18,28 +18,28 @@ func Test_copilot_FindGlassType(t *testing.T) {
 		want := map[string]recipe.GlassType{
 			"collins": {
 				Name:        "collins",
-				ImageURL:    ptr("https://example.com/path/to/image/collins"),
-				Description: ptr("collins glass description"),
+				ImageURL:    new("https://example.com/path/to/image/collins"),
+				Description: new("collins glass description"),
 			},
 			"cocktail": {
 				Name:        "cocktail",
-				ImageURL:    ptr("https://example.com/path/to/image/cocktail"),
-				Description: ptr("cocktail glass description"),
+				ImageURL:    new("https://example.com/path/to/image/cocktail"),
+				Description: new("cocktail glass description"),
 			},
 			"shot": {
 				Name:        "shot",
-				ImageURL:    ptr("https://example.com/path/to/image/shot"),
-				Description: ptr("shot glass description"),
+				ImageURL:    new("https://example.com/path/to/image/shot"),
+				Description: new("shot glass description"),
 			},
 			"rock": {
 				Name:        "rock",
-				ImageURL:    ptr("https://example.com/path/to/image/rock"),
-				Description: ptr("rock glass description"),
+				ImageURL:    new("https://example.com/path/to/image/rock"),
+				Description: new("rock glass description"),
 			},
 			"beer": {
 				Name:        "beer",
-				ImageURL:    ptr("https://example.com/path/to/image/beer"),
-				Description: ptr("beer glass description"),
+				ImageURL:    new("https://example.com/path/to/image/beer"),
+				Description: new("beer glass description"),
 			},
 		}
 

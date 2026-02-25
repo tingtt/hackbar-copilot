@@ -57,8 +57,7 @@ func JWT(secret []byte) (middleware func(http.Handler) http.Handler, usedContext
 			}()
 
 			authorization := r.Header.Get("Authorization")
-			if strings.HasPrefix(authorization, "Bearer ") {
-				tokenStr := strings.TrimPrefix(authorization, "Bearer ")
+			if tokenStr, ok := strings.CutPrefix(authorization, "Bearer "); ok {
 				claims, err := parseJWT(tokenStr, secret)
 				if err != nil {
 					setJWTError(r, err)
@@ -88,7 +87,7 @@ func JWT(secret []byte) (middleware func(http.Handler) http.Handler, usedContext
 }
 
 func parseJWT(tokenStr string, secret []byte) (jwtclaims.Claims, error) {
-	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (any, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
